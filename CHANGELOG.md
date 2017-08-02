@@ -1,3 +1,7 @@
+**1.5.2.0**
+
+- New Icon !
+
 **1.5.1.9/10/11**
 
 - Hiding the unread badge when marking all items as read.
