@@ -86,7 +86,7 @@ class HomeActivityEspressoTest {
 
         intended(hasComponent(LoginActivity::class.java.name), times(1))
 
-        onView(isRoot()).perform(pressBack())
+        //onView(isRoot()).perform(pressBack())
 
 
     }
