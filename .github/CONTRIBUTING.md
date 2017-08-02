@@ -38,18 +38,21 @@ Always check if the web version of your instance is working.
 * Be willing to accept criticism on your PRs (as I am on mine).
 * Remember that PR review can take time.
 
+
 # Build the project
 
 You can directly import this project into IntellIJ/Android Studio.
 
 You'll have to:
 
-- [Create your own launcher icon](https://developer.android.com/studio/write/image-asset-studio.html#creating-launcher)
+- For now, [create your own launcher icon](https://developer.android.com/studio/write/image-asset-studio.html#creating-launcher). I'll add the icon back soon.
 
 - Configure Fabric, or [remove it](https://docs.fabric.io/android/fabric/settings/removing.html#).
+- Create a firebase project and add the `google-services.json` to the `app/` folder.
 - Define the following in `res/values/strings.xml` or create `res/values/secrets.xml`
 
     - mercury: A [Mercury](https://mercury.postlight.com/web-parser/) web parser api key for the internal browser
     - feedback_email: An email to receive users  feedback.
     - source_url: an url to the source code, used in the settings
     - tracker_url: an url to the tracker, used in the settings
+- To run your app, you'll have to add `-P appLoginUrl="your.selfoss-instance.url" -P appLoginUsername="Username" -P appLoginPassword="password"`. (These are only used to run the espresso tests. You should be able to use empty strings or fake values to build the app)
