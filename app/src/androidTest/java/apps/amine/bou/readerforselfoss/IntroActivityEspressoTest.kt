@@ -46,7 +46,7 @@ class IntroActivityEspressoTest {
         Intents.init()
     }
 
-    @Test
+    /*@Test
     fun nextEachTimes() {
 
         rule.launchActivity(Intent())
@@ -61,7 +61,7 @@ class IntroActivityEspressoTest {
         intended(hasComponent(IntroActivity::class.java.name), times(1))
         intended(hasComponent(LoginActivity::class.java.name), times(1))
 
-    }
+    }*/
 
     @Test
     fun nextBackRandomTimes() {
