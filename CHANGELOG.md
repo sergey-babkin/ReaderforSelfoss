@@ -1,3 +1,7 @@
+**1.5.2.01**
+
+- New (Better) Icon !
+
 **1.5.2.0**
 
 - New Icon !
