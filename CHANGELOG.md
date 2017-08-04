@@ -1,3 +1,7 @@
+**1.5.2.03**
+
+- Added the ability to accept self signed certificates.
+
 **1.5.2.02**
 
 - Added optional login option.
