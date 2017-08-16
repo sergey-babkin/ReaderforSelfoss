@@ -2,6 +2,10 @@
 
 - Reverted to the old icon.
 
+- Better icon for the intro activity.
+
+- Updated gradle version.
+
 **1.5.2.03**
 
 - Added the ability to accept self signed certificates. (Needs more testing)
