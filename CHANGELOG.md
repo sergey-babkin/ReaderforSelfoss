@@ -1,3 +1,7 @@
+**1.5.2.06**
+
+- Fix problem introduced in 1.5.2.04. SVG file not working on older versions of android.
+
 **1.5.2.05**
 
 - Versions updates

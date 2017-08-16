@@ -9,13 +9,15 @@ import android.view.View
 import agency.tango.materialintroscreen.MaterialIntroActivity
 import agency.tango.materialintroscreen.MessageButtonBehaviour
 import agency.tango.materialintroscreen.SlideFragmentBuilder
-
+import android.support.v7.app.AppCompatDelegate
 
 
 class IntroActivity : MaterialIntroActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
         addSlide(SlideFragmentBuilder()
             .backgroundColor(R.color.colorPrimary)
