@@ -1,3 +1,7 @@
+**1.5.2.05**
+
+- Versions updates
+
 **1.5.2.04**
 
 - Reverted to the old icon.
