@@ -1,6 +1,10 @@
+**1.5.2.04**
+
+- Reverted to the old icon.
+
 **1.5.2.03**
 
-- Added the ability to accept self signed certificates.
+- Added the ability to accept self signed certificates. (Needs more testing)
 
 **1.5.2.02**
 
