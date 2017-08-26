@@ -86,6 +86,7 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     private var displayUnreadCount = false
     private var displayAllCount = false
     private var fullHeightCards: Boolean = false
+    private var itemsNumber: Int = 200
     private var elementsShown: Int = 0
     private var maybeTagFilter: Tag? = null
     private var maybeSourceFilter: Sources? = null
@@ -283,6 +284,7 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         displayUnreadCount = sharedPref.getBoolean("display_unread_count", true)
         displayAllCount = sharedPref.getBoolean("display_other_count", false)
         fullHeightCards = sharedPref.getBoolean("full_height_cards", false)
+        itemsNumber = sharedPref.getString("prefer_api_items_number", "200").toInt()
     }
 
     private fun handleDrawer() {
@@ -612,7 +614,7 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private fun getUnRead() {
         elementsShown = UNREAD_SHOWN
-        doCallTo(R.string.cant_get_new_elements){t, id, f -> api.newItems(t, id, f)}
+        doCallTo(R.string.cant_get_new_elements){t, id, f -> api.newItems(t, id, f, itemsNumber)}
     }
 
     private fun getRead() {

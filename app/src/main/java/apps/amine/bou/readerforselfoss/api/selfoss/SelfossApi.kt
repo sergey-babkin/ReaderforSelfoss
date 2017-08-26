@@ -124,16 +124,16 @@ class SelfossApi(c: Context, callingActivity: Activity, isWithSelfSignedCert: Bo
         service.loginToSelfoss(config.userLogin, config.userPassword)
 
     fun readItems(tag: String?, sourceId: Long?, search: String?): Call<List<Item>> =
-        getItems("read", tag, sourceId, search)
+        getItems("read", tag, sourceId, search, 200)
 
-    fun newItems(tag: String?, sourceId: Long?, search: String?): Call<List<Item>> =
-        getItems("unread", tag, sourceId, search)
+    fun newItems(tag: String?, sourceId: Long?, search: String?, itemsNumber: Int): Call<List<Item>> =
+        getItems("unread", tag, sourceId, search, itemsNumber)
 
     fun starredItems(tag: String?, sourceId: Long?, search: String?): Call<List<Item>> =
-        getItems("starred", tag, sourceId, search)
+        getItems("starred", tag, sourceId, search, 200)
 
-    private fun getItems(type: String, tag: String?, sourceId: Long?, search: String?): Call<List<Item>> =
-        service.getItems(type, tag, sourceId, search, userName, password)
+    private fun getItems(type: String, tag: String?, sourceId: Long?, search: String?, items: Int): Call<List<Item>> =
+        service.getItems(type, tag, sourceId, search, userName, password, items)
 
     fun markItem(itemId: String): Call<SuccessResponse> =
         service.markAsRead(itemId, userName, password)

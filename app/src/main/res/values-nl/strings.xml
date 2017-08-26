@@ -138,4 +138,6 @@
     <string name="login_menu_debug">Debug</string>
     <string name="self_hosted_cert_switch">Using a self hosted certificate ?</string>
     <string name="self_signed_cert_warning">Due to security reasons, self signed certificates are not supported by default. By activating this, I\'ll not be responsible of any security problem you encounter.</string>
+    <string name="pref_selfoss_category">Selfoss Api</string>
+    <string name="pref_api_items_number_title">Loaded items number</string>
 </resources>

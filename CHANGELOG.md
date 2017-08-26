@@ -1,3 +1,7 @@
+**1.5.2.07**
+
+- Added the ability to choose the number of items loaded (the maximum value is 200 and is imposed by the selfoss api)
+
 **1.5.2.06**
 
 - Fix problem introduced in 1.5.2.04. SVG file not working on older versions of android.

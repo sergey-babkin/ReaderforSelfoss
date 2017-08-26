@@ -8,6 +8,7 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
@@ -15,6 +16,8 @@ import android.preference.SwitchPreference;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.view.MenuItem;
 
 import java.util.List;
@@ -143,6 +146,22 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     boolean isEnabled = (Boolean) newValue;
                     tabOnTap.setEnabled(!isEnabled);
                     return true;
+                }
+            });
+
+            EditTextPreference itemsNumber = (EditTextPreference) findPreference("prefer_api_items_number");
+            itemsNumber.getEditText().setFilters(new InputFilter[]{
+                new InputFilter (){
+
+                    @Override
+                    public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                        try {
+                            int input = Integer.parseInt(dest.toString() + source.toString());
+                            if (input <= 200 && input >0)
+                                return null;
+                        } catch (NumberFormatException nfe) { }
+                        return "";
+                    }
                 }
             });
         }
