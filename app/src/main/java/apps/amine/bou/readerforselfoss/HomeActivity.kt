@@ -80,6 +80,7 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private var items: ArrayList<Item> = ArrayList()
     private var clickBehavior = false
+    private var debugReadingItems = false
     private var internalBrowser = false
     private var articleViewer = false
     private var shouldBeCardView = false
@@ -277,6 +278,7 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
 
     private fun handleSharedPrefs() {
+        debugReadingItems = sharedPref.getBoolean("read_debug", false)
         clickBehavior = sharedPref.getBoolean("tab_on_tap", false)
         internalBrowser = sharedPref.getBoolean("prefer_internal_browser", true)
         articleViewer = sharedPref.getBoolean("prefer_article_viewer", true)
@@ -641,7 +643,8 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                     internalBrowser,
                     articleViewer,
                     fullHeightCards,
-                    appColors)
+                    appColors,
+                    debugReadingItems)
         } else {
             mAdapter =
                 ItemListAdapter(
@@ -651,7 +654,8 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                     customTabActivityHelper,
                     clickBehavior,
                     internalBrowser,
-                    articleViewer)
+                    articleViewer,
+                    debugReadingItems)
         }
         recyclerView.adapter = mAdapter
         mAdapter.notifyDataSetChanged()

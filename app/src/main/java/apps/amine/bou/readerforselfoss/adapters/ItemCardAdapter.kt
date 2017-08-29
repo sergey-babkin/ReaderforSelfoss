@@ -2,15 +2,12 @@ package apps.amine.bou.readerforselfoss.adapters
 
 import android.app.Activity
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.support.constraint.ConstraintLayout
 import android.support.design.widget.Snackbar
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.text.Html
-import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageButton
@@ -22,15 +19,11 @@ import android.widget.Toast
 import com.amulyakhare.textdrawable.TextDrawable
 import com.amulyakhare.textdrawable.util.ColorGenerator
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.BitmapImageViewTarget
 import com.like.LikeButton
 import com.like.OnLikeListener
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.ParseException
-import java.text.SimpleDateFormat
-import java.util.*
 
 import apps.amine.bou.readerforselfoss.R
 import apps.amine.bou.readerforselfoss.api.selfoss.Item
@@ -39,6 +32,8 @@ import apps.amine.bou.readerforselfoss.api.selfoss.SuccessResponse
 import apps.amine.bou.readerforselfoss.themes.AppColors
 import apps.amine.bou.readerforselfoss.utils.*
 import apps.amine.bou.readerforselfoss.utils.customtabs.CustomTabActivityHelper
+import com.crashlytics.android.Crashlytics
+import kotlin.collections.ArrayList
 
 class ItemCardAdapter(private val app: Activity,
                       private val items: ArrayList<Item>,
@@ -47,7 +42,8 @@ class ItemCardAdapter(private val app: Activity,
                       private val internalBrowser: Boolean,
                       private val articleViewer: Boolean,
                       private val fullHeightCards: Boolean,
-                      private val appColors: AppColors) : RecyclerView.Adapter<ItemCardAdapter.ViewHolder>() {
+                      private val appColors: AppColors,
+                      val debugReadingItems: Boolean) : RecyclerView.Adapter<ItemCardAdapter.ViewHolder>() {
     private val c: Context = app.baseContext
     private val generator: ColorGenerator = ColorGenerator.MATERIAL
 
@@ -130,11 +126,21 @@ class ItemCardAdapter(private val app: Activity,
 
         api.markItem(i.id).enqueue(object : Callback<SuccessResponse> {
             override fun onResponse(call: Call<SuccessResponse>, response: Response<SuccessResponse>) {
-
+                if (debugReadingItems) {
+                    val message =
+                        "message: ${response.message()} body: ${response.body()} raw body string: ${response.raw()?.body()?.toString()}"
+                    Crashlytics.log(100, "READ_DEBUG_SUCCESS", message)
+                    Toast.makeText(c, message, Toast.LENGTH_LONG).show()
+                }
                 doUnmark(i, position)
             }
 
             override fun onFailure(call: Call<SuccessResponse>, t: Throwable) {
+                if (debugReadingItems) {
+                    Crashlytics.log(100, "READ_DEBUG_ERROR", t.message)
+                    Crashlytics.logException(t)
+                    Toast.makeText(c, t.message, Toast.LENGTH_LONG).show()
+                }
                 Toast.makeText(app, app.getString(R.string.cant_mark_read), Toast.LENGTH_SHORT).show()
                 items.add(i)
                 notifyItemInserted(position)
