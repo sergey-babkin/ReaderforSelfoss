@@ -129,9 +129,12 @@ class ItemCardAdapter(private val app: Activity,
                 if (debugReadingItems) {
                     val message =
                         "message: ${response.message()} " +
+                            "response isSuccess: ${response.isSuccessful} " +
+                            "response code: ${response.code()} " +
+                            "response message: ${response.message()} " +
+                            "response errorBody: ${response.errorBody()?.string()} " +
                             "body success: ${response.body()?.success} " +
-                            "body isSuccess: ${response.body()?.isSuccess} " +
-                            "raw body string: ${response.raw()?.body()?.string()}"
+                            "body isSuccess: ${response.body()?.isSuccess}"
                     Crashlytics.log(100, "READ_DEBUG_SUCCESS", message)
                     Crashlytics.logException(Exception("Was success, but did it work ?"))
                     Toast.makeText(c, message, Toast.LENGTH_LONG).show()
