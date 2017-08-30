@@ -137,8 +137,12 @@ class ItemListAdapter(private val app: Activity,
             override fun onResponse(call: Call<SuccessResponse>, response: Response<SuccessResponse>) {
                 if (debugReadingItems) {
                     val message =
-                        "message: ${response.message()} body: ${response.body()} raw body string: ${response.raw()?.body()?.toString()}"
+                        "message: ${response.message()} " +
+                            "body success: ${response.body()?.success} " +
+                            "body isSuccess: ${response.body()?.isSuccess} " +
+                            "raw body string: ${response.raw()?.body()?.string()}"
                     Crashlytics.log(100, "READ_DEBUG_SUCCESS", message)
+                    Crashlytics.logException(Exception("Was success, but did it work ?"))
                     Toast.makeText(c, message, Toast.LENGTH_LONG).show()
                 }
                 doUnmark(i, position)
