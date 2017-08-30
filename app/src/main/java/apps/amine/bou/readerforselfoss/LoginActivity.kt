@@ -51,6 +51,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var mPasswordView: EditText
     private lateinit var mHTTPPasswordView: EditText
     private lateinit var mLoginFormView: View
+    private lateinit var userIdentifier: String
     private var logErrors: Boolean = false
 
 
@@ -76,6 +77,7 @@ class LoginActivity : AppCompatActivity() {
 
 
         settings = getSharedPreferences(Config.settingsName, Context.MODE_PRIVATE)
+        userIdentifier = settings.getString("unique_id", "")
         logErrors = settings.getBoolean("loging_debug", false)
 
         editor = settings.edit()
@@ -224,6 +226,7 @@ class LoginActivity : AppCompatActivity() {
                     mHTTPLoginView.error = getString(R.string.wrong_infos)
                     mHTTPPasswordView.error = getString(R.string.wrong_infos)
                     if (logErrors) {
+                        Crashlytics.setUserIdentifier(userIdentifier)
                         Crashlytics.log(100, "LOGIN_DEBUG_ERRROR", t.message)
                         Crashlytics.logException(t)
                         Toast.makeText(this@LoginActivity, t.message, Toast.LENGTH_LONG).show()

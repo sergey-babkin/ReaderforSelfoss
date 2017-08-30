@@ -143,4 +143,6 @@
     <string name="read_debug_title">Des articles lus marqués comme non lus ?</string>
     <string name="read_debug_on">Les appels API vont être logués lorsequ\'un article est marqué comme lu</string>
     <string name="read_debug_off">Aucun log quand un article est marqué comme lu</string>
+    <string name="summary_debug_identifier">Identifiant de debug</string>
+    <string name="unique_id_to_clipboard">Texte  copié</string>
 </resources>

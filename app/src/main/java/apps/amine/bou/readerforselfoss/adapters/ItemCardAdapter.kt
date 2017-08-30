@@ -43,7 +43,8 @@ class ItemCardAdapter(private val app: Activity,
                       private val articleViewer: Boolean,
                       private val fullHeightCards: Boolean,
                       private val appColors: AppColors,
-                      val debugReadingItems: Boolean) : RecyclerView.Adapter<ItemCardAdapter.ViewHolder>() {
+                      val debugReadingItems: Boolean,
+                      val userIdentifier: String) : RecyclerView.Adapter<ItemCardAdapter.ViewHolder>() {
     private val c: Context = app.baseContext
     private val generator: ColorGenerator = ColorGenerator.MATERIAL
 
@@ -135,8 +136,10 @@ class ItemCardAdapter(private val app: Activity,
                             "response errorBody: ${response.errorBody()?.string()} " +
                             "body success: ${response.body()?.success} " +
                             "body isSuccess: ${response.body()?.isSuccess}"
+                    Crashlytics.setUserIdentifier(userIdentifier)
                     Crashlytics.log(100, "READ_DEBUG_SUCCESS", message)
                     Crashlytics.logException(Exception("Was success, but did it work ?"))
+
                     Toast.makeText(c, message, Toast.LENGTH_LONG).show()
                 }
                 doUnmark(i, position)
@@ -144,6 +147,7 @@ class ItemCardAdapter(private val app: Activity,
 
             override fun onFailure(call: Call<SuccessResponse>, t: Throwable) {
                 if (debugReadingItems) {
+                    Crashlytics.setUserIdentifier(userIdentifier)
                     Crashlytics.log(100, "READ_DEBUG_ERROR", t.message)
                     Crashlytics.logException(t)
                     Toast.makeText(c, t.message, Toast.LENGTH_LONG).show()

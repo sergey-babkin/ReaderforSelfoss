@@ -6,6 +6,7 @@ import android.net.Uri
 import android.preference.PreferenceManager
 import android.support.multidex.MultiDexApplication
 import android.widget.ImageView
+import apps.amine.bou.readerforselfoss.utils.Config
 import com.anupcowkur.reservoir.Reservoir
 import com.bumptech.glide.Glide
 import com.crashlytics.android.Crashlytics
@@ -15,9 +16,13 @@ import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import io.fabric.sdk.android.Fabric
 import java.io.IOException
+import java.util.UUID.randomUUID
+
+
 
 
 class MyApp : MultiDexApplication() {
+
     override fun onCreate() {
         super.onCreate()
         Fabric.with(this, Crashlytics())
@@ -25,6 +30,13 @@ class MyApp : MultiDexApplication() {
         initAmplify()
 
         initCache()
+
+        val prefs = getSharedPreferences(Config.settingsName, Context.MODE_PRIVATE)
+        if (prefs.getString("unique_id", "").isEmpty()) {
+            val editor = prefs.edit()
+            editor.putString("unique_id", randomUUID().toString())
+            editor.apply()
+        }
 
         initDrawerImageLoader()
 

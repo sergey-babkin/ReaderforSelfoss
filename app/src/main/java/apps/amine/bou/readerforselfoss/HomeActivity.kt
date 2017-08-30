@@ -92,6 +92,7 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     private var maybeTagFilter: Tag? = null
     private var maybeSourceFilter: Sources? = null
     private var maybeSearchFilter: String? = null
+    private var userIdentifier: String = ""
 
     private lateinit var emptyText: TextView
     private lateinit var recyclerView: RecyclerView
@@ -287,6 +288,7 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         displayAllCount = sharedPref.getBoolean("display_other_count", false)
         fullHeightCards = sharedPref.getBoolean("full_height_cards", false)
         itemsNumber = sharedPref.getString("prefer_api_items_number", "200").toInt()
+        userIdentifier = sharedPref.getString("unique_id", "")
     }
 
     private fun handleDrawer() {
@@ -644,7 +646,8 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                     articleViewer,
                     fullHeightCards,
                     appColors,
-                    debugReadingItems)
+                    debugReadingItems,
+                    userIdentifier)
         } else {
             mAdapter =
                 ItemListAdapter(
@@ -655,7 +658,8 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                     clickBehavior,
                     internalBrowser,
                     articleViewer,
-                    debugReadingItems)
+                    debugReadingItems,
+                    userIdentifier)
         }
         recyclerView.adapter = mAdapter
         mAdapter.notifyDataSetChanged()

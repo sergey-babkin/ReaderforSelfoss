@@ -15,4 +15,9 @@
         android:summaryOff="@string/read_debug_off"
         android:summaryOn="@string/read_debug_on"
         android:title="@string/read_debug_title" />
+
+    <Preference
+        android:enabled="true"
+        android:key="debug_identifier"
+        android:summary="@string/summary_debug_identifier" />
 </PreferenceScreen>

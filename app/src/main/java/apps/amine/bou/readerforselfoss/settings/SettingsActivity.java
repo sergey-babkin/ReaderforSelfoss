@@ -2,8 +2,11 @@ package apps.amine.bou.readerforselfoss.settings;
 
 
 import android.annotation.TargetApi;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
@@ -11,6 +14,7 @@ import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.SwitchPreference;
 import android.support.v7.app.ActionBar;
@@ -19,10 +23,12 @@ import android.preference.PreferenceManager;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.List;
 
 import apps.amine.bou.readerforselfoss.R;
+import apps.amine.bou.readerforselfoss.utils.Config;
 import com.ftinc.scoop.ui.ScoopSettingsActivity;
 
 
@@ -184,6 +190,25 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_debug);
             setHasOptionsMenu(true);
+
+            SharedPreferences pref = getActivity().getSharedPreferences(Config.Companion.getSettingsName(), Context.MODE_PRIVATE);
+            final String id = pref.getString("unique_id", "...");
+
+            final Preference identifier = findPreference("debug_identifier");
+            final ClipboardManager clipboard = (ClipboardManager)
+                    getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+
+            identifier.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    ClipData clip = ClipData.newPlainText("Selfoss unique id", id);
+                    clipboard.setPrimaryClip(clip);
+
+                    Toast.makeText(getActivity(), R.string.unique_id_to_clipboard, Toast.LENGTH_LONG).show();
+                    return true;
+                }
+            });
+            identifier.setTitle(id);
         }
 
         @Override

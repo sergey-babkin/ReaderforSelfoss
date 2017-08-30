@@ -40,7 +40,8 @@ class ItemListAdapter(private val app: Activity,
                       private val clickBehavior: Boolean,
                       private val internalBrowser: Boolean,
                       private val articleViewer: Boolean,
-                      val debugReadingItems: Boolean) : RecyclerView.Adapter<ItemListAdapter.ViewHolder>() {
+                      val debugReadingItems: Boolean,
+                      val userIdentifier: String) : RecyclerView.Adapter<ItemListAdapter.ViewHolder>() {
     private val generator: ColorGenerator = ColorGenerator.MATERIAL
     private val c: Context = app.baseContext
     private val bars: ArrayList<Boolean> = ArrayList(Collections.nCopies(items.size + 1, false))
@@ -144,6 +145,7 @@ class ItemListAdapter(private val app: Activity,
                             "response errorBody: ${response.errorBody()?.string()} " +
                             "body success: ${response.body()?.success} " +
                             "body isSuccess: ${response.body()?.isSuccess}"
+                    Crashlytics.setUserIdentifier(userIdentifier)
                     Crashlytics.log(100, "READ_DEBUG_SUCCESS", message)
                     Crashlytics.logException(Exception("Was success, but did it work ?"))
                     Toast.makeText(c, message, Toast.LENGTH_LONG).show()
@@ -154,6 +156,7 @@ class ItemListAdapter(private val app: Activity,
 
             override fun onFailure(call: Call<SuccessResponse>, t: Throwable) {
                 if (debugReadingItems) {
+                    Crashlytics.setUserIdentifier(userIdentifier)
                     Crashlytics.log(100, "READ_DEBUG_ERROR", t.message)
                     Crashlytics.logException(t)
                     Toast.makeText(c, t.message, Toast.LENGTH_LONG).show()

@@ -22,7 +22,8 @@ Always check if the web version of your instance is working.
 ### Bug reports/Feature request
 
 * Always search before reporting an issue or asking for a feature to avoid duplicates.
-* Include every usefull details (app version, phone model, Android version and screenshots when possible)
+* Include your unique user id. It's displayed on the debug settings page. (You can tap it, it'll be copied to your clipboard)
+* Include every other useful details (app version, phone model, Android version and screenshots when possible).
 * Avoid bumping non-fatal issues, or feature requests. I'll try to fix them as soon as possible, and try to prioritize the requests. (You may wan to use the [reactions](https://github.com/blog/2119-add-reactions-to-pull-requests-issues-and-comments) for that)
 
 ### Pull requests

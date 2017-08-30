@@ -1,3 +1,11 @@
+**1.5.2.11**
+
+- Added a random unique identifier to be used in the logs.
+
+**1.5.2.08/09/10**
+
+- Added settable logs for reading articles problems.
+
 **1.5.2.07**
 
 - Added the ability to choose the number of items loaded (the maximum value is 200 and is imposed by the selfoss api)
