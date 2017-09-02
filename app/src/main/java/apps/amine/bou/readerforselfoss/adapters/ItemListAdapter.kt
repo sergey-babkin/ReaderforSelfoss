@@ -29,6 +29,8 @@ import apps.amine.bou.readerforselfoss.api.selfoss.SelfossApi
 import apps.amine.bou.readerforselfoss.api.selfoss.SuccessResponse
 import apps.amine.bou.readerforselfoss.utils.*
 import apps.amine.bou.readerforselfoss.utils.customtabs.CustomTabActivityHelper
+import apps.amine.bou.readerforselfoss.utils.glide.bitmapCenterCrop
+import apps.amine.bou.readerforselfoss.utils.glide.circularBitmapDrawable
 import com.crashlytics.android.Crashlytics
 import kotlin.collections.ArrayList
 

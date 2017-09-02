@@ -24,6 +24,7 @@ import apps.amine.bou.readerforselfoss.utils.buildCustomTabsIntent
 import apps.amine.bou.readerforselfoss.utils.customtabs.CustomTabActivityHelper
 import apps.amine.bou.readerforselfoss.utils.openItemUrl
 import apps.amine.bou.readerforselfoss.utils.shareLink
+import com.bumptech.glide.request.RequestOptions
 import com.ftinc.scoop.Scoop
 
 
@@ -75,9 +76,9 @@ class ReaderActivity : DragDismissActivity() {
                     if (response.body()!!.lead_image_url != null && !response.body()!!.lead_image_url.isEmpty())
                         Glide
                             .with(baseContext)
-                            .load(response.body()!!.lead_image_url)
                             .asBitmap()
-                            .fitCenter()
+                            .load(response.body()!!.lead_image_url)
+                            .apply(RequestOptions.fitCenterTransform())
                             .into(image)
 
                     shareBtn.setOnClickListener {

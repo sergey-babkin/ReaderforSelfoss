@@ -9,6 +9,7 @@ import android.widget.ImageView
 import apps.amine.bou.readerforselfoss.utils.Config
 import com.anupcowkur.reservoir.Reservoir
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.crashlytics.android.Crashlytics
 import com.ftinc.scoop.Scoop
 import com.github.stkent.amplify.tracking.Amplify
@@ -63,11 +64,15 @@ class MyApp : MultiDexApplication() {
     private fun initDrawerImageLoader() {
         DrawerImageLoader.init(object : AbstractDrawerImageLoader() {
             override fun set(imageView: ImageView?, uri: Uri?, placeholder: Drawable?, tag: String?) {
-                Glide.with(imageView?.context).load(uri).placeholder(placeholder).into(imageView)
+                Glide.with(imageView?.context)
+                    .load(uri)
+                    .apply(RequestOptions.fitCenterTransform()
+                        .placeholder(placeholder))
+                    .into(imageView)
             }
 
             override fun cancel(imageView: ImageView?) {
-                Glide.clear(imageView)
+                Glide.with(imageView?.context).clear(imageView)
             }
 
             override fun placeholder(ctx: Context?, tag: String?): Drawable {

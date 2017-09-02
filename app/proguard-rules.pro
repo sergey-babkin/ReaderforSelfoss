@@ -57,3 +57,7 @@
 
 #Bottom bar lib
 -dontwarn com.roughike.bottombar.**
+
+
+# self signed glidemodule
+-keep public class * implements com.bumptech.glide.module.GlideModule

@@ -21,7 +21,7 @@ import apps.amine.bou.readerforselfoss.R
 import apps.amine.bou.readerforselfoss.api.selfoss.SelfossApi
 import apps.amine.bou.readerforselfoss.api.selfoss.Sources
 import apps.amine.bou.readerforselfoss.api.selfoss.SuccessResponse
-import apps.amine.bou.readerforselfoss.utils.circularBitmapDrawable
+import apps.amine.bou.readerforselfoss.utils.glide.circularBitmapDrawable
 import apps.amine.bou.readerforselfoss.utils.toTextDrawableString
 
 

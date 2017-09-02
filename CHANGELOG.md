@@ -1,3 +1,9 @@
+**1.5.2.13**
+
+- Updated glide.
+
+- Loading images from self signed certificate now working.
+
 **1.5.2.12**
 
 - Self signed certificates are now working for loading data. Image are not loading yet.
