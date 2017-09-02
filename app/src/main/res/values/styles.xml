@@ -13,6 +13,7 @@
         <item name="android:colorBackground">@color/md_grey_50</item>
         <item name="android:textColorPrimary">@color/md_grey_900</item>
         <item name="android:textColorSecondary">@color/md_grey_400</item>
+        <item name="material_drawer_header_selection_text">@color/md_grey_900</item>
     </style>
 
     <style name="NoBarDark" parent="MaterialDrawerTheme">
@@ -25,12 +26,14 @@
         <item name="bnbBackgroundColor">@color/md_grey_900</item>
         <item name="android:textColorPrimary">@color/md_white_1000</item>
         <item name="android:textColorSecondary">@color/md_grey_600</item>
+        <item name="material_drawer_header_selection_text">@color/md_grey_900</item>
     </style>
 
     <!-- ToolBar -->
     <style name="ToolBarStyle" parent="Theme.AppCompat">
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:textColorSecondary">@color/white</item>
+        <item name="material_drawer_header_selection_text">@color/md_grey_900</item>
         <item name="actionMenuTextColor">@color/white</item>
         <!--<item name="actionOverflowButtonStyle">@style/ActionButtonOverflowStyle</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>-->
@@ -46,6 +49,7 @@
         <item name="android:colorBackground">@color/md_grey_50</item>
         <item name="android:textColorPrimary">@color/md_grey_900</item>
         <item name="android:textColorSecondary">@color/md_grey_400</item>
+        <item name="material_drawer_header_selection_text">@color/md_grey_900</item>
     </style>
 
     <style name="NoBarBlueAmberDark" parent="MaterialDrawerTheme">
@@ -58,6 +62,7 @@
         <item name="bnbBackgroundColor">@color/md_grey_900</item>
         <item name="android:textColorPrimary">@color/md_white_1000</item>
         <item name="android:textColorSecondary">@color/md_grey_600</item>
+        <item name="material_drawer_header_selection_text">@color/md_grey_900</item>
     </style>
 
     <style name="NoBarGreyOrange" parent="MaterialDrawerTheme.Light">
@@ -69,6 +74,7 @@
         <item name="android:colorBackground">@color/md_grey_50</item>
         <item name="android:textColorPrimary">@color/md_grey_900</item>
         <item name="android:textColorSecondary">@color/md_grey_400</item>
+        <item name="material_drawer_header_selection_text">@color/md_grey_900</item>
     </style>
 
     <style name="NoBarGreyOrangeDark" parent="MaterialDrawerTheme">
@@ -81,6 +87,7 @@
         <item name="bnbBackgroundColor">@color/md_grey_900</item>
         <item name="android:textColorPrimary">@color/md_white_1000</item>
         <item name="android:textColorSecondary">@color/md_grey_600</item>
+        <item name="material_drawer_header_selection_text">@color/md_grey_900</item>
     </style>
 
     <style name="NoBarIndigoPink" parent="MaterialDrawerTheme.Light">
@@ -92,6 +99,7 @@
         <item name="android:colorBackground">@color/md_grey_50</item>
         <item name="android:textColorPrimary">@color/md_grey_900</item>
         <item name="android:textColorSecondary">@color/md_grey_400</item>
+        <item name="material_drawer_header_selection_text">@color/md_grey_900</item>
     </style>
 
     <style name="NoBarIndigoPinkDark" parent="MaterialDrawerTheme">
@@ -104,6 +112,7 @@
         <item name="bnbBackgroundColor">@color/md_grey_900</item>
         <item name="android:textColorPrimary">@color/md_white_1000</item>
         <item name="android:textColorSecondary">@color/md_grey_600</item>
+        <item name="material_drawer_header_selection_text">@color/md_grey_900</item>
     </style>
 
     <style name="NoBarRedTeal" parent="MaterialDrawerTheme.Light">
@@ -115,6 +124,7 @@
         <item name="android:colorBackground">@color/md_grey_50</item>
         <item name="android:textColorPrimary">@color/md_grey_900</item>
         <item name="android:textColorSecondary">@color/md_grey_400</item>
+        <item name="material_drawer_header_selection_text">@color/md_grey_900</item>
     </style>
 
     <style name="NoBarRedTealDark" parent="MaterialDrawerTheme">
@@ -127,6 +137,7 @@
         <item name="bnbBackgroundColor">@color/md_grey_900</item>
         <item name="android:textColorPrimary">@color/md_white_1000</item>
         <item name="android:textColorSecondary">@color/md_grey_600</item>
+        <item name="material_drawer_header_selection_text">@color/md_grey_900</item>
     </style>
 
     <style name="NoBarCyanPink" parent="MaterialDrawerTheme.Light">
@@ -138,6 +149,7 @@
         <item name="android:colorBackground">@color/md_grey_50</item>
         <item name="android:textColorPrimary">@color/md_grey_900</item>
         <item name="android:textColorSecondary">@color/md_grey_400</item>
+        <item name="material_drawer_header_selection_text">@color/md_grey_900</item>
     </style>
 
     <style name="NoBarCyanPinkDark" parent="MaterialDrawerTheme">
@@ -150,6 +162,7 @@
         <item name="bnbBackgroundColor">@color/md_grey_900</item>
         <item name="android:textColorPrimary">@color/md_white_1000</item>
         <item name="android:textColorSecondary">@color/md_grey_600</item>
+        <item name="material_drawer_header_selection_text">@color/md_grey_900</item>
     </style>
 
 
@@ -162,6 +175,7 @@
         <item name="android:colorBackground">@color/md_grey_50</item>
         <item name="android:textColorPrimary">@color/md_grey_900</item>
         <item name="android:textColorSecondary">@color/md_grey_400</item>
+        <item name="material_drawer_header_selection_text">@color/md_grey_900</item>
     </style>
 
     <style name="NoBarTealOrangeDark" parent="MaterialDrawerTheme">
@@ -174,6 +188,7 @@
         <item name="bnbBackgroundColor">@color/md_grey_900</item>
         <item name="android:textColorPrimary">@color/md_white_1000</item>
         <item name="android:textColorSecondary">@color/md_grey_600</item>
+        <item name="material_drawer_header_selection_text">@color/md_grey_900</item>
     </style>
 
 </resources>

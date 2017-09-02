@@ -64,6 +64,10 @@ import com.ashokvarma.bottomnavigation.BottomNavigationBar
 import com.ashokvarma.bottomnavigation.BottomNavigationItem
 import com.ashokvarma.bottomnavigation.TextBadgeItem
 import com.ftinc.scoop.Scoop
+import com.mikepenz.materialdrawer.AccountHeader
+import com.mikepenz.materialdrawer.AccountHeaderBuilder
+import com.mikepenz.materialdrawer.holder.DimenHolder
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 
 
 class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
@@ -150,7 +154,7 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
         handleBottomBar()
 
-        handleDrawer()
+        handleDrawer(dirtyPref)
 
         coordinatorLayout = findViewById(R.id.coordLayout)
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
@@ -291,10 +295,25 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         userIdentifier = sharedPref.getString("unique_id", "")
     }
 
-    private fun handleDrawer() {
+    private fun handleDrawer(dirtyPref: SharedPreferences) {
+
+        val headerResult: AccountHeader = AccountHeaderBuilder()
+            .withActivity(this)
+            .withHeaderBackground(R.drawable.bg)
+            .addProfiles(
+                ProfileDrawerItem()
+                    .withName(
+                        dirtyPref.getString("url", "")
+                    )
+                    .withIcon(resources.getDrawable(R.mipmap.ic_launcher))
+            )
+            .withSelectionListEnabledForSingleProfile(false)
+            .build()
 
         drawer = DrawerBuilder()
             .withActivity(this)
+            .withAccountHeader(headerResult)
+            .withHeaderHeight(DimenHolder.fromDp(140))
             .withRootView(R.id.drawer_layout)
             .withToolbar(toolbar)
             .withActionBarDrawerToggle(true)
@@ -316,25 +335,6 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
             })
             .build()
 
-        drawer.addStickyFooterItem(
-            PrimaryDrawerItem()
-                .withName(R.string.action_about)
-                .withSelectable(false)
-                .withIcon(R.drawable.ic_info_outline)
-                .withIconTintingEnabled(true)
-                .withOnDrawerItemClickListener { _, _, _ ->
-                    LibsBuilder()
-                        .withActivityStyle(
-                            if (appColors.isDarkTheme)
-                                Libs.ActivityStyle.LIGHT_DARK_TOOLBAR
-                            else
-                                Libs.ActivityStyle.DARK
-                        )
-                        .withAboutIconShown(true)
-                        .withAboutVersionShown(true)
-                        .start(this@HomeActivity)
-                    false
-                })
         drawer.addStickyFooterItem(
             PrimaryDrawerItem()
                 .withName(R.string.title_activity_settings)
@@ -438,6 +438,7 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                         .withIdentifier(DRAWER_ID_TAGS)
                         .withSelectable(false))
                 handleTags(maybeDrawerData.tags)
+                drawer.addItem(DividerDrawerItem())
                 drawer.addItem(
                     SecondaryDrawerItem()
                         .withName(getString(R.string.drawer_item_sources))
@@ -450,6 +451,26 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                         }
                 )
                 handleSources(maybeDrawerData.sources)
+                drawer.addItem(DividerDrawerItem())
+                drawer.addItem(
+                    PrimaryDrawerItem()
+                        .withName(R.string.action_about)
+                        .withSelectable(false)
+                        .withIcon(R.drawable.ic_info_outline)
+                        .withIconTintingEnabled(true)
+                        .withOnDrawerItemClickListener { _, _, _ ->
+                            LibsBuilder()
+                                .withActivityStyle(
+                                    if (appColors.isDarkTheme)
+                                        Libs.ActivityStyle.LIGHT_DARK_TOOLBAR
+                                    else
+                                        Libs.ActivityStyle.DARK
+                                )
+                                .withAboutIconShown(true)
+                                .withAboutVersionShown(true)
+                                .start(this@HomeActivity)
+                            false
+                        })
 
 
                 if (!loadedFromCache)
