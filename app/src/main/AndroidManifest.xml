@@ -64,9 +64,7 @@
         <activity android:name=".ReaderActivity"
             android:theme="@style/DragDismissTheme">
         </activity>
-        <meta-data
-            android:name="apps.amine.bou.readerforselfoss.utils.glide.SelfSignedGlideModule"
-            android:value="GlideModule" />
+
     </application>
 
 </manifest>
