@@ -41,6 +41,11 @@
     </PreferenceCategory>
     <SwitchPreference
         android:defaultValue="false"
+        android:key="account_header_displaying"
+        android:summary="@string/display_header_drawer_summary"
+        android:title="@string/display_header_drawer_title" />
+    <SwitchPreference
+        android:defaultValue="false"
         android:key="card_view_active"
         android:summaryOff="@string/pref_switch_card_view_off"
         android:summaryOn="@string/pref_switch_card_view_on"

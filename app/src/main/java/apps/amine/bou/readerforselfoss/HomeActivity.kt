@@ -66,7 +66,6 @@ import com.ashokvarma.bottomnavigation.TextBadgeItem
 import com.ftinc.scoop.Scoop
 import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
-import com.mikepenz.materialdrawer.holder.DimenHolder
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 
 
@@ -97,6 +96,7 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     private var maybeSourceFilter: Sources? = null
     private var maybeSearchFilter: String? = null
     private var userIdentifier: String = ""
+    private var displayAccountHeader: Boolean = false
 
     private lateinit var emptyText: TextView
     private lateinit var recyclerView: RecyclerView
@@ -293,47 +293,55 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         fullHeightCards = sharedPref.getBoolean("full_height_cards", false)
         itemsNumber = sharedPref.getString("prefer_api_items_number", "200").toInt()
         userIdentifier = sharedPref.getString("unique_id", "")
+        displayAccountHeader = sharedPref.getBoolean("account_header_displaying", false)
     }
 
     private fun handleDrawer(dirtyPref: SharedPreferences) {
+        displayAccountHeader =
+            PreferenceManager.getDefaultSharedPreferences(this)
+                .getBoolean("account_header_displaying", false)
+        val headerResult: AccountHeader? = if (displayAccountHeader) {
+            AccountHeaderBuilder()
+                .withActivity(this)
+                .withHeaderBackground(R.drawable.bg)
+                .addProfiles(
+                    ProfileDrawerItem()
+                        .withName(
+                            dirtyPref.getString("url", "")
+                        )
+                        .withIcon(resources.getDrawable(R.mipmap.ic_launcher))
+                )
+                .withSelectionListEnabledForSingleProfile(false)
+                .build()
+        } else null
 
-        val headerResult: AccountHeader = AccountHeaderBuilder()
-            .withActivity(this)
-            .withHeaderBackground(R.drawable.bg)
-            .addProfiles(
-                ProfileDrawerItem()
-                    .withName(
-                        dirtyPref.getString("url", "")
-                    )
-                    .withIcon(resources.getDrawable(R.mipmap.ic_launcher))
-            )
-            .withSelectionListEnabledForSingleProfile(false)
-            .build()
+        val drawerBuilder =
+            DrawerBuilder()
+                .withActivity(this)
+                .withRootView(R.id.drawer_layout)
+                .withToolbar(toolbar)
+                .withActionBarDrawerToggle(true)
+                .withActionBarDrawerToggleAnimated(true)
+                .withShowDrawerOnFirstLaunch(true)
+                .withOnDrawerListener(object: Drawer.OnDrawerListener {
+                    override fun onDrawerSlide(v: View?, p1: Float) {
+                        bottomBar.alpha = (1 - p1)
+                    }
 
-        drawer = DrawerBuilder()
-            .withActivity(this)
-            .withAccountHeader(headerResult)
-            .withHeaderHeight(DimenHolder.fromDp(140))
-            .withRootView(R.id.drawer_layout)
-            .withToolbar(toolbar)
-            .withActionBarDrawerToggle(true)
-            .withActionBarDrawerToggleAnimated(true)
-            .withShowDrawerOnFirstLaunch(true)
-            .withOnDrawerListener(object: Drawer.OnDrawerListener {
-                override fun onDrawerSlide(v: View?, p1: Float) {
-                    bottomBar.alpha = (1 - p1)
-                }
+                    override fun onDrawerClosed(v: View?) {
+                        bottomBar.show()
+                    }
 
-                override fun onDrawerClosed(v: View?) {
-                    bottomBar.show()
-                }
+                    override fun onDrawerOpened(v: View?) {
+                        bottomBar.hide()
+                    }
 
-                override fun onDrawerOpened(v: View?) {
-                    bottomBar.hide()
-                }
+                })
 
-            })
-            .build()
+        if (displayAccountHeader && headerResult != null)
+            drawerBuilder.withAccountHeader(headerResult)
+
+        drawer = drawerBuilder.build()
 
         drawer.addStickyFooterItem(
             PrimaryDrawerItem()

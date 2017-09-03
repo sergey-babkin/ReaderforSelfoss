@@ -145,4 +145,6 @@
     <string name="read_debug_off">Aucun log quand un article est marqué comme lu</string>
     <string name="summary_debug_identifier">Identifiant de debug</string>
     <string name="unique_id_to_clipboard">Texte  copié</string>
+    <string name="display_header_drawer_summary">Afficher une entête avec l\'url de votre instance de Selfoss en haut du drawer lateral.</string>
+    <string name="display_header_drawer_title">Entête de compte</string>
 </resources>

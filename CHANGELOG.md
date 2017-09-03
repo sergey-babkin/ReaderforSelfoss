@@ -1,4 +1,10 @@
-**1.5.2.13**
+**1.5.2.15/16**
+
+- Adding an account header on the lateral drawer.
+
+- The account header is only displayed when the setting is enabled.
+
+**1.5.2.13/14**
 
 - Updated glide.
 

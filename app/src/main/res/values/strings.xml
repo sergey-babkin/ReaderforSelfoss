@@ -147,4 +147,7 @@
     <string name="read_debug_on">Api calls will be logged when marking an article as read</string>
     <string name="summary_debug_identifier">Debug identifier</string>
     <string name="unique_id_to_clipboard">Identifier copied to your clipboard</string>
+    <string
+        name="display_header_drawer_summary">Display a header with the selfoss instance url on the lateral drawer.</string>
+    <string name="display_header_drawer_title">Account header</string>
 </resources>
