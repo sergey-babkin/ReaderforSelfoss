@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import apps.amine.bou.readerforselfoss.BuildConfig;
 import apps.amine.bou.readerforselfoss.R;
 import apps.amine.bou.readerforselfoss.utils.Config;
 import com.ftinc.scoop.ui.ScoopSettingsActivity;
@@ -242,7 +243,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             findPreference( "trackerLink" ).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    openUrl(Uri.parse(getString(R.string.tracker_url)));
+                    openUrl(Uri.parse(BuildConfig.TRACKER_URL));
                     return true;
                 }
             });
@@ -250,7 +251,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             findPreference("sourceLink").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    openUrl(Uri.parse(getString(R.string.source_url)));
+                    openUrl(Uri.parse(BuildConfig.SOURCE_URL));
                     return false;
                 }
             });

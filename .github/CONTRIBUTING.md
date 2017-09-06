@@ -46,12 +46,30 @@ You can directly import this project into IntellIJ/Android Studio.
 
 You'll have to:
 
-- Configure Fabric, or [remove it](https://docs.fabric.io/android/fabric/settings/removing.html#).
+- Configure fabric and add your `apiKey` and `apiSecret` in the `fabric.properties` file.
 - Create a firebase project and add the `google-services.json` to the `app/` folder.
-- Define the following in `res/values/strings.xml` or create `res/values/secrets.xml`
+- Define the following some parameters either in `~/.gradle/gradle.properties` or as gradle parameters (see the examples)
 
-    - mercury: A [Mercury](https://mercury.postlight.com/web-parser/) web parser api key for the internal browser
-    - feedback_email: An email to receive users  feedback.
-    - source_url: an url to the source code, used in the settings
-    - tracker_url: an url to the tracker, used in the settings
-- To run your app, you'll have to add `-P appLoginUrl="your.selfoss-instance.url" -P appLoginUsername="Username" -P appLoginPassword="password"`. (These are only used to run the espresso tests. You should be able to use empty strings or fake values to build the app)
+    - mercuryApiKey: A [Mercury](https://mercury.postlight.com/web-parser/) web parser api key for the internal browser
+    - feedbackEmail: An email to receive users  feedback.
+    - sourceUrl: an url to the source code, used in the settings
+    - trackerUrl: an url to the tracker, used in the settings
+
+### Examples:
+#### Inside ~/.gradle/gradle.properties
+
+```
+appLoginUrl="URL"
+appLoginUsername="LOGIN"
+appLoginPassword="PASS"
+mercuryApiKey="LONGAPIKEY"
+feedbackEmail="EMAIL"
+sourceUrl="URLSOURCE"
+trackerUrl="URLTRACKER"
+```
+
+#### As gradle parameters
+
+```
+./gradlew .... -P appLoginUrl="URL" -P appLoginUsername="LOGIN" -P appLoginPassword="PASS" -P mercuryApiKey="LONGAPIKEY" -P feedbackEmail="EMAIL" -P sourceUrl="URLSOURCE" -P trackerUrl="URLTRACKER"
+```

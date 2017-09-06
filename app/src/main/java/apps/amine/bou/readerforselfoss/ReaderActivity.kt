@@ -51,7 +51,7 @@ class ReaderActivity : DragDismissActivity() {
         val title: TextView = v.findViewById(R.id.title)
         val content: HtmlTextView = v.findViewById(R.id.content)
         val url = intent.getStringExtra("url")
-        val parser = MercuryApi(getString(R.string.mercury))
+        val parser = MercuryApi(BuildConfig.MERCURY_KEY)
         val browserBtn: ImageButton = v.findViewById(R.id.browserBtn)
         val shareBtn: ImageButton = v.findViewById(R.id.shareBtn)
 

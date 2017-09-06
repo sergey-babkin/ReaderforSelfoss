@@ -49,7 +49,7 @@ class MyApp : MultiDexApplication() {
 
     private fun initAmplify() {
         Amplify.initSharedInstance(this)
-            .setFeedbackEmailAddress(getString(R.string.feedback_email))
+            .setFeedbackEmailAddress(BuildConfig.FEEDBACK_EMAIL)
             .applyAllDefaultRules()
     }
 

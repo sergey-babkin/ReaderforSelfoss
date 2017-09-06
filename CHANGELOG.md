@@ -1,3 +1,7 @@
+**1.5.2.17**
+
+- Source code and tracker links weren't being set, and updated the contributing doc.
+
 **1.5.2.15/16**
 
 - Adding an account header on the lateral drawer.
