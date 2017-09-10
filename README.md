@@ -12,6 +12,8 @@ This is the repo of [Reader For Selfoss](https://play.google.com/store/apps/deta
 
 It's an RSS Reader for Android, that **only** works with [Selfoss](https://selfoss.aditu.de/)
 
+The last APK built from source is available [here](https://jenkins.amine-bou.fr/job/ReaderForSelfoss/lastSuccessfulBuild/artifact/SignApksBuilder-out/selfoss-key/selfoss/app-githubConfig-release-unsigned.apk/app-githubConfig-release.apk).
+
 
 ## Want to help ?
 
