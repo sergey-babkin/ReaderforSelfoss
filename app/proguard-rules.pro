@@ -61,3 +61,5 @@
 
 # self signed glidemodule
 -keep public class * implements com.bumptech.glide.module.GlideModule
+
+-dontwarn com.anupcowkur.reservoir.**
