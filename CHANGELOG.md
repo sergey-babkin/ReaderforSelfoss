@@ -1,3 +1,7 @@
+**1.5.2.18/19**
+
+- APK minification finally working. That means less space taken !
+
 **1.5.2.17**
 
 - Source code and tracker links weren't being set, and updated the contributing doc.

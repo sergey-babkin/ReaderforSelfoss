@@ -147,7 +147,7 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         customTabActivityHelper = CustomTabActivityHelper()
 
         val dirtyPref = getSharedPreferences(Config.settingsName, Context.MODE_PRIVATE)
-        api = SelfossApi(this, this@HomeActivity, dirtyPref.getBoolean("isSelfSignedCert", false))
+        api = SelfossApi(this, this@HomeActivity, dirtyPref.getBoolean("isSelfSignedCert", false), dirtyPref.getBoolean("should_log_everything", false))
         items = ArrayList()
 
         appColors =  AppColors(this@HomeActivity)

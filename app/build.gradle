@@ -149,7 +149,7 @@ dependencies {
     compile('com.github.bumptech.glide:okhttp3-integration:4.1.0@aar')
 
     // Asking politely users to rate the app
-    compile 'com.github.stkent:amplify:1.5.0'
+    compile 'com.github.stkent:amplify:2.1.0'
 
     // For the article reader
     compile 'com.klinkerapps:drag-dismiss-activity:1.4.3'

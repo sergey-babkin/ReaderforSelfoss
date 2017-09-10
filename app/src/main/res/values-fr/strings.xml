@@ -147,4 +147,7 @@
     <string name="unique_id_to_clipboard">Texte  copié</string>
     <string name="display_header_drawer_summary">Afficher une entête avec l\'url de votre instance de Selfoss en haut du drawer lateral.</string>
     <string name="display_header_drawer_title">Entête de compte</string>
+    <string name="login_everything_title">Log de tous les appels à l\'API</string>
+    <string name="login_everything_off">Aucun appel à l\'API ne sera logué</string>
+    <string name="login_everything_on">Tous les appels à l\'API vont êtres logués</string>
 </resources>

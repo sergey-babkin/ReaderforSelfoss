@@ -211,7 +211,7 @@ class LoginActivity : AppCompatActivity() {
             editor.putBoolean("isSelfSignedCert", isWithSelfSignedCert)
             editor.apply()
 
-            val api = SelfossApi(this, this@LoginActivity, isWithSelfSignedCert)
+            val api = SelfossApi(this, this@LoginActivity, isWithSelfSignedCert, isWithSelfSignedCert)
             api.login().enqueue(object : Callback<SuccessResponse> {
                 private fun preferenceError(t: Throwable) {
                     editor.remove("url")

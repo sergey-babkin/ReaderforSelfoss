@@ -19,10 +19,13 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 import apps.amine.bou.readerforselfoss.utils.Config
 import apps.amine.bou.readerforselfoss.utils.getUnsafeHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+
+
 
 
 // codebeat:disable[ARITY,TOO_MANY_FUNCTIONS]
-class SelfossApi(c: Context, callingActivity: Activity, isWithSelfSignedCert: Boolean) {
+class SelfossApi(c: Context, callingActivity: Activity, isWithSelfSignedCert: Boolean, shouldLog: Boolean) {
 
     private lateinit var service: SelfossService
     private val config: Config = Config(c)
@@ -42,14 +45,13 @@ class SelfossApi(c: Context, callingActivity: Activity, isWithSelfSignedCert: Bo
             .with("basic", BasicAuthenticator(this))
             .build()
 
-    fun DispatchingAuthenticator.getHttpClien(isWithSelfSignedCert: Boolean): OkHttpClient {
+    fun DispatchingAuthenticator.getHttpClien(isWithSelfSignedCert: Boolean): OkHttpClient.Builder {
         val authCache = ConcurrentHashMap<String, CachingAuthenticator>()
         return OkHttpClient
             .Builder()
             .maybeWithSelfSigned(isWithSelfSignedCert)
             .authenticator(CachingAuthenticatorDecorator(this, authCache))
             .addInterceptor(AuthenticationCacheInterceptor(authCache))
-            .build()
     }
 
 
@@ -69,13 +71,23 @@ class SelfossApi(c: Context, callingActivity: Activity, isWithSelfSignedCert: Bo
                 .setLenient()
                 .create()
 
+        val logging = HttpLoggingInterceptor()
+
+        logging.level = if (shouldLog)
+            HttpLoggingInterceptor.Level.BODY
+        else
+            HttpLoggingInterceptor.Level.NONE
+
+        val httpClient = authenticator.getHttpClien(isWithSelfSignedCert)
+
+        httpClient.addInterceptor(logging)
 
         try {
             val retrofit =
                 Retrofit
                     .Builder()
                     .baseUrl(config.baseUrl)
-                    .client(authenticator.getHttpClien(isWithSelfSignedCert))
+                    .client(httpClient.build())
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build()
             service = retrofit.create(SelfossService::class.java)

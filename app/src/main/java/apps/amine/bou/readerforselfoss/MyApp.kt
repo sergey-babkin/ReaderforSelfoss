@@ -12,6 +12,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.crashlytics.android.Crashlytics
 import com.ftinc.scoop.Scoop
+import com.github.stkent.amplify.feedback.DefaultEmailFeedbackCollector
+import com.github.stkent.amplify.feedback.GooglePlayStoreFeedbackCollector
 import com.github.stkent.amplify.tracking.Amplify
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
@@ -49,7 +51,8 @@ class MyApp : MultiDexApplication() {
 
     private fun initAmplify() {
         Amplify.initSharedInstance(this)
-            .setFeedbackEmailAddress(BuildConfig.FEEDBACK_EMAIL)
+            .setPositiveFeedbackCollectors(GooglePlayStoreFeedbackCollector())
+            .setCriticalFeedbackCollectors(DefaultEmailFeedbackCollector(BuildConfig.FEEDBACK_EMAIL))
             .applyAllDefaultRules()
     }
 

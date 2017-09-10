@@ -45,7 +45,7 @@ class AddSourceActivity : AppCompatActivity() {
 
         try {
             val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-            api = SelfossApi(this, this@AddSourceActivity, prefs.getBoolean("isSelfSignedCert", false))
+            api = SelfossApi(this, this@AddSourceActivity, prefs.getBoolean("isSelfSignedCert", false), prefs.getBoolean("should_log_everything", false))
         } catch (e: IllegalArgumentException) {
             mustLoginToAddSource()
         }

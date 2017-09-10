@@ -40,7 +40,7 @@ class SourcesActivity : AppCompatActivity() {
 
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
-        val api = SelfossApi(this, this@SourcesActivity, prefs.getBoolean("isSelfSignedCert", false))
+        val api = SelfossApi(this, this@SourcesActivity, prefs.getBoolean("isSelfSignedCert", false), prefs.getBoolean("should_log_everything", false))
         var items: ArrayList<Sources> = ArrayList()
 
         mFab.attachToRecyclerView(mRecyclerView)
