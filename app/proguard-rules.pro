@@ -63,3 +63,5 @@
 -keep public class * implements com.bumptech.glide.module.GlideModule
 
 -dontwarn com.anupcowkur.reservoir.**
+
+-dontwarn javax.annotation.**
