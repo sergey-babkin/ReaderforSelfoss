@@ -131,7 +131,7 @@ dependencies {
 
     // Retrofit + http logging + okhttp
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.9.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     compile 'com.burgstaller:okhttp-digest:1.12'
 
@@ -143,10 +143,8 @@ dependencies {
     compile 'org.sufficientlysecure:html-textview:3.3'
 
     // glide
-    compile('com.github.bumptech.glide:glide:4.1.0@aar') {
-        transitive = true;
-    }
-    compile('com.github.bumptech.glide:okhttp3-integration:4.1.0@aar')
+    compile 'com.github.bumptech.glide:glide:4.1.1'
+    compile 'com.github.bumptech.glide:okhttp3-integration:4.1.1'
 
     // Asking politely users to rate the app
     compile 'com.github.stkent:amplify:2.1.0'

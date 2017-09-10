@@ -97,6 +97,7 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     private var maybeSearchFilter: String? = null
     private var userIdentifier: String = ""
     private var displayAccountHeader: Boolean = false
+    private var infiniteScroll: Boolean = false
 
     private lateinit var emptyText: TextView
     private lateinit var recyclerView: RecyclerView
@@ -114,6 +115,10 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     private lateinit var sharedPref: SharedPreferences
     private lateinit var firebaseRemoteConfig: FirebaseRemoteConfig
     private lateinit var appColors: AppColors
+    private var offset: Int = 0
+    private var firstVisible: Int = 0
+    private var recyclerViewScrollListener: RecyclerView.OnScrollListener? = null
+
 
 
 
@@ -294,6 +299,7 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         itemsNumber = sharedPref.getString("prefer_api_items_number", "200").toInt()
         userIdentifier = sharedPref.getString("unique_id", "")
         displayAccountHeader = sharedPref.getBoolean("account_header_displaying", false)
+        infiniteScroll = sharedPref.getBoolean("infinite_loading", false)
     }
 
     private fun handleDrawer(dirtyPref: SharedPreferences) {
@@ -374,7 +380,7 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                 }
                 else {
                     for (tag in maybeTags) {
-                        val gd: GradientDrawable = GradientDrawable()
+                        val gd = GradientDrawable()
                         gd.setColor(Color.parseColor(tag.color))
                         gd.shape = GradientDrawable.RECTANGLE
                         gd.setSize(30, 30)
@@ -567,6 +573,30 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         recyclerView.layoutManager = mLayoutManager
         recyclerView.setHasFixedSize(true)
 
+        if (infiniteScroll) {
+            if (recyclerViewScrollListener == null)
+                recyclerViewScrollListener = object: RecyclerView.OnScrollListener() {
+                    override fun onScrolled(localRecycler: RecyclerView?, dx: Int, dy: Int) {
+                        if (dy > 0) {
+                            if (localRecycler != null) {
+                                val lastVisibleItem: Int = when (mLayoutManager) {
+                                    is StaggeredGridLayoutManager -> mLayoutManager.findLastCompletelyVisibleItemPositions(null).last()
+                                    is GridLayoutManager -> mLayoutManager.findLastCompletelyVisibleItemPosition()
+                                    else -> 0
+                                }
+
+                                if (lastVisibleItem == (items.size - 1)) {
+                                    getElementsAccordingToTab(appendResults = true)
+                                }
+                            }
+                        }
+                    }
+                }
+
+            recyclerView.clearOnScrollListeners()
+            recyclerView.addOnScrollListener(recyclerViewScrollListener)
+        }
+
         bottomBar.setTabSelectedListener(object: BottomNavigationBar.OnTabSelectedListener {
             override fun onTabUnselected(position: Int) = Unit
 
@@ -605,26 +635,31 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
             recyclerView.visibility = View.VISIBLE
         }
 
-    private fun getElementsAccordingToTab() =
+    private fun getElementsAccordingToTab(appendResults: Boolean = false) =
         when (elementsShown) {
-            UNREAD_SHOWN -> getUnRead()
-            READ_SHOWN -> getRead()
-            FAV_SHOWN -> getStarred()
-            else -> getUnRead()
+            UNREAD_SHOWN -> getUnRead(appendResults)
+            READ_SHOWN -> getRead(appendResults)
+            FAV_SHOWN -> getStarred(appendResults)
+            else -> getUnRead(appendResults)
         }
 
-    private fun doCallTo(toastMessage: Int, call: (String?, Long?, String?) -> Call<List<Item>>) {
+    private fun doCallTo(appendResults: Boolean, toastMessage: Int, call: (String?, Long?, String?) -> Call<List<Item>>) {
         fun handleItemsResponse(response: Response<List<Item>>) {
             val didUpdate = (response.body() != items)
             if (response.body() != null) {
                 if (response.body() != items) {
-                    items = response.body() as ArrayList<Item>
+                    if (appendResults)
+                        items.addAll(response.body() as ArrayList<Item>)
+                    else
+                        items = response.body() as ArrayList<Item>
                 }
             } else {
-                items = ArrayList()
+                if (!appendResults)
+                    items = ArrayList()
             }
             if (didUpdate)
-                handleListResult()
+                handleListResult(appendResults)
+
             mayBeEmpty()
             swipeRefreshLayout.isRefreshing = false
         }
@@ -645,22 +680,40 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
             })
     }
 
-    private fun getUnRead() {
+    private fun getUnRead(appendResults: Boolean = false) {
+        offset =  if (appendResults) (offset + itemsNumber)
+                  else 0
+        firstVisible = if (appendResults) firstVisible else 0
         elementsShown = UNREAD_SHOWN
-        doCallTo(R.string.cant_get_new_elements){t, id, f -> api.newItems(t, id, f, itemsNumber)}
+        doCallTo(appendResults, R.string.cant_get_new_elements){t, id, f -> api.newItems(t, id, f, itemsNumber, offset)}
     }
 
-    private fun getRead() {
+    private fun getRead(appendResults: Boolean = false) {
+        offset =  if (appendResults) (offset + itemsNumber)
+                  else 0
+        firstVisible = if (appendResults) firstVisible else 0
         elementsShown = READ_SHOWN
-        doCallTo(R.string.cant_get_read){t, id, f -> api.readItems(t, id, f)}
+        doCallTo(appendResults, R.string.cant_get_read){t, id, f -> api.readItems(t, id, f, itemsNumber, offset)}
     }
 
-    private fun getStarred() {
+    private fun getStarred(appendResults: Boolean = false) {
+        offset =  if (appendResults) (offset + itemsNumber)
+                  else 0
+        firstVisible = if (appendResults) firstVisible else 0
         elementsShown = FAV_SHOWN
-        doCallTo(R.string.cant_get_favs){t, id, f -> api.starredItems(t, id, f)}
+        doCallTo(appendResults, R.string.cant_get_favs){t, id, f -> api.starredItems(t, id, f, itemsNumber, offset)}
     }
 
-    private fun handleListResult() {
+    private fun handleListResult(appendResults: Boolean = false) {
+        if (appendResults) {
+            val oldManager = recyclerView.layoutManager
+            firstVisible = if ((oldManager is StaggeredGridLayoutManager)) {
+                oldManager.findFirstCompletelyVisibleItemPositions(null).last()
+            }
+            else
+                (oldManager as GridLayoutManager)?.findFirstCompletelyVisibleItemPosition()
+        }
+
         reloadLayoutManager()
 
         val mAdapter: RecyclerView.Adapter<*>
@@ -692,6 +745,10 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         }
         recyclerView.adapter = mAdapter
         mAdapter.notifyDataSetChanged()
+
+        if (appendResults) {
+            recyclerView.scrollToPosition(firstVisible!!)
+        }
 
         reloadBadges()
     }

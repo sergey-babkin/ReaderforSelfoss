@@ -1,6 +1,11 @@
+**1.5.3.00**
+
+- (BETA) Added pull from bottom to load more pages of results. May be buggy.
+
 **1.5.2.18/19**
 
 - APK minification finally working. That means less space taken !
+- Added an option to log every API call.
 
 **1.5.2.17**
 

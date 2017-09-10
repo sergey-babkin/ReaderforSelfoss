@@ -97,7 +97,7 @@ fun String.longHash(): Long {
     val l = this.length
     val chars = this.toCharArray()
 
-    for (i in 0..l - 1) {
+    for (i in 0 until l) {
         h = 31 * h + chars[i].toLong()
     }
     return h

@@ -1,7 +1,5 @@
 package apps.amine.bou.readerforselfoss
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,23 +7,21 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-
-import com.bumptech.glide.Glide
-import org.sufficientlysecure.htmltextview.HtmlHttpImageGetter
-import org.sufficientlysecure.htmltextview.HtmlTextView
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import xyz.klinker.android.drag_dismiss.activity.DragDismissActivity
-
 import apps.amine.bou.readerforselfoss.api.mercury.MercuryApi
 import apps.amine.bou.readerforselfoss.api.mercury.ParsedContent
 import apps.amine.bou.readerforselfoss.utils.buildCustomTabsIntent
 import apps.amine.bou.readerforselfoss.utils.customtabs.CustomTabActivityHelper
 import apps.amine.bou.readerforselfoss.utils.openItemUrl
 import apps.amine.bou.readerforselfoss.utils.shareLink
+import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.ftinc.scoop.Scoop
+import org.sufficientlysecure.htmltextview.HtmlHttpImageGetter
+import org.sufficientlysecure.htmltextview.HtmlTextView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import xyz.klinker.android.drag_dismiss.activity.DragDismissActivity
 
 
 class ReaderActivity : DragDismissActivity() {

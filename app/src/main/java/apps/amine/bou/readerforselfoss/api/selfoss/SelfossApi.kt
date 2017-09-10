@@ -99,17 +99,17 @@ class SelfossApi(c: Context, callingActivity: Activity, isWithSelfSignedCert: Bo
     fun login(): Call<SuccessResponse> =
         service.loginToSelfoss(config.userLogin, config.userPassword)
 
-    fun readItems(tag: String?, sourceId: Long?, search: String?): Call<List<Item>> =
-        getItems("read", tag, sourceId, search, 200)
+    fun readItems(tag: String?, sourceId: Long?, search: String?, itemsNumber: Int, offset: Int): Call<List<Item>> =
+        getItems("read", tag, sourceId, search, itemsNumber, offset)
 
-    fun newItems(tag: String?, sourceId: Long?, search: String?, itemsNumber: Int): Call<List<Item>> =
-        getItems("unread", tag, sourceId, search, itemsNumber)
+    fun newItems(tag: String?, sourceId: Long?, search: String?, itemsNumber: Int, offset: Int): Call<List<Item>> =
+        getItems("unread", tag, sourceId, search, itemsNumber, offset)
 
-    fun starredItems(tag: String?, sourceId: Long?, search: String?): Call<List<Item>> =
-        getItems("starred", tag, sourceId, search, 200)
+    fun starredItems(tag: String?, sourceId: Long?, search: String?, itemsNumber: Int, offset: Int): Call<List<Item>> =
+        getItems("starred", tag, sourceId, search, itemsNumber, offset)
 
-    private fun getItems(type: String, tag: String?, sourceId: Long?, search: String?, items: Int): Call<List<Item>> =
-        service.getItems(type, tag, sourceId, search, userName, password, items)
+    private fun getItems(type: String, tag: String?, sourceId: Long?, search: String?, items: Int, offset: Int): Call<List<Item>> =
+        service.getItems(type, tag, sourceId, search, userName, password, items, offset)
 
     fun markItem(itemId: String): Call<SuccessResponse> =
         service.markAsRead(itemId, userName, password)

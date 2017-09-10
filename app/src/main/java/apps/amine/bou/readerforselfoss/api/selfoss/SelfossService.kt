@@ -23,7 +23,8 @@ internal interface SelfossService {
                  @Query("search") search: String?,
                  @Query("username") username: String,
                  @Query("password") password: String,
-                 @Query("items") items: Int): Call<List<Item>>
+                 @Query("items") items: Int,
+                 @Query("offset") offset: Int): Call<List<Item>>
 
     @POST("mark/{id}")
     fun markAsRead(@Path("id") id: String,

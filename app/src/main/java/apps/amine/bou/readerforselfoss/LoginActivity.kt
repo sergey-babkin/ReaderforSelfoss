@@ -16,14 +16,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.*
-
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.mikepenz.aboutlibraries.Libs
-import com.mikepenz.aboutlibraries.LibsBuilder
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-
 import apps.amine.bou.readerforselfoss.api.selfoss.SelfossApi
 import apps.amine.bou.readerforselfoss.api.selfoss.SuccessResponse
 import apps.amine.bou.readerforselfoss.utils.Config
@@ -31,7 +23,12 @@ import apps.amine.bou.readerforselfoss.utils.checkAndDisplayStoreApk
 import apps.amine.bou.readerforselfoss.utils.isBaseUrlValid
 import com.crashlytics.android.Crashlytics
 import com.ftinc.scoop.Scoop
-import io.fabric.sdk.android.Fabric
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.mikepenz.aboutlibraries.Libs
+import com.mikepenz.aboutlibraries.LibsBuilder
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class LoginActivity : AppCompatActivity() {

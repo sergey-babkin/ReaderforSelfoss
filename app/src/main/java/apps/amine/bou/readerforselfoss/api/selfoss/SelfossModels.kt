@@ -114,14 +114,14 @@ data class Item(@SerializedName("id") val id: String,
     // TODO: maybe find a better way to handle these kind of urls
     fun getLinkDecoded(): String {
         var stringUrl: String
-        if (link.startsWith("http://news.google.com/news/") || link.startsWith("https://news.google.com/news/")) {
+        stringUrl = if (link.startsWith("http://news.google.com/news/") || link.startsWith("https://news.google.com/news/")) {
             if (link.contains("&amp;url=")) {
-                stringUrl = link.substringAfter("&amp;url=")
+                link.substringAfter("&amp;url=")
             } else {
-                stringUrl = this.link.replace("&amp;", "&")
+                this.link.replace("&amp;", "&")
             }
         } else {
-            stringUrl = this.link.replace("&amp;", "&")
+            this.link.replace("&amp;", "&")
         }
 
         // handle :443 => https

@@ -16,7 +16,7 @@ fun String.toTextDrawableString(): String {
 }
 
 fun Item.sourceAndDateText(): String {
-    var formattedDate: String = try {
+    val formattedDate: String = try {
         " " + DateUtils.getRelativeTimeSpanString(
             SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(this.datetime).time,
             Date().time,

@@ -7,14 +7,10 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.support.customtabs.CustomTabsIntent
-
-import xyz.klinker.android.drag_dismiss.DragDismissIntentBuilder
-
 import apps.amine.bou.readerforselfoss.R
 import apps.amine.bou.readerforselfoss.ReaderActivity
-import apps.amine.bou.readerforselfoss.api.selfoss.Item
 import apps.amine.bou.readerforselfoss.utils.customtabs.CustomTabActivityHelper
-
+import xyz.klinker.android.drag_dismiss.DragDismissIntentBuilder
 
 
 fun Context.buildCustomTabsIntent(): CustomTabsIntent {

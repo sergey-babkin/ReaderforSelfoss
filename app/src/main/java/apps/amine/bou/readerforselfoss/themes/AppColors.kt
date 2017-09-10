@@ -5,8 +5,6 @@ import android.content.Context
 import android.support.annotation.ColorInt
 import android.util.TypedValue
 import apps.amine.bou.readerforselfoss.R
-import java.lang.reflect.AccessibleObject.setAccessible
-
 
 
 class AppColors(a: Activity) {

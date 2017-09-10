@@ -17,7 +17,7 @@ class IntroActivity : MaterialIntroActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
 
         addSlide(SlideFragmentBuilder()
             .backgroundColor(R.color.colorPrimary)
