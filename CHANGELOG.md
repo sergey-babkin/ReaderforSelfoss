@@ -1,3 +1,9 @@
+**1.5.3.01/02**
+
+- Added translation link to the settings page.
+
+- Added the translation link to the README.
+
 **1.5.3.00**
 
 - (BETA) Added pull from bottom to load more pages of results. May be buggy.

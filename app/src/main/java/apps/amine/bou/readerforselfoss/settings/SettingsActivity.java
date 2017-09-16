@@ -255,6 +255,14 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     return false;
                 }
             });
+
+            findPreference("translation").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    openUrl(Uri.parse(BuildConfig.TRANSLATION_URL));
+                    return false;
+                }
+            });
         }
 
         @Override

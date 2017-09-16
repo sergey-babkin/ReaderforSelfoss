@@ -58,6 +58,7 @@ android {
         buildConfigField "String", "FEEDBACK_EMAIL", feedbackEmail
         buildConfigField "String", "SOURCE_URL", sourceUrl
         buildConfigField "String", "TRACKER_URL", trackerUrl
+        buildConfigField "String", "TRANSLATION_URL", translationUrl
     }
     buildTypes {
         release {
@@ -204,6 +205,7 @@ def initAppForSecretPropertiesIfNeeded() {
             entry(key: "feedbackEmail", value: System.getProperty("feedbackEmail"))
             entry(key: "sourceUrl", value: System.getProperty("sourceUrl"))
             entry(key: "trackerUrl", value: System.getProperty("trackerUrl"))
+            entry(key: "translationUrl", value: System.getProperty("translationUrl"))
         }
     }
 }

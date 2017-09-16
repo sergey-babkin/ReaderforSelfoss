@@ -7,4 +7,7 @@
 
     <Preference android:title="@string/source_code"
         android:key="sourceLink" />
+
+    <Preference android:title="@string/translation"
+        android:key="translation" />
 </PreferenceScreen>
