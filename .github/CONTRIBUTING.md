@@ -52,20 +52,21 @@ You'll have to:
 
     - mercuryApiKey: A [Mercury](https://mercury.postlight.com/web-parser/) web parser api key for the internal browser
     - feedbackEmail: An email to receive users  feedback.
-    - sourceUrl: an url to the source code, used in the settings
-    - trackerUrl: an url to the tracker, used in the settings
+    - sourceUrl: an url to the source code, used in the settings. **It can be empty.**
+    - trackerUrl: an url to the tracker, used in the settings. **It can be empty.**
+    - appLoginUrl, appLoginUsername and appLoginPassword: url, username and password of a selfoss instance. **These are only used for tests. They can be empty if you don't test API calls.**
 
 ### Examples:
 #### Inside ~/.gradle/gradle.properties
 
 ```
-appLoginUrl="URL"
-appLoginUsername="LOGIN"
-appLoginPassword="PASS"
+appLoginUrl="URL" # It can be empty.
+appLoginUsername="LOGIN" # It can be empty.
+appLoginPassword="PASS" # It can be empty.
 mercuryApiKey="LONGAPIKEY"
 feedbackEmail="EMAIL"
-sourceUrl="URLSOURCE"
-trackerUrl="URLTRACKER"
+sourceUrl="URLSOURCE" # It can be empty.
+trackerUrl="URLTRACKER" # It can be empty.
 ```
 
 #### As gradle parameters
