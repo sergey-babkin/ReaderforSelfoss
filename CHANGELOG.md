@@ -1,3 +1,13 @@
+**1.5.3.04**
+
+- Crowdin translations
+
+**1.5.3.03**
+
+- Libs updates.
+
+- Translation fix.
+
 **1.5.3.01/02**
 
 - Added translation link to the settings page.
