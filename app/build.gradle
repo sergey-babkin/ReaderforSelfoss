@@ -23,6 +23,8 @@ def versionNameFromGit() {
     return gitVersion().trim()
 }
 
+apply plugin: 'org.sonarqube'
+
 apply plugin: 'com.android.application'
 
 apply plugin: 'io.fabric'
@@ -30,12 +32,14 @@ apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
 
 repositories {
-    maven { url 'https://maven.fabric.io/public' }
+    maven {
+        url 'https://maven.fabric.io/public'
+    }
 }
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "apps.amine.bou.readerforselfoss"
         minSdkVersion 16

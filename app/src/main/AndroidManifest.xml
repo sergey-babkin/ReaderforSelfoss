@@ -28,7 +28,8 @@
             android:name=".IntroActivity"
             android:theme="@style/Theme.Intro">
         </activity>
-        <activity android:name=".LoginActivity"
+        <activity
+            android:name=".LoginActivity"
             android:label="@string/title_activity_login">
         </activity>
         <activity android:name=".HomeActivity">
@@ -41,13 +42,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="apps.amine.bou.readerforselfoss.HomeActivity" />
         </activity>
-        <activity android:name=".SourcesActivity"
+        <activity
+            android:name=".SourcesActivity"
             android:parentActivityName=".HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".HomeActivity" />
         </activity>
-        <activity android:name=".AddSourceActivity"
+        <activity
+            android:name=".AddSourceActivity"
             android:parentActivityName=".SourcesActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -61,9 +64,11 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-        <activity android:name=".ReaderActivity"
+        <activity
+            android:name=".ReaderActivity"
             android:theme="@style/DragDismissTheme">
         </activity>
+
         <meta-data
             android:name="apps.amine.bou.readerforselfoss.utils.glide.SelfSignedGlideModule"
             android:value="GlideModule" />
