@@ -1,3 +1,9 @@
+**1.5.3.05**
+
+- Fixed an issue on older versions of Android.
+
+- Libs update.
+
 **1.5.3.04**
 
 - Crowdin translations

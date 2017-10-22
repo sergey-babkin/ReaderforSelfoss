@@ -60,6 +60,7 @@ fun Context.openItemUrl(linkDecoded: String,
             DragDismissIntentBuilder(this)
                     .setFullscreenOnTablets(true)      // defaults to false, tablets will have padding on each side
                     .setDragElasticity(DragDismissIntentBuilder.DragElasticity.NORMAL)  // Larger elasticities will make it easier to dismiss.
+                    .setDrawUnderStatusBar(true)
                     .build(intent)
 
             intent.putExtra("url", linkDecoded)
