@@ -64,6 +64,7 @@ import com.ashokvarma.bottomnavigation.BottomNavigationBar
 import com.ashokvarma.bottomnavigation.BottomNavigationItem
 import com.ashokvarma.bottomnavigation.TextBadgeItem
 import com.ftinc.scoop.Scoop
+import com.heinrichreimersoftware.androidissuereporter.IssueReporterLauncher
 import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
@@ -351,6 +352,25 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
             drawerBuilder.withAccountHeader(headerResult)
 
         drawer = drawerBuilder.build()
+
+        drawer.addStickyFooterItem(
+            PrimaryDrawerItem()
+                .withName(R.string.drawer_report_bug)
+                .withIcon(R.drawable.ic_bug_report)
+                .withIconTintingEnabled(true)
+                .withOnDrawerItemClickListener { _, _, _ ->
+                    IssueReporterLauncher.forTarget(getString(R.string.report_github_user), getString(R.string.report_github_repo))
+                        .theme(R.style.Theme_App_Light)
+                        .guestToken(BuildConfig.GITHUB_TOKEN)
+                        .guestEmailRequired(true)
+                        .minDescriptionLength(20)
+                        .putExtraInfo("Unique ID", settings.getString("unique_id", ""))
+                        .putExtraInfo("From github", BuildConfig.GITHUB_VERSION)
+                        .homeAsUpEnabled(true)
+                        .launch(this)
+                    false
+                }
+        )
 
         drawer.addStickyFooterItem(
             PrimaryDrawerItem()

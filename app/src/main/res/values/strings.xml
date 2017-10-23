@@ -156,4 +156,7 @@
     <string name="pref_general_infinite_loading_title">(BETA) Load more articles on scroll</string>
     <string name="translation">Translation</string>
     <string name="cant_open_invalid_url">The item url is invalid. I\'m looking into solving this issue so the app won\'t crash.</string>
+    <string name="report_github_user" translatable="false">aminecmi</string>
+    <string name="report_github_repo" translatable="false">ReaderforSelfoss</string>
+    <string name="drawer_report_bug">Report a bug</string>
 </resources>

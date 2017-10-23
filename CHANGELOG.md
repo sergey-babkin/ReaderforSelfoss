@@ -1,3 +1,7 @@
+**1.5.4.00**
+
+- Added issue reporting from within the app.
+
 **1.5.3.06**
 
 - Fixed infinite scroll not working.
