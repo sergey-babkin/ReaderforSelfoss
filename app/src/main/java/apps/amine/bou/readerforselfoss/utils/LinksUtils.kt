@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.support.customtabs.CustomTabsIntent
 import android.util.Patterns
+import android.widget.Toast
 import apps.amine.bou.readerforselfoss.R
 import apps.amine.bou.readerforselfoss.ReaderActivity
 import apps.amine.bou.readerforselfoss.utils.customtabs.CustomTabActivityHelper
@@ -54,30 +55,34 @@ fun Context.openItemUrl(linkDecoded: String,
                         articleViewer: Boolean,
                         app: Activity) {
 
-    if (!internalBrowser || !linkDecoded.isUrlValid()) {
-        openInBrowser(linkDecoded, app)
+    if (!linkDecoded.isUrlValid()) {
+        Toast.makeText(this, this.getString(R.string.cant_open_invalid_url), Toast.LENGTH_LONG).show()
     } else {
-        if (articleViewer) {
-            val intent = Intent(this, ReaderActivity::class.java)
+        if (!internalBrowser) {
+            openInBrowser(linkDecoded, app)
+        } else {
+            if (articleViewer) {
+                val intent = Intent(this, ReaderActivity::class.java)
 
-            DragDismissIntentBuilder(this)
+                DragDismissIntentBuilder(this)
                     .setFullscreenOnTablets(true)      // defaults to false, tablets will have padding on each side
                     .setDragElasticity(DragDismissIntentBuilder.DragElasticity.NORMAL)  // Larger elasticities will make it easier to dismiss.
                     .setDrawUnderStatusBar(true)
                     .build(intent)
 
-            intent.putExtra("url", linkDecoded)
-            app.startActivity(intent)
-        } else {
-            try {
-                CustomTabActivityHelper.openCustomTab(app, customTabsIntent, Uri.parse(linkDecoded)
-                ) { _, uri ->
-                    val intent = Intent(Intent.ACTION_VIEW, uri)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
+                intent.putExtra("url", linkDecoded)
+                app.startActivity(intent)
+            } else {
+                try {
+                    CustomTabActivityHelper.openCustomTab(app, customTabsIntent, Uri.parse(linkDecoded)
+                    ) { _, uri ->
+                        val intent = Intent(Intent.ACTION_VIEW, uri)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(intent)
+                    }
+                } catch (e: Exception) {
+                    openInBrowser(linkDecoded, app)
                 }
-            } catch (e: Exception) {
-                openInBrowser(linkDecoded, app)
             }
         }
     }

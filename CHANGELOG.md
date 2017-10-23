@@ -4,6 +4,8 @@
 
 - Fixed logs not working.
 
+- Temporary workaround handling opening invalid urls. Waiting to solve #83.
+
 **1.5.3.05**
 
 - Fixed an issue on older versions of Android.
