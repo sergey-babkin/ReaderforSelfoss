@@ -9,13 +9,16 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 
-class MercuryApi(private val key: String) {
+class MercuryApi(private val key: String, shouldLog: Boolean) {
     private val service: MercuryService
 
     init {
 
         val interceptor = HttpLoggingInterceptor()
-        interceptor.level = HttpLoggingInterceptor.Level.BODY
+        interceptor.level = if (shouldLog)
+            HttpLoggingInterceptor.Level.BODY
+        else
+            HttpLoggingInterceptor.Level.NONE
         val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
 
         val gson = GsonBuilder()

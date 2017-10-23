@@ -1,6 +1,7 @@
 package apps.amine.bou.readerforselfoss
 
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,13 +42,14 @@ class ReaderActivity : DragDismissActivity() {
         Scoop.getInstance().apply(this)
         val v = inflater.inflate(R.layout.activity_reader, parent, false)
         showProgressBar()
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
         val image: ImageView = v.findViewById(R.id.imageView)
         val source: TextView = v.findViewById(R.id.source)
         val title: TextView = v.findViewById(R.id.title)
         val content: HtmlTextView = v.findViewById(R.id.content)
         val url = intent.getStringExtra("url")
-        val parser = MercuryApi(BuildConfig.MERCURY_KEY)
+        val parser = MercuryApi(BuildConfig.MERCURY_KEY, prefs.getBoolean("should_log_everything", false))
         val browserBtn: ImageButton = v.findViewById(R.id.browserBtn)
         val shareBtn: ImageButton = v.findViewById(R.id.shareBtn)
 

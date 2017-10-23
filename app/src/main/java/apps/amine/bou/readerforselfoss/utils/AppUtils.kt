@@ -6,10 +6,8 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.support.v7.app.AlertDialog
 import android.text.TextUtils
-import android.util.Patterns
 
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import okhttp3.HttpUrl
 
 import apps.amine.bou.readerforselfoss.BuildConfig
 import apps.amine.bou.readerforselfoss.R
@@ -34,20 +32,6 @@ fun Context.checkAndDisplayStoreApk() = {
             { dialog, _ -> dialog.dismiss() })
         alertDialog.show()
     } else Unit
-}
-
-fun String.isUrlValid(): Boolean =
-    HttpUrl.parse(this) != null && Patterns.WEB_URL.matcher(this).matches()
-
-fun String.isBaseUrlValid(): Boolean {
-    val baseUrl = HttpUrl.parse(this)
-    var existsAndEndsWithSlash = false
-    if (baseUrl != null) {
-        val pathSegments = baseUrl.pathSegments()
-        existsAndEndsWithSlash = "" == pathSegments[pathSegments.size - 1]
-    }
-
-    return Patterns.WEB_URL.matcher(this).matches() && existsAndEndsWithSlash
 }
 
 fun String?.isEmptyOrNullOrNullString(): Boolean =

@@ -1,3 +1,9 @@
+**1.5.3.06**
+
+- Fixed infinite scroll not working.
+
+- Fixed logs not working.
+
 **1.5.3.05**
 
 - Fixed an issue on older versions of Android.

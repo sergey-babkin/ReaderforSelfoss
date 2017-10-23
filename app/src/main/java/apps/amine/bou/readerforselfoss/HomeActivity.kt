@@ -118,6 +118,7 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     private var offset: Int = 0
     private var firstVisible: Int = 0
     private var recyclerViewScrollListener: RecyclerView.OnScrollListener? = null
+    private lateinit var settings: SharedPreferences
 
 
 
@@ -151,15 +152,17 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
         customTabActivityHelper = CustomTabActivityHelper()
 
-        val dirtyPref = getSharedPreferences(Config.settingsName, Context.MODE_PRIVATE)
-        api = SelfossApi(this, this@HomeActivity, dirtyPref.getBoolean("isSelfSignedCert", false), dirtyPref.getBoolean("should_log_everything", false))
+        settings = getSharedPreferences(Config.settingsName, Context.MODE_PRIVATE)
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
+
+        api = SelfossApi(this, this@HomeActivity, settings.getBoolean("isSelfSignedCert", false), sharedPref.getBoolean("should_log_everything", false))
         items = ArrayList()
 
         appColors =  AppColors(this@HomeActivity)
 
         handleBottomBar()
 
-        handleDrawer(dirtyPref)
+        handleDrawer()
 
         coordinatorLayout = findViewById(R.id.coordLayout)
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
@@ -193,11 +196,12 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                         val i = items[viewHolder.adapterPosition]
                         val position = items.indexOf(i)
 
-                        if (shouldBeCardView) {
-                            (recyclerView.adapter as ItemCardAdapter).removeItemAtIndex(position)
-                        } else {
-                            (recyclerView.adapter as ItemListAdapter).removeItemAtIndex(position)
+                        val adapter = recyclerView.adapter
+                        when (adapter) {
+                            is ItemCardAdapter -> adapter.removeItemAtIndex(position)
+                            is ItemListAdapter -> adapter.removeItemAtIndex(position)
                         }
+
                         if (items.size > 0)
                             tabNewBadge.setText("${items.size}").maybeShow()
                         else
@@ -269,7 +273,6 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
 
-        val settings = getSharedPreferences(Config.settingsName, Context.MODE_PRIVATE)
         editor = settings.edit()
 
         if (BuildConfig.GITHUB_VERSION) {
@@ -302,7 +305,7 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         infiniteScroll = sharedPref.getBoolean("infinite_loading", false)
     }
 
-    private fun handleDrawer(dirtyPref: SharedPreferences) {
+    private fun handleDrawer() {
         displayAccountHeader =
             PreferenceManager.getDefaultSharedPreferences(this)
                 .getBoolean("account_header_displaying", false)
@@ -313,7 +316,7 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                 .addProfiles(
                     ProfileDrawerItem()
                         .withName(
-                            dirtyPref.getString("url", "")
+                            settings.getString("url", "")
                         )
                         .withIcon(resources.getDrawable(R.mipmap.ic_launcher))
                 )
@@ -579,9 +582,10 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                     override fun onScrolled(localRecycler: RecyclerView?, dx: Int, dy: Int) {
                         if (dy > 0) {
                             if (localRecycler != null) {
-                                val lastVisibleItem: Int = when (mLayoutManager) {
-                                    is StaggeredGridLayoutManager -> mLayoutManager.findLastCompletelyVisibleItemPositions(null).last()
-                                    is GridLayoutManager -> mLayoutManager.findLastCompletelyVisibleItemPosition()
+                                val manager = recyclerView.layoutManager
+                                val lastVisibleItem: Int = when (manager) {
+                                    is StaggeredGridLayoutManager -> manager.findLastCompletelyVisibleItemPositions(null).last()
+                                    is GridLayoutManager -> manager.findLastCompletelyVisibleItemPosition()
                                     else -> 0
                                 }
 
@@ -601,18 +605,20 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
             override fun onTabUnselected(position: Int) = Unit
 
             override fun onTabReselected(position: Int) =
-                if (shouldBeCardView) {
-                    if ((mLayoutManager as StaggeredGridLayoutManager).findFirstCompletelyVisibleItemPositions(null)[0] == 0) {
-                        getElementsAccordingToTab()
-                    } else {
-                        mLayoutManager.scrollToPositionWithOffset(0, 0)
-                    }
-                } else {
-                    if ((mLayoutManager as GridLayoutManager).findFirstCompletelyVisibleItemPosition() == 0) {
-                        getElementsAccordingToTab()
-                    } else {
-                        mLayoutManager.scrollToPositionWithOffset(0, 0)
-                    }
+                when (mLayoutManager) {
+                    is StaggeredGridLayoutManager ->
+                        if (mLayoutManager.findFirstCompletelyVisibleItemPositions(null)[0] == 0) {
+                            getElementsAccordingToTab()
+                        } else {
+                            mLayoutManager.scrollToPositionWithOffset(0, 0)
+                        }
+                    is GridLayoutManager ->
+                        if (mLayoutManager.findFirstCompletelyVisibleItemPosition() == 0) {
+                            getElementsAccordingToTab()
+                        } else {
+                            mLayoutManager.scrollToPositionWithOffset(0, 0)
+                        }
+                    else -> Unit
                 }
 
             override fun onTabSelected(position: Int) =

@@ -7,9 +7,11 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.support.customtabs.CustomTabsIntent
+import android.util.Patterns
 import apps.amine.bou.readerforselfoss.R
 import apps.amine.bou.readerforselfoss.ReaderActivity
 import apps.amine.bou.readerforselfoss.utils.customtabs.CustomTabActivityHelper
+import okhttp3.HttpUrl
 import xyz.klinker.android.drag_dismiss.DragDismissIntentBuilder
 
 
@@ -51,6 +53,7 @@ fun Context.openItemUrl(linkDecoded: String,
                         internalBrowser: Boolean,
                         articleViewer: Boolean,
                         app: Activity) {
+
     if (!internalBrowser || !linkDecoded.isUrlValid()) {
         openInBrowser(linkDecoded, app)
     } else {
@@ -84,4 +87,18 @@ private fun openInBrowser(linkDecoded: String, app: Activity) {
     val intent = Intent(Intent.ACTION_VIEW)
     intent.data = Uri.parse(linkDecoded)
     app.startActivity(intent)
+}
+
+fun String.isUrlValid(): Boolean =
+    HttpUrl.parse(this) != null && Patterns.WEB_URL.matcher(this).matches()
+
+fun String.isBaseUrlValid(): Boolean {
+    val baseUrl = HttpUrl.parse(this)
+    var existsAndEndsWithSlash = false
+    if (baseUrl != null) {
+        val pathSegments = baseUrl.pathSegments()
+        existsAndEndsWithSlash = "" == pathSegments[pathSegments.size - 1]
+    }
+
+    return Patterns.WEB_URL.matcher(this).matches() && existsAndEndsWithSlash
 }

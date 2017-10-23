@@ -128,6 +128,12 @@ data class Item(@SerializedName("id") val id: String,
         if (stringUrl.contains(":443")) {
             stringUrl = stringUrl.replace(":443", "").replace("http://", "https://")
         }
+
+        // handle url not starting with http
+        if (stringUrl.startsWith("//")) {
+            stringUrl = "http:" + stringUrl
+        }
+
         return stringUrl
     }
 
