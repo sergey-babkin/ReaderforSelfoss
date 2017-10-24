@@ -11,8 +11,14 @@ import android.util.Patterns
 import android.widget.Toast
 import apps.amine.bou.readerforselfoss.R
 import apps.amine.bou.readerforselfoss.ReaderActivity
+import apps.amine.bou.readerforselfoss.api.selfoss.SelfossApi
+import apps.amine.bou.readerforselfoss.api.selfoss.Sources
 import apps.amine.bou.readerforselfoss.utils.customtabs.CustomTabActivityHelper
+import com.crashlytics.android.Crashlytics
+import okhttp3.Callback
 import okhttp3.HttpUrl
+import retrofit2.Call
+import retrofit2.Response
 import xyz.klinker.android.drag_dismiss.DragDismissIntentBuilder
 
 
@@ -50,6 +56,8 @@ fun Context.buildCustomTabsIntent(): CustomTabsIntent {
 }
 
 fun Context.openItemUrl(linkDecoded: String,
+                        api: SelfossApi,
+                        sourceId: String,
                         customTabsIntent: CustomTabsIntent,
                         internalBrowser: Boolean,
                         articleViewer: Boolean,
@@ -57,6 +65,18 @@ fun Context.openItemUrl(linkDecoded: String,
 
     if (!linkDecoded.isUrlValid()) {
         Toast.makeText(this, this.getString(R.string.cant_open_invalid_url), Toast.LENGTH_LONG).show()
+        api.sources.enqueue(object: retrofit2.Callback<List<Sources>> {
+            override fun onResponse(call: Call<List<Sources>>?, response: Response<List<Sources>>) {
+                val source = response.body()?.find { it.id == sourceId }
+                Crashlytics.log(100, "INVALID_ITEM_URL", "url $linkDecoded source ${source?.title} spout ${source?.spout}")
+                Crashlytics.logException(Exception("Invalid item URL"))
+            }
+
+            override fun onFailure(call: Call<List<Sources>>?, t: Throwable?) {
+                Crashlytics.log(100, "INVALID_ITEM_URL", "url $linkDecoded (no source data)")
+                Crashlytics.logException(Exception("Invalid item URL"))
+            }
+        })
     } else {
         if (!internalBrowser) {
             openInBrowser(linkDecoded, app)

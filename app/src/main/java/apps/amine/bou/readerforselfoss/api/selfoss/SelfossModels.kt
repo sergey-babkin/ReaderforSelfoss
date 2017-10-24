@@ -57,6 +57,7 @@ data class Item(@SerializedName("id") val id: String,
                 @SerializedName("title") val title: String,
                 @SerializedName("unread") val unread: Boolean,
                 @SerializedName("starred") val starred: Boolean,
+                @SerializedName("source") val source: String,
                 @SerializedName("thumbnail") val thumbnail: String,
                 @SerializedName("icon") val icon: String,
                 @SerializedName("link") val link: String,
@@ -77,6 +78,7 @@ data class Item(@SerializedName("id") val id: String,
         title = source.readString(),
         unread = 0.toByte() != source.readByte(),
         starred = 0.toByte() != source.readByte(),
+        source = source.readString(),
         thumbnail = source.readString(),
         icon = source.readString(),
         link = source.readString(),
@@ -91,6 +93,7 @@ data class Item(@SerializedName("id") val id: String,
         dest.writeString(title)
         dest.writeByte((if (unread) 1 else 0))
         dest.writeByte((if (starred) 1 else 0))
+        dest.writeString(source)
         dest.writeString(thumbnail)
         dest.writeString(icon)
         dest.writeString(link)

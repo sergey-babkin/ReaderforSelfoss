@@ -233,6 +233,8 @@ class ItemCardAdapter(private val app: Activity,
 
             mView.setOnClickListener {
                 c.openItemUrl(items[adapterPosition].getLinkDecoded(),
+                    api,
+                    items[adapterPosition].source,
                     customTabsIntent,
                     internalBrowser,
                     articleViewer,
