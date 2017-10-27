@@ -11,6 +11,7 @@ import android.util.Patterns
 import android.widget.Toast
 import apps.amine.bou.readerforselfoss.R
 import apps.amine.bou.readerforselfoss.ReaderActivity
+import apps.amine.bou.readerforselfoss.api.selfoss.Item
 import apps.amine.bou.readerforselfoss.utils.customtabs.CustomTabActivityHelper
 import okhttp3.HttpUrl
 import xyz.klinker.android.drag_dismiss.DragDismissIntentBuilder
@@ -106,4 +107,11 @@ fun String.isBaseUrlValid(): Boolean {
     }
 
     return Patterns.WEB_URL.matcher(this).matches() && existsAndEndsWithSlash
+}
+
+fun Context.openInBrowserAsNewTask(i: Item) {
+    val intent = Intent(Intent.ACTION_VIEW)
+    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+    intent.data = Uri.parse(i.getLinkDecoded().toStringUriWithHttp())
+    startActivity(intent)
 }

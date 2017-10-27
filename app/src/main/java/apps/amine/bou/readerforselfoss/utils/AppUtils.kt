@@ -5,34 +5,12 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.support.v7.app.AlertDialog
-import android.text.TextUtils
 
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 
-import apps.amine.bou.readerforselfoss.BuildConfig
 import apps.amine.bou.readerforselfoss.R
 import apps.amine.bou.readerforselfoss.api.selfoss.Item
 
-
-fun Context.checkAndDisplayStoreApk() = {
-    fun isStoreVersion(): Boolean =
-        try {
-            val installer = this.packageManager
-                .getInstallerPackageName(this.packageName)
-            !TextUtils.isEmpty(installer)
-        } catch (e: Throwable) {
-            false
-        }
-
-    if (!isStoreVersion() && !BuildConfig.GITHUB_VERSION) {
-        val alertDialog = AlertDialog.Builder(this).create()
-        alertDialog.setTitle(getString(R.string.warning_version))
-        alertDialog.setMessage(getString(R.string.text_version))
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-            { dialog, _ -> dialog.dismiss() })
-        alertDialog.show()
-    } else Unit
-}
 
 fun String?.isEmptyOrNullOrNullString(): Boolean =
     this == null || this == "null" || this.isEmpty()
@@ -100,11 +78,4 @@ fun Context.shareLink(itemUrl: String) {
     sendIntent.putExtra(Intent.EXTRA_TEXT, itemUrl.toStringUriWithHttp())
     sendIntent.type = "text/plain"
     startActivity(Intent.createChooser(sendIntent, getString(R.string.share)).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-}
-
-fun Context.openInBrowser(i: Item) {
-    val intent = Intent(Intent.ACTION_VIEW)
-    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-    intent.data = Uri.parse(i.getLinkDecoded().toStringUriWithHttp())
-    startActivity(intent)
 }

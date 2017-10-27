@@ -46,10 +46,8 @@
   <string name="pref_header_links">"Links"</string>
   <string name="issue_tracker_link">"Bug tracker"</string>
   <string name="issue_tracker_summary">"Rapporteer een probleem of dien een verzoek in"</string>
-  <string name="warning_version">"WAARSCHUWING"</string>
-  <string name="warning_wrong_url">"WAARSCHUWING"</string>
-  <string name="text_version">"Deze versie van de applicatie lijkt niet afkomstig van de Play Store en kan mogelijk virussen bevatten. De ontwikkelaar is niet verantwoordelijk voor mogelijke schade aan uw apparaat. Overweeg om de ReaderForSelfoss app uit de Play Store te gebruiken."</string>
-  <string name="pref_switch_card_view_title">"Kaart weergave"</string>
+    <string name="warning_wrong_url">"WAARSCHUWING"</string>
+    <string name="pref_switch_card_view_title">"Kaart weergave"</string>
   <string name="cant_mark_favortie">"Kan het artikel niet markeren als favoriet"</string>
   <string name="cant_unmark_favortie">"Kan het item niet verwijderen uit favorieten"</string>
   <string name="share">"Delen"</string>
@@ -116,7 +114,7 @@
   <string name="no_sources_loaded">No sources loaded</string>
   <string name="drawer_loading">Loading …</string>
   <string name="menu_home_search">Zoeken</string>
-  <string name="can_delete_source">Can\'t delete the source...</string>
+  <string name="can_delete_source">Can\'t delete the source…</string>
   <string name="base_url_error">There was an issue when trying to communicate with your Selfoss Instance. If the issue persists, please get in touch with me.</string>
   <string name="pref_header_theme">Themes</string>
   <string name="default_theme">Default</string>

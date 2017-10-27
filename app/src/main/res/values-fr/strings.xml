@@ -46,10 +46,8 @@
   <string name="pref_header_links">"Liens utils"</string>
   <string name="issue_tracker_link">"Suivie des problèmes"</string>
   <string name="issue_tracker_summary">"Pour signaler un bug ou demander une nouvelle fonctionnalité"</string>
-  <string name="warning_version">"ATTENTION"</string>
-  <string name="warning_wrong_url">"ATTENTION"</string>
-  <string name="text_version">"Il semblerait que vous utilisiez une version de l'application ne provenant pas du Play Store. L'application peut avoir été modifié et son utilisation peut être dangereuse. Je ne serai en aucun cas tenu responsable en cas de dommage causé sur votre appareil. Pour éviter tout problème, je vous conseille de télécharger ReaderForSelfoss directement depuis le Play Store."</string>
-  <string name="pref_switch_card_view_title">"Card View"</string>
+    <string name="warning_wrong_url">"ATTENTION"</string>
+    <string name="pref_switch_card_view_title">"Card View"</string>
   <string name="cant_mark_favortie">"Impossible de marquer l'élément comme favoris"</string>
   <string name="cant_unmark_favortie">"Impossible de retirer l'élément des favoris"</string>
   <string name="share">"Partager"</string>

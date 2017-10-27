@@ -223,7 +223,7 @@ class ItemCardAdapter(private val app: Activity,
             }
 
             browserBtn.setOnClickListener {
-                c.openInBrowser(items[adapterPosition])
+                c.openInBrowserAsNewTask(items[adapterPosition])
             }
         }
 

@@ -19,7 +19,6 @@ import android.widget.*
 import apps.amine.bou.readerforselfoss.api.selfoss.SelfossApi
 import apps.amine.bou.readerforselfoss.api.selfoss.SuccessResponse
 import apps.amine.bou.readerforselfoss.utils.Config
-import apps.amine.bou.readerforselfoss.utils.checkAndDisplayStoreApk
 import apps.amine.bou.readerforselfoss.utils.isBaseUrlValid
 import com.crashlytics.android.Crashlytics
 import com.ftinc.scoop.Scoop
@@ -81,8 +80,6 @@ class LoginActivity : AppCompatActivity() {
 
         if (settings.getString("url", "").isNotEmpty()) {
             goToMain()
-        } else {
-            this@LoginActivity.checkAndDisplayStoreApk()
         }
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)

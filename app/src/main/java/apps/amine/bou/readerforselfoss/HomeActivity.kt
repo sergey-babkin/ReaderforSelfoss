@@ -55,7 +55,6 @@ import apps.amine.bou.readerforselfoss.themes.AppColors
 import apps.amine.bou.readerforselfoss.utils.Config
 import apps.amine.bou.readerforselfoss.utils.bottombar.maybeShow
 import apps.amine.bou.readerforselfoss.utils.bottombar.removeBadge
-import apps.amine.bou.readerforselfoss.utils.checkAndDisplayStoreApk
 import apps.amine.bou.readerforselfoss.utils.checkApkVersion
 import apps.amine.bou.readerforselfoss.utils.customtabs.CustomTabActivityHelper
 import apps.amine.bou.readerforselfoss.utils.drawer.CustomUrlPrimaryDrawerItem
@@ -214,9 +213,6 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
             }
 
         ItemTouchHelper(simpleItemTouchCallback).attachToRecyclerView(recyclerView)
-
-        this@HomeActivity.checkAndDisplayStoreApk()
-
     }
 
     private fun handleBottomBar() {

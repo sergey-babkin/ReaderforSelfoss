@@ -1,3 +1,13 @@
+**1.5.4.01**
+
+- Removed the "apk downloaded from outside of playstore" message.
+
+- Versions update.
+
+- HTML viewer version update. It should fix an issue with images.
+
+- Some code cleaning.
+
 **1.5.4.00**
 
 - Added issue reporting from within the app.
