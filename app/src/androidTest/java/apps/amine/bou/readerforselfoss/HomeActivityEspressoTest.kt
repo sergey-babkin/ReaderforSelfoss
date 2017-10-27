@@ -24,6 +24,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 import apps.amine.bou.readerforselfoss.utils.Config
+import com.heinrichreimersoftware.androidissuereporter.IssueReporterLauncher
 import org.junit.After
 
 
@@ -71,9 +72,6 @@ class HomeActivityEspressoTest {
 
         onView(withContentDescription(R.string.abc_toolbar_collapse_description)).perform(click())
 
-
-        onView(withMenu(id = R.id.readAll, titleId = R.string.readAll)).perform(click())
-
         openActionBarOverflowOrOptionsMenu(context)
 
         onView(withMenu(id = R.id.refresh, titleId = R.string.menu_home_refresh))
@@ -94,8 +92,9 @@ class HomeActivityEspressoTest {
 
         onView(withId(R.id.material_drawer_layout)).perform(DrawerActions.open())
 
-        onView(withText(R.string.action_about)).perform(click())
-        intended(hasComponent(LibsActivity::class.java.name))
+        onView(withText(R.string.drawer_report_bug)).perform(click())
+        intended(hasComponent(IssueReporterLauncher.Activity::class.java.name))
+        onView(isRoot()).perform(pressBack())
         onView(isRoot()).perform(pressBack())
         intended(hasComponent(HomeActivity::class.java.name))
 
