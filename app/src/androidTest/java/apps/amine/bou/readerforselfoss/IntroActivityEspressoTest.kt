@@ -46,7 +46,7 @@ class IntroActivityEspressoTest {
         Intents.init()
     }
 
-    /*@Test
+    @Test
     fun nextEachTimes() {
 
         rule.launchActivity(Intent())
@@ -61,7 +61,7 @@ class IntroActivityEspressoTest {
         intended(hasComponent(IntroActivity::class.java.name), times(1))
         intended(hasComponent(LoginActivity::class.java.name), times(1))
 
-    }*/
+    }
 
     @Test
     fun nextBackRandomTimes() {
@@ -88,29 +88,6 @@ class IntroActivityEspressoTest {
 
         intended(hasComponent(IntroActivity::class.java.name), times(1))
         intended(hasComponent(LoginActivity::class.java.name), times(1))
-
-    }
-
-    @Test
-    fun clickSelfossUrl() {
-        rule.launchActivity(Intent())
-
-        onView(withText(R.string.intro_hello_title)).check(matches(isDisplayed()))
-
-        onView(withId(R.id.button_next)).perform(click())
-
-        onView(withId(R.id.button_message)).perform(click())
-
-        intended(
-            allOf(
-                hasData(
-                    hasHost(
-                        equalTo("selfoss.aditu.de")
-                    )
-                ),
-                hasAction(Intent.ACTION_VIEW)
-            )
-        )
 
     }
 

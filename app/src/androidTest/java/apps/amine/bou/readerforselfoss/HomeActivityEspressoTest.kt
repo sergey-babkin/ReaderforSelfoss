@@ -23,7 +23,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-import apps.amine.bou.readerforselfoss.settings.SettingsActivity
 import apps.amine.bou.readerforselfoss.utils.Config
 import org.junit.After
 
@@ -86,9 +85,6 @@ class HomeActivityEspressoTest {
 
         intended(hasComponent(LoginActivity::class.java.name), times(1))
 
-        //onView(isRoot()).perform(pressBack())
-
-
     }
 
     @Test
@@ -107,10 +103,6 @@ class HomeActivityEspressoTest {
 
         onView(withId(R.id.material_drawer_layout)).perform(DrawerActions.open())
         onView(withText(R.string.drawer_action_clear)).perform(click())
-
-        // bug
-        //onView(withText(R.string.title_activity_settings)).perform(scrollTo(), click())
-        //intended(hasComponent(SettingsActivity::class.java.name))
 
     }
 
