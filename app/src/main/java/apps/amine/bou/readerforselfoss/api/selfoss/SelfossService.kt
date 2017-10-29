@@ -1,20 +1,15 @@
 package apps.amine.bou.readerforselfoss.api.selfoss
 
 import retrofit2.Call
-import retrofit2.http.DELETE
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
-import retrofit2.http.Query
-
+import retrofit2.http.*
 
 
 // codebeat:disable[ARITY]
 internal interface SelfossService {
+
     @GET("login")
     fun loginToSelfoss(@Query("username") username: String, @Query("password") password: String): Call<SuccessResponse>
+
 
     @GET("items")
     fun getItems(@Query("type") type: String,
@@ -26,16 +21,20 @@ internal interface SelfossService {
                  @Query("items") items: Int,
                  @Query("offset") offset: Int): Call<List<Item>>
 
+
+    @Headers("Content-Type: application/json")
     @POST("mark/{id}")
     fun markAsRead(@Path("id") id: String,
                    @Query("username") username: String,
                    @Query("password") password: String): Call<SuccessResponse>
 
 
+    @Headers("Content-Type: application/json")
     @POST("unmark/{id}")
     fun unmarkAsRead(@Path("id") id: String,
                      @Query("username") username: String,
                      @Query("password") password: String): Call<SuccessResponse>
+
 
     @FormUrlEncoded
     @POST("mark")
@@ -44,12 +43,14 @@ internal interface SelfossService {
                       @Query("password") password: String): Call<SuccessResponse>
 
 
+    @Headers("Content-Type: application/json")
     @POST("starr/{id}")
     fun starr(@Path("id") id: String,
               @Query("username") username: String,
               @Query("password") password: String): Call<SuccessResponse>
 
 
+    @Headers("Content-Type: application/json")
     @POST("unstarr/{id}")
     fun unstarr(@Path("id") id: String,
                 @Query("username") username: String,
@@ -70,9 +71,11 @@ internal interface SelfossService {
     fun update(@Query("username") username: String,
                @Query("password") password: String): Call<String>
 
+
     @GET("sources/spouts")
     fun spouts(@Query("username") username: String,
                @Query("password") password: String): Call<Map<String, Spout>>
+
 
     @GET("sources/list")
     fun sources(@Query("username") username: String,
@@ -83,6 +86,7 @@ internal interface SelfossService {
     fun deleteSource(@Path("id") id: String,
                      @Query("username") username: String,
                      @Query("password") password: String): Call<SuccessResponse>
+
 
     @FormUrlEncoded
     @POST("source")
