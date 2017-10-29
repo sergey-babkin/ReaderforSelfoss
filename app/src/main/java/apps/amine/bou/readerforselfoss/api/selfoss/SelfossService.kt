@@ -22,14 +22,14 @@ internal interface SelfossService {
                  @Query("offset") offset: Int): Call<List<Item>>
 
 
-    @Headers("Content-Type: application/json")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
     @POST("mark/{id}")
     fun markAsRead(@Path("id") id: String,
                    @Query("username") username: String,
                    @Query("password") password: String): Call<SuccessResponse>
 
 
-    @Headers("Content-Type: application/json")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
     @POST("unmark/{id}")
     fun unmarkAsRead(@Path("id") id: String,
                      @Query("username") username: String,
@@ -43,14 +43,14 @@ internal interface SelfossService {
                       @Query("password") password: String): Call<SuccessResponse>
 
 
-    @Headers("Content-Type: application/json")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
     @POST("starr/{id}")
     fun starr(@Path("id") id: String,
               @Query("username") username: String,
               @Query("password") password: String): Call<SuccessResponse>
 
 
-    @Headers("Content-Type: application/json")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
     @POST("unstarr/{id}")
     fun unstarr(@Path("id") id: String,
                 @Query("username") username: String,
