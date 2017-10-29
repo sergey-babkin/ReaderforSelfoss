@@ -2,6 +2,7 @@ package apps.amine.bou.readerforselfoss
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -284,11 +285,15 @@ class LoginActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.about -> {
-                LibsBuilder()
-                    .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
-                    .withAboutIconShown(true)
-                    .withAboutVersionShown(true)
-                    .start(this)
+                if (!ActivityManager.isUserAMonkey()){
+                    LibsBuilder()
+                        .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
+                        .withAboutIconShown(true)
+                        .withAboutVersionShown(true)
+                        .start(this)
+                } else {
+                    Toast.makeText(this@LoginActivity, "You may be a bot", Toast.LENGTH_SHORT).show()
+                }
                 return true
             }
             R.id.loging_debug -> {
