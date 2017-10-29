@@ -1,3 +1,19 @@
+**1.5.4.05**
+
+- Translation fix.
+
+**1.5.4.04**
+
+- Fixing an issue with marking items as read (something related to an old version of selfoss).
+
+**1.5.4.03**
+
+- Trying to fix some issue with pre-launch reports. Reverted because it seems to be related to the dev console side.
+
+**1.5.4.02**
+
+- Fixing full height cards issue.
+
 **1.5.4.01**
 
 - Removed the "apk downloaded from outside of playstore" message.
