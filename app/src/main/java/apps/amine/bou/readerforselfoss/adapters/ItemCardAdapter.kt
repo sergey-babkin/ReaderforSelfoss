@@ -52,7 +52,7 @@ class ItemCardAdapter(private val app: Activity,
     private val generator: ColorGenerator = ColorGenerator.MATERIAL
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val v = LayoutInflater.from(c).inflate(R.layout.card_item, parent, false) as ConstraintLayout
+        val v = LayoutInflater.from(c).inflate(R.layout.card_item, parent, false) as CardView
         return ViewHolder(v)
     }
 
@@ -69,14 +69,9 @@ class ItemCardAdapter(private val app: Activity,
             Glide.with(c).clear(holder.itemImage)
             holder.itemImage.setImageDrawable(null)
         } else {
-            if (fullHeightCards) {
-                c.bitmapFitCenter(itm.getThumbnail(c), holder.itemImage)
-            } else {
-                c.bitmapCenterCrop(itm.getThumbnail(c), holder.itemImage)
-            }
+            c.bitmapCenterCrop(itm.getThumbnail(c), holder.itemImage)
         }
 
-        val fHolder = holder
         if (itm.getIcon(c).isEmpty()) {
             val color = generator.getColor(itm.sourcetitle)
 
@@ -163,7 +158,7 @@ class ItemCardAdapter(private val app: Activity,
 
     }
 
-    inner class ViewHolder(val mView: ConstraintLayout) : RecyclerView.ViewHolder(mView) {
+    inner class ViewHolder(val mView: CardView) : RecyclerView.ViewHolder(mView) {
         lateinit var saveBtn: LikeButton
         lateinit var browserBtn: ImageButton
         lateinit var shareBtn: ImageButton
@@ -173,7 +168,7 @@ class ItemCardAdapter(private val app: Activity,
         lateinit var sourceTitleAndDate: TextView
 
         init {
-            (mView.findViewById<CardView>(R.id.card)).setCardBackgroundColor(appColors.cardBackground)
+            mView.setCardBackgroundColor(appColors.cardBackground)
             handleClickListeners()
             handleCustomTabActions()
         }
