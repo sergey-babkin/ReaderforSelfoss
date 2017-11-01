@@ -207,6 +207,18 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                         else
                             tabNewBadge.hide()
 
+
+                        val manager = recyclerView.layoutManager
+                        val lastVisibleItem: Int = when (manager) {
+                            is StaggeredGridLayoutManager -> manager.findLastCompletelyVisibleItemPositions(null).last()
+                            is GridLayoutManager -> manager.findLastCompletelyVisibleItemPosition()
+                            else -> 0
+                        }
+
+                        if (lastVisibleItem == (items.size - 1)) {
+                            getElementsAccordingToTab(appendResults = true)
+                        }
+
                     } catch (e: IndexOutOfBoundsException) {}
 
                 }
