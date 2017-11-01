@@ -1,3 +1,11 @@
+**1.5.4.06**
+
+- Loading more items on swipe too.
+
+- Fixed popup menu style. User may need to reselect the theme.
+
+- Disabled reporting marking items as read if there isn't an issue.
+
 **1.5.4.05**
 
 - Translation fix.
