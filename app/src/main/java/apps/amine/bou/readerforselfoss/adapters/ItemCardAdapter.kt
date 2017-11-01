@@ -125,7 +125,7 @@ class ItemCardAdapter(private val app: Activity,
 
         api.markItem(i.id).enqueue(object : Callback<SuccessResponse> {
             override fun onResponse(call: Call<SuccessResponse>, response: Response<SuccessResponse>) {
-                if (debugReadingItems) {
+                if (!response.succeeded() && debugReadingItems) {
                     val message =
                         "message: ${response.message()} " +
                             "response isSuccess: ${response.isSuccessful} " +
