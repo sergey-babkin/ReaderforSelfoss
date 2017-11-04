@@ -2,8 +2,8 @@ package apps.amine.bou.readerforselfoss.api.selfoss
 
 import android.app.Activity
 import android.content.Context
-import java.util.concurrent.ConcurrentHashMap
-
+import apps.amine.bou.readerforselfoss.utils.Config
+import apps.amine.bou.readerforselfoss.utils.getUnsafeHttpClient
 import com.burgstaller.okhttp.AuthenticationCacheInterceptor
 import com.burgstaller.okhttp.CachingAuthenticatorDecorator
 import com.burgstaller.okhttp.DispatchingAuthenticator
@@ -13,15 +13,11 @@ import com.burgstaller.okhttp.digest.Credentials
 import com.burgstaller.okhttp.digest.DigestAuthenticator
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-
-import apps.amine.bou.readerforselfoss.utils.Config
-import apps.amine.bou.readerforselfoss.utils.getUnsafeHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-
-
+import java.util.concurrent.ConcurrentHashMap
 
 
 class SelfossApi(c: Context, callingActivity: Activity, isWithSelfSignedCert: Boolean, shouldLog: Boolean) {

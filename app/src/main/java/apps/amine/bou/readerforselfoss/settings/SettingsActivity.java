@@ -1,6 +1,8 @@
 package apps.amine.bou.readerforselfoss.settings;
 
 
+import java.util.List;
+
 import android.annotation.TargetApi;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -16,16 +18,14 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
-import android.preference.SwitchPreference;
-import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.SwitchPreference;
+import android.support.v7.app.ActionBar;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.view.MenuItem;
 import android.widget.Toast;
-
-import java.util.List;
 
 import apps.amine.bou.readerforselfoss.BuildConfig;
 import apps.amine.bou.readerforselfoss.R;
