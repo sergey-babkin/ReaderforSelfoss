@@ -4,7 +4,6 @@ import retrofit2.Call
 import retrofit2.http.*
 
 
-// codebeat:disable[ARITY]
 internal interface SelfossService {
 
     @GET("login")
@@ -98,4 +97,3 @@ internal interface SelfossService {
                      @Query("username") username: String,
                      @Query("password") password: String): Call<SuccessResponse>
 }
-// codebeat:disable[ARITY]

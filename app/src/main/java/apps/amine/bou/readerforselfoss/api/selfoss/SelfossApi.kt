@@ -24,7 +24,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 
 
 
-// codebeat:disable[ARITY,TOO_MANY_FUNCTIONS]
 class SelfossApi(c: Context, callingActivity: Activity, isWithSelfSignedCert: Boolean, shouldLog: Boolean) {
 
     private lateinit var service: SelfossService
@@ -148,5 +147,3 @@ class SelfossApi(c: Context, callingActivity: Activity, isWithSelfSignedCert: Bo
         service.createSource(title, url, spout, tags, filter, userName, password)
 
 }
-
-// codebeat:enable[ARITY,TOO_MANY_FUNCTIONS]

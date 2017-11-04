@@ -60,16 +60,7 @@ class LoginActivity : AppCompatActivity() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        if (intent.getBooleanExtra("baseUrlFail", false)) {
-            val alertDialog = AlertDialog.Builder(this).create()
-            alertDialog.setTitle(getString(R.string.warning_wrong_url))
-            alertDialog.setMessage(getString(R.string.base_url_error))
-            alertDialog.setButton(
-                AlertDialog.BUTTON_NEUTRAL,
-                "OK",
-                { dialog, _ -> dialog.dismiss() })
-            alertDialog.show()
-        }
+        handleBaseUrlFail()
 
 
         settings = getSharedPreferences(Config.settingsName, Context.MODE_PRIVATE)
@@ -91,6 +82,10 @@ class LoginActivity : AppCompatActivity() {
         mLoginFormView = findViewById(R.id.login_form)
         mProgressView = findViewById(R.id.login_progress)
 
+        handleActions()
+    }
+
+    private fun handleActions() {
         val mSwitch: Switch = findViewById(R.id.withLogin)
         val mHTTPSwitch: Switch = findViewById(R.id.withHttpLogin)
         val mLoginLayout: TextInputLayout = findViewById(R.id.loginLayout)
@@ -101,7 +96,7 @@ class LoginActivity : AppCompatActivity() {
         val selfHostedSwitch: Switch = findViewById(R.id.withSelfhostedCert)
         val warningTextview: TextView = findViewById(R.id.warningText)
 
-        selfHostedSwitch.setOnCheckedChangeListener {_, b ->
+        selfHostedSwitch.setOnCheckedChangeListener { _, b ->
             isWithSelfSignedCert = !isWithSelfSignedCert
             val visi: Int = if (b) View.VISIBLE else View.GONE
 
@@ -132,6 +127,19 @@ class LoginActivity : AppCompatActivity() {
 
             mHTTPLoginLayout.visibility = visi
             mHTTPPasswordLayout.visibility = visi
+        }
+    }
+
+    private fun handleBaseUrlFail() {
+        if (intent.getBooleanExtra("baseUrlFail", false)) {
+            val alertDialog = AlertDialog.Builder(this).create()
+            alertDialog.setTitle(getString(R.string.warning_wrong_url))
+            alertDialog.setMessage(getString(R.string.base_url_error))
+            alertDialog.setButton(
+                AlertDialog.BUTTON_NEUTRAL,
+                "OK",
+                { dialog, _ -> dialog.dismiss() })
+            alertDialog.show()
         }
     }
 
@@ -244,9 +252,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Shows the progress UI and hides the login form.
-     */
+
     private fun showProgress(show: Boolean) {
         val shortAnimTime = resources.getInteger(android.R.integer.config_shortAnimTime)
 

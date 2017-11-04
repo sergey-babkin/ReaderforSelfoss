@@ -62,6 +62,7 @@ import apps.amine.bou.readerforselfoss.utils.longHash
 import com.ashokvarma.bottomnavigation.BottomNavigationBar
 import com.ashokvarma.bottomnavigation.BottomNavigationItem
 import com.ashokvarma.bottomnavigation.TextBadgeItem
+import com.crashlytics.android.Crashlytics
 import com.ftinc.scoop.Scoop
 import com.heinrichreimersoftware.androidissuereporter.IssueReporterLauncher
 import com.mikepenz.materialdrawer.AccountHeader
@@ -172,6 +173,10 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
         reloadLayoutManager()
 
+        handleSwipeRefreshLayout()
+    }
+
+    private fun handleSwipeRefreshLayout() {
         swipeRefreshLayout.setColorSchemeResources(
             R.color.refresh_progress_1,
             R.color.refresh_progress_2,
@@ -189,7 +194,7 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
                 override fun onMove(recyclerView: RecyclerView,
                                     viewHolder: RecyclerView.ViewHolder,
-                                    target: RecyclerView.ViewHolder): Boolean  = false
+                                    target: RecyclerView.ViewHolder): Boolean = false
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
                     try {
@@ -219,7 +224,11 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                             getElementsAccordingToTab(appendResults = true)
                         }
 
-                    } catch (e: IndexOutOfBoundsException) {}
+                    } catch (e: IndexOutOfBoundsException) {
+                        Crashlytics.setUserIdentifier(userIdentifier)
+                        Crashlytics.log(100, "SWIPE_INDEX_OUT_OF_BOUND", "IndexOutOfBoundsException when swiping")
+                        Crashlytics.logException(e)
+                    }
 
                 }
             }
@@ -578,7 +587,7 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
         drawer.addItem(PrimaryDrawerItem().withName(getString(R.string.drawer_loading)).withSelectable(false))
 
-        val resultType = object : TypeToken<DrawerData>() {}.type
+        val resultType = object : TypeToken<DrawerData>() {}.type //NOSONAR
         Reservoir.getAsync("drawerData", resultType, object: ReservoirGetCallback<DrawerData> {
             override fun onSuccess(maybeDrawerData: DrawerData?) {
                 handleDrawerData(maybeDrawerData, loadedFromCache = true)
@@ -605,31 +614,14 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         recyclerView.setHasFixedSize(true)
 
         if (infiniteScroll) {
-            if (recyclerViewScrollListener == null)
-                recyclerViewScrollListener = object: RecyclerView.OnScrollListener() {
-                    override fun onScrolled(localRecycler: RecyclerView?, dx: Int, dy: Int) {
-                        if (dy > 0) {
-                            if (localRecycler != null) {
-                                val manager = recyclerView.layoutManager
-                                val lastVisibleItem: Int = when (manager) {
-                                    is StaggeredGridLayoutManager -> manager.findLastCompletelyVisibleItemPositions(null).last()
-                                    is GridLayoutManager -> manager.findLastCompletelyVisibleItemPosition()
-                                    else -> 0
-                                }
-
-                                if (lastVisibleItem == (items.size - 1)) {
-                                    getElementsAccordingToTab(appendResults = true)
-                                }
-                            }
-                        }
-                    }
-                }
-
-            recyclerView.clearOnScrollListeners()
-            recyclerView.addOnScrollListener(recyclerViewScrollListener)
+            handleInfiniteScroll()
         }
 
-        bottomBar.setTabSelectedListener(object: BottomNavigationBar.OnTabSelectedListener {
+        handleBottomBarActions(mLayoutManager)
+    }
+
+    private fun handleBottomBarActions(mLayoutManager: RecyclerView.LayoutManager) {
+        bottomBar.setTabSelectedListener(object : BottomNavigationBar.OnTabSelectedListener {
             override fun onTabUnselected(position: Int) = Unit
 
             override fun onTabReselected(position: Int) =
@@ -650,7 +642,7 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                 }
 
             override fun onTabSelected(position: Int) =
-                when(position) {
+                when (position) {
                     0 -> getUnRead()
                     1 -> getRead()
                     2 -> getStarred()
@@ -658,6 +650,29 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                 }
 
         })
+    }
+
+    private fun handleInfiniteScroll() {
+        if (recyclerViewScrollListener == null)
+            recyclerViewScrollListener = object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(localRecycler: RecyclerView?, dx: Int, dy: Int) {
+                    if (localRecycler != null && dy > 0) {
+                        val manager = recyclerView.layoutManager
+                        val lastVisibleItem: Int = when (manager) {
+                            is StaggeredGridLayoutManager -> manager.findLastCompletelyVisibleItemPositions(null).last()
+                            is GridLayoutManager -> manager.findLastCompletelyVisibleItemPosition()
+                            else -> 0
+                        }
+
+                        if (lastVisibleItem == (items.size - 1)) {
+                            getElementsAccordingToTab(appendResults = true)
+                        }
+                    }
+                }
+            }
+
+        recyclerView.clearOnScrollListeners()
+        recyclerView.addOnScrollListener(recyclerViewScrollListener)
     }
 
     fun mayBeEmpty() =
