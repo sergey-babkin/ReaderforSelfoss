@@ -1,4 +1,4 @@
-**1.5.4.06**
+**1.5.4.07**
 
 - Loading more items on swipe too.
 
@@ -6,7 +6,7 @@
 
 - Disabled reporting marking items as read if there isn't an issue.
 
-**1.5.4.05**
+**1.5.4.05/06**
 
 - Translation fix.
 
