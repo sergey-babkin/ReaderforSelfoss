@@ -1,3 +1,7 @@
+**1.5.4.08**
+
+-- Thanks @jrafaelsantana for translating the whole app in Brazilian Portuguese.
+
 **1.5.4.07**
 
 - Loading more items on swipe too.
