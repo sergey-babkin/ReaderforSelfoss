@@ -50,7 +50,23 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/source" />
 
-    <org.sufficientlysecure.htmltextview.HtmlTextView
+    <TextView
+        android:id="@+id/content"
+        android:autoLink="web"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:paddingBottom="48dp"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
+
+    <!--<org.sufficientlysecure.htmltextview.HtmlTextView
         android:id="@+id/content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -63,8 +79,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        tools:text="Some text @android:string/fingerprint_icon_content_description" />
+        app:layout_constraintTop_toBottomOf="@+id/title" />-->
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
