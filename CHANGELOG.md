@@ -1,8 +1,12 @@
-**master**
+**1.5.4.09**
 
 - Using the kotlin wrapper for the material drawer (see #98 for more details).
 
 - Updated support libraries
+
+- Changed the Floating Action Button to the support library version.
+
+- New reader activity action bar #103.
 
 **1.5.4.08**
 
