@@ -61,11 +61,11 @@ fun Context.openItemUrlInternally(linkDecoded: String,
     if (articleViewer) {
         val intent = Intent(this, ReaderActivity::class.java)
 
-        DragDismissIntentBuilder(this)
+        /*DragDismissIntentBuilder(this)
                 .setFullscreenOnTablets(true)      // defaults to false, tablets will have padding on each side
                 .setDragElasticity(DragDismissIntentBuilder.DragElasticity.NORMAL)  // Larger elasticities will make it easier to dismiss.
                 .setDrawUnderStatusBar(true)
-                .build(intent)
+                .build(intent)*/
 
 
         intent.putExtra("url", linkDecoded)
