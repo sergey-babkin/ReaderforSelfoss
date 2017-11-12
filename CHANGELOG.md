@@ -1,3 +1,11 @@
+**1.5.4.10**
+
+- Displaying a loader when "reading more" in the article viewer.
+
+- Displaying the thumbnail instead of icon on the article viewer.
+
+- Scrolling to top when loading content with the "read more" button.
+
 **1.5.4.09**
 
 - Using the kotlin wrapper for the material drawer (see #98 for more details).

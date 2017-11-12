@@ -122,6 +122,7 @@
             android:paddingTop="@dimen/activity_vertical_margin"
             android:src="@drawable/ic_add"
             app:backgroundTint="?attr/colorAccent"
+            app:fabSize="mini"
             app:rippleColor="?attr/colorAccentDark" />
     </FrameLayout>
 
