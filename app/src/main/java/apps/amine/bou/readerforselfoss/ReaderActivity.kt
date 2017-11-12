@@ -124,6 +124,14 @@ class ReaderActivity : AppCompatActivity() {
                 image.visibility = View.GONE
             }
         }
+
+        nestedScrollView.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
+            if (scrollY > oldScrollY) {
+                fab.hide()
+            } else {
+                fab.show()
+            }
+        })
     }
 
     private fun getContentFromMercury(customTabsIntent: CustomTabsIntent, prefs: SharedPreferences) {

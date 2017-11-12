@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
+import android.view.View
 import android.widget.Toast
 import apps.amine.bou.readerforselfoss.adapters.SourcesListAdapter
 import apps.amine.bou.readerforselfoss.api.selfoss.SelfossApi
@@ -20,6 +21,8 @@ import retrofit2.Response
 
 class SourcesActivity : AppCompatActivity() {
 
+    private lateinit var mRecyclerView: RecyclerView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Scoop.getInstance().apply(this)
@@ -30,10 +33,15 @@ class SourcesActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowHomeEnabled(true)
     }
 
+    override fun onStop() {
+        super.onStop()
+        mRecyclerView.clearOnScrollListeners()
+    }
+
     override fun onResume() {
         super.onResume()
         val mFab: FloatingActionButton = findViewById(R.id.fab)
-        val mRecyclerView: RecyclerView = findViewById(R.id.activity_sources)
+        mRecyclerView = findViewById(R.id.activity_sources)
         val mLayoutManager = LinearLayoutManager(this)
 
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)

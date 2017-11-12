@@ -1,3 +1,7 @@
+**master**
+
+- Hiding FABs on scroll.
+
 **1.5.4.10**
 
 - Displaying a loader when "reading more" in the article viewer.
