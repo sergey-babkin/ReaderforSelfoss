@@ -9,7 +9,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.github.stkent.amplify.prompt.DefaultLayoutPromptView
-        android:id="@+id/prompt_view"
+        android:id="@+id/promptView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:prompt_view_user_opinion_question_title="@string/rating_prompt_title"
@@ -34,7 +34,7 @@
         android:id="@+id/coordLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/prompt_view">
+        android:layout_below="@id/promptView">
 
         <android.support.design.widget.CoordinatorLayout
             android:id="@+id/intern_coordLayout"
@@ -51,7 +51,7 @@
                     android:layout_height="wrap_content">
 
                     <android.support.v7.widget.Toolbar
-                        android:id="@+id/toolbar"
+                        android:id="@+id/toolBar"
                         android:layout_width="match_parent"
                         android:layout_height="?attr/actionBarSize"
                         app:theme="@style/ToolBarStyle"
@@ -89,7 +89,7 @@
                                 android:background="@color/transparent"
                                 android:visibility="gone" />
                             <android.support.v7.widget.RecyclerView
-                                android:id="@+id/my_recycler_view"
+                                android:id="@+id/recyclerView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@color/transparent"

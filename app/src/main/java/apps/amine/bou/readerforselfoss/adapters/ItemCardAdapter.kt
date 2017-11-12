@@ -9,8 +9,6 @@ import android.support.v7.widget.RecyclerView
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.ImageView.ScaleType
 import android.widget.TextView
 import android.widget.Toast
@@ -38,6 +36,7 @@ import com.like.OnLikeListener
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlinx.android.synthetic.main.card_item.view.*
 
 class ItemCardAdapter(private val app: Activity,
                       private val items: ArrayList<Item>,
@@ -61,16 +60,16 @@ class ItemCardAdapter(private val app: Activity,
         val itm = items[position]
 
 
-        holder.saveBtn.isLiked = itm.starred
-        holder.title.text = Html.fromHtml(itm.title)
+        holder.mView.favButton.isLiked = itm.starred
+        holder.mView.title.text = Html.fromHtml(itm.title)
 
-        holder.sourceTitleAndDate.text = itm.sourceAndDateText()
+        holder.mView.sourceTitleAndDate.text = itm.sourceAndDateText()
 
         if (itm.getThumbnail(c).isEmpty()) {
-            Glide.with(c).clear(holder.itemImage)
-            holder.itemImage.setImageDrawable(null)
+            Glide.with(c).clear(holder.mView.itemImage)
+            holder.mView.itemImage.setImageDrawable(null)
         } else {
-            c.bitmapCenterCrop(itm.getThumbnail(c), holder.itemImage)
+            c.bitmapCenterCrop(itm.getThumbnail(c), holder.mView.itemImage)
         }
 
         if (itm.getIcon(c).isEmpty()) {
@@ -81,12 +80,12 @@ class ItemCardAdapter(private val app: Activity,
                             .builder()
                             .round()
                             .build(itm.sourcetitle.toTextDrawableString(), color)
-            holder.sourceImage.setImageDrawable(drawable)
+            holder.mView.sourceImage.setImageDrawable(drawable)
         } else {
-            c.circularBitmapDrawable(itm.getIcon(c), holder.sourceImage)
+            c.circularBitmapDrawable(itm.getIcon(c), holder.mView.sourceImage)
         }
 
-        holder.saveBtn.isLiked = itm.starred
+        holder.mView.favButton.isLiked = itm.starred
     }
 
     override fun getItemCount(): Int {
@@ -160,14 +159,6 @@ class ItemCardAdapter(private val app: Activity,
     }
 
     inner class ViewHolder(val mView: CardView) : RecyclerView.ViewHolder(mView) {
-        lateinit var saveBtn: LikeButton
-        lateinit var browserBtn: ImageButton
-        lateinit var shareBtn: ImageButton
-        lateinit var itemImage: ImageView
-        lateinit var sourceImage: ImageView
-        lateinit var title: TextView
-        lateinit var sourceTitleAndDate: TextView
-
         init {
             mView.setCardBackgroundColor(appColors.cardBackground)
             handleClickListeners()
@@ -175,27 +166,20 @@ class ItemCardAdapter(private val app: Activity,
         }
 
         private fun handleClickListeners() {
-            sourceImage = mView.findViewById(R.id.sourceImage)
-            itemImage = mView.findViewById(R.id.itemImage)
-            title = mView.findViewById(R.id.title)
-            sourceTitleAndDate = mView.findViewById(R.id.sourceTitleAndDate)
-            saveBtn = mView.findViewById(R.id.favButton)
-            shareBtn = mView.findViewById(R.id.shareBtn)
-            browserBtn = mView.findViewById(R.id.browserBtn)
 
             if (!fullHeightCards) {
-                itemImage.maxHeight = c.resources.getDimension(R.dimen.card_image_max_height).toInt()
-                itemImage.scaleType = ScaleType.CENTER_CROP
+                mView.itemImage.maxHeight = c.resources.getDimension(R.dimen.card_image_max_height).toInt()
+                mView.itemImage.scaleType = ScaleType.CENTER_CROP
             }
 
-            saveBtn.setOnLikeListener(object : OnLikeListener {
+            mView.favButton.setOnLikeListener(object : OnLikeListener {
                 override fun liked(likeButton: LikeButton) {
                     val (id) = items[adapterPosition]
                     api.starrItem(id).enqueue(object : Callback<SuccessResponse> {
                         override fun onResponse(call: Call<SuccessResponse>, response: Response<SuccessResponse>) {}
 
                         override fun onFailure(call: Call<SuccessResponse>, t: Throwable) {
-                            saveBtn.isLiked = false
+                            mView.favButton.isLiked = false
                             Toast.makeText(c, R.string.cant_mark_favortie, Toast.LENGTH_SHORT).show()
                         }
                     })
@@ -207,18 +191,18 @@ class ItemCardAdapter(private val app: Activity,
                         override fun onResponse(call: Call<SuccessResponse>, response: Response<SuccessResponse>) {}
 
                         override fun onFailure(call: Call<SuccessResponse>, t: Throwable) {
-                            saveBtn.isLiked = true
+                            mView.favButton.isLiked = true
                             Toast.makeText(c, R.string.cant_unmark_favortie, Toast.LENGTH_SHORT).show()
                         }
                     })
                 }
             })
 
-            shareBtn.setOnClickListener {
+            mView.shareBtn.setOnClickListener {
                 c.shareLink(items[adapterPosition].getLinkDecoded())
             }
 
-            browserBtn.setOnClickListener {
+            mView.browserBtn.setOnClickListener {
                 c.openInBrowserAsNewTask(items[adapterPosition])
             }
         }

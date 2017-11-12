@@ -12,9 +12,6 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import apps.amine.bou.readerforselfoss.R
@@ -40,7 +37,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 import kotlin.collections.ArrayList
-
+import kotlinx.android.synthetic.main.list_item.view.*
 
 class ItemListAdapter(private val app: Activity,
                       private val items: ArrayList<Item>,
@@ -64,10 +61,10 @@ class ItemListAdapter(private val app: Activity,
         val itm = items[position]
 
 
-        holder.saveBtn.isLiked = itm.starred
-        holder.title.text = Html.fromHtml(itm.title)
+        holder.mView.favButton.isLiked = itm.starred
+        holder.mView.title.text = Html.fromHtml(itm.title)
 
-        holder.sourceTitleAndDate.text = itm.sourceAndDateText()
+        holder.mView.sourceTitleAndDate.text = itm.sourceAndDateText()
 
         if (itm.getThumbnail(c).isEmpty()) {
             val sizeInInt = 46
@@ -80,11 +77,11 @@ class ItemListAdapter(private val app: Activity,
                     TypedValue.COMPLEX_UNIT_DIP, marginInInt.toFloat(), c.resources
                     .displayMetrics).toInt()
 
-            val params = holder.sourceImage.layoutParams as ViewGroup.MarginLayoutParams
+            val params = holder.mView.itemImage.layoutParams as ViewGroup.MarginLayoutParams
             params.height = sizeInDp
             params.width = sizeInDp
             params.setMargins(marginInDp, 0, 0, 0)
-            holder.sourceImage.layoutParams = params
+            holder.mView.itemImage.layoutParams = params
 
             if (itm.getIcon(c).isEmpty()) {
                 val color = generator.getColor(itm.sourcetitle)
@@ -96,17 +93,17 @@ class ItemListAdapter(private val app: Activity,
                 val builder = TextDrawable.builder().round()
 
                 val drawable = builder.build(textDrawable.toString(), color)
-                holder.sourceImage.setImageDrawable(drawable)
+                holder.mView.itemImage.setImageDrawable(drawable)
             } else {
-                c.circularBitmapDrawable(itm.getIcon(c), holder.sourceImage)
+                c.circularBitmapDrawable(itm.getIcon(c), holder.mView.itemImage)
             }
         } else {
-            c.bitmapCenterCrop(itm.getThumbnail(c), holder.sourceImage)
+            c.bitmapCenterCrop(itm.getThumbnail(c), holder.mView.itemImage)
         }
 
-        if (bars[position]) holder.actionBar.visibility = View.VISIBLE else holder.actionBar.visibility = View.GONE
+        if (bars[position]) holder.mView.actionBar.visibility = View.VISIBLE else holder.mView.actionBar.visibility = View.GONE
 
-        holder.saveBtn.isLiked = itm.starred
+        holder.mView.favButton.isLiked = itm.starred
     }
 
     override fun getItemCount(): Int = items.size
@@ -179,13 +176,6 @@ class ItemListAdapter(private val app: Activity,
     }
 
     inner class ViewHolder(val mView: ConstraintLayout) : RecyclerView.ViewHolder(mView) {
-        lateinit var saveBtn: LikeButton
-        lateinit var browserBtn: ImageButton
-        lateinit var shareBtn: ImageButton
-        lateinit var actionBar: RelativeLayout
-        lateinit var sourceImage: ImageView
-        lateinit var title: TextView
-        lateinit var sourceTitleAndDate: TextView
 
         init {
             handleClickListeners()
@@ -193,23 +183,15 @@ class ItemListAdapter(private val app: Activity,
         }
 
         private fun handleClickListeners() {
-            actionBar = mView.findViewById(R.id.actionBar)
-            sourceImage = mView.findViewById(R.id.itemImage)
-            title = mView.findViewById(R.id.title)
-            sourceTitleAndDate = mView.findViewById(R.id.sourceTitleAndDate)
-            saveBtn = mView.findViewById(R.id.favButton)
-            shareBtn = mView.findViewById(R.id.shareBtn)
-            browserBtn = mView.findViewById(R.id.browserBtn)
 
-
-            saveBtn.setOnLikeListener(object : OnLikeListener {
+            mView.favButton.setOnLikeListener(object : OnLikeListener {
                 override fun liked(likeButton: LikeButton) {
                     val (id) = items[adapterPosition]
                     api.starrItem(id).enqueue(object : Callback<SuccessResponse> {
                         override fun onResponse(call: Call<SuccessResponse>, response: Response<SuccessResponse>) {}
 
                         override fun onFailure(call: Call<SuccessResponse>, t: Throwable) {
-                            saveBtn.isLiked = false
+                            mView.favButton.isLiked = false
                             Toast.makeText(c, R.string.cant_mark_favortie, Toast.LENGTH_SHORT).show()
                         }
                     })
@@ -221,18 +203,18 @@ class ItemListAdapter(private val app: Activity,
                         override fun onResponse(call: Call<SuccessResponse>, response: Response<SuccessResponse>) {}
 
                         override fun onFailure(call: Call<SuccessResponse>, t: Throwable) {
-                            saveBtn.isLiked = true
+                            mView.favButton.isLiked = true
                             Toast.makeText(c, R.string.cant_unmark_favortie, Toast.LENGTH_SHORT).show()
                         }
                     })
                 }
             })
 
-            shareBtn.setOnClickListener {
+            mView.shareBtn.setOnClickListener {
                 c.shareLink(items[adapterPosition].getLinkDecoded())
             }
 
-            browserBtn.setOnClickListener {
+            mView.browserBtn.setOnClickListener {
                 c.openInBrowserAsNewTask(items[adapterPosition])
 
             }
@@ -279,7 +261,11 @@ class ItemListAdapter(private val app: Activity,
 
         private fun actionBarShowHide() {
             bars[adapterPosition] = true
-            if (actionBar.visibility == View.GONE) actionBar.visibility = View.VISIBLE else actionBar.visibility = View.GONE
+            if (mView.actionBar.visibility == View.GONE) {
+                mView.actionBar.visibility = View.VISIBLE
+            } else {
+                mView.actionBar.visibility = View.GONE
+            }
         }
     }
 }

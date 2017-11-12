@@ -9,20 +9,16 @@ import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.support.design.widget.CoordinatorLayout
 import android.support.v4.view.MenuItemCompat
-import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
 import android.support.v7.widget.StaggeredGridLayoutManager
-import android.support.v7.widget.Toolbar
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.TextView
 import android.widget.Toast
 import apps.amine.bou.readerforselfoss.adapters.ItemCardAdapter
 import apps.amine.bou.readerforselfoss.adapters.ItemListAdapter
@@ -56,7 +52,6 @@ import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.answers.Answers
 import com.crashlytics.android.answers.InviteEvent
 import com.ftinc.scoop.Scoop
-import com.github.stkent.amplify.prompt.DefaultLayoutPromptView
 import com.github.stkent.amplify.tracking.Amplify
 import com.google.android.gms.appinvite.AppInviteInvitation
 import com.google.android.gms.common.ConnectionResult
@@ -74,6 +69,8 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlinx.android.synthetic.main.activity_home.*
+
 
 class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
@@ -105,15 +102,9 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     private var displayAccountHeader: Boolean = false
     private var infiniteScroll: Boolean = false
 
-    private lateinit var emptyText: TextView
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var bottomBar: BottomNavigationBar
-    private lateinit var coordinatorLayout: CoordinatorLayout
-    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var tabNewBadge: TextBadgeItem
     private lateinit var tabArchiveBadge: TextBadgeItem
     private lateinit var tabStarredBadge: TextBadgeItem
-    private lateinit var toolBar: Toolbar
     private lateinit var drawer: Drawer
     private lateinit var api: SelfossApi
     private lateinit var customTabActivityHelper: CustomTabActivityHelper
@@ -140,16 +131,11 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         Scoop.getInstance().apply(this)
-
         setContentView(R.layout.activity_home)
 
-        toolBar = findViewById(R.id.toolbar)
         setSupportActionBar(toolBar)
-
         if (savedInstanceState == null) {
-            val promptView: DefaultLayoutPromptView = findViewById(R.id.prompt_view)
             Amplify.getSharedInstance().promptIfReady(promptView)
         }
 
@@ -167,122 +153,112 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         appColors =  AppColors(this@HomeActivity)
 
         handleBottomBar()
-
         handleDrawer()
 
-        coordinatorLayout = findViewById(R.id.coordLayout)
-        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
-        recyclerView = findViewById(R.id.my_recycler_view)
-
-        emptyText = findViewById(R.id.emptyText)
-
         reloadLayoutManager()
-
         handleSwipeRefreshLayout()
     }
 
     private fun handleSwipeRefreshLayout() {
         swipeRefreshLayout.setColorSchemeResources(
-            R.color.refresh_progress_1,
-            R.color.refresh_progress_2,
-            R.color.refresh_progress_3)
+                R.color.refresh_progress_1,
+                R.color.refresh_progress_2,
+                R.color.refresh_progress_3)
         swipeRefreshLayout.setOnRefreshListener {
             handleDrawerItems()
             getElementsAccordingToTab()
         }
 
         val simpleItemTouchCallback =
-            object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+                object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
 
-                override fun getSwipeDirs(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?): Int =
-                    if (elementsShown != UNREAD_SHOWN) 0 else super.getSwipeDirs(recyclerView, viewHolder)
+                    override fun getSwipeDirs(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?): Int =
+                            if (elementsShown != UNREAD_SHOWN) 0 else super.getSwipeDirs(recyclerView, viewHolder)
 
-                override fun onMove(recyclerView: RecyclerView,
-                                    viewHolder: RecyclerView.ViewHolder,
-                                    target: RecyclerView.ViewHolder): Boolean = false
+                    override fun onMove(recyclerView: RecyclerView,
+                                        viewHolder: RecyclerView.ViewHolder,
+                                        target: RecyclerView.ViewHolder): Boolean = false
 
-                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
-                    try {
-                        val i = items[viewHolder.adapterPosition]
-                        val position = items.indexOf(i)
+                    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
+                        try {
+                            val i = items[viewHolder.adapterPosition]
+                            val position = items.indexOf(i)
 
-                        val adapter = recyclerView.adapter
-                        when (adapter) {
-                            is ItemCardAdapter -> adapter.removeItemAtIndex(position)
-                            is ItemListAdapter -> adapter.removeItemAtIndex(position)
+                            val adapter = recyclerView.adapter
+                            when (adapter) {
+                                is ItemCardAdapter -> adapter.removeItemAtIndex(position)
+                                is ItemListAdapter -> adapter.removeItemAtIndex(position)
+                            }
+
+                            if (items.size > 0)
+                                tabNewBadge.setText("${items.size}").maybeShow()
+                            else
+                                tabNewBadge.hide()
+
+
+                            val manager = recyclerView.layoutManager
+                            val lastVisibleItem: Int = when (manager) {
+                                is StaggeredGridLayoutManager -> manager.findLastCompletelyVisibleItemPositions(null).last()
+                                is GridLayoutManager -> manager.findLastCompletelyVisibleItemPosition()
+                                else -> 0
+                            }
+
+                            if (lastVisibleItem == (items.size - 1)) {
+                                getElementsAccordingToTab(appendResults = true)
+                            }
+
+                        } catch (e: IndexOutOfBoundsException) {
+                            Crashlytics.setUserIdentifier(userIdentifier)
+                            Crashlytics.log(100, "SWIPE_INDEX_OUT_OF_BOUND", "IndexOutOfBoundsException when swiping")
+                            Crashlytics.logException(e)
                         }
 
-                        if (items.size > 0)
-                            tabNewBadge.setText("${items.size}").maybeShow()
-                        else
-                            tabNewBadge.hide()
-
-
-                        val manager = recyclerView.layoutManager
-                        val lastVisibleItem: Int = when (manager) {
-                            is StaggeredGridLayoutManager -> manager.findLastCompletelyVisibleItemPositions(null).last()
-                            is GridLayoutManager -> manager.findLastCompletelyVisibleItemPosition()
-                            else -> 0
-                        }
-
-                        if (lastVisibleItem == (items.size - 1)) {
-                            getElementsAccordingToTab(appendResults = true)
-                        }
-
-                    } catch (e: IndexOutOfBoundsException) {
-                        Crashlytics.setUserIdentifier(userIdentifier)
-                        Crashlytics.log(100, "SWIPE_INDEX_OUT_OF_BOUND", "IndexOutOfBoundsException when swiping")
-                        Crashlytics.logException(e)
                     }
-
                 }
-            }
 
         ItemTouchHelper(simpleItemTouchCallback).attachToRecyclerView(recyclerView)
     }
 
     private fun handleBottomBar() {
 
-        bottomBar = findViewById(R.id.bottomBar)
-
         tabNewBadge = TextBadgeItem()
-            .setText("")
-            .setHideOnSelect(false).hide(false)
-            .setBackgroundColor(appColors.primary)
+                .setText("")
+                .setHideOnSelect(false).hide(false)
+                .setBackgroundColor(appColors.primary)
         tabArchiveBadge = TextBadgeItem()
-            .setText("")
-            .setHideOnSelect(false).hide(false)
-            .setBackgroundColor(appColors.primary)
+                .setText("")
+                .setHideOnSelect(false).hide(false)
+                .setBackgroundColor(appColors.primary)
         tabStarredBadge = TextBadgeItem()
-            .setText("")
-            .setHideOnSelect(false).hide(false)
-            .setBackgroundColor(appColors.primary)
+                .setText("")
+                .setHideOnSelect(false).hide(false)
+                .setBackgroundColor(appColors.primary)
 
         val tabNew =
-            BottomNavigationItem(
-                R.drawable.ic_fiber_new_black_24dp,
-                getString(R.string.tab_new)
-            ).setActiveColor(appColors.accent)
-                .setBadgeItem(tabNewBadge)
+                BottomNavigationItem(
+                        R.drawable.ic_fiber_new_black_24dp,
+                        getString(R.string.tab_new)
+                ).setActiveColor(appColors.accent)
+                        .setBadgeItem(tabNewBadge)
         val tabArchive =
-            BottomNavigationItem(
-                R.drawable.ic_archive_black_24dp,
-                getString(R.string.tab_read)
-            ).setActiveColor(appColors.dark)
-                .setBadgeItem(tabArchiveBadge)
+                BottomNavigationItem(
+                        R.drawable.ic_archive_black_24dp,
+                        getString(R.string.tab_read)
+                ).setActiveColor(appColors.dark)
+                        .setBadgeItem(tabArchiveBadge)
         val tabStarred =
-            BottomNavigationItem(
-                R.drawable.ic_favorite_black_24dp,
-                getString(R.string.tab_favs)
-            ).setActiveColorResource(R.color.pink)
-                .setBadgeItem(tabStarredBadge)
+                BottomNavigationItem(
+                        R.drawable.ic_favorite_black_24dp,
+                        getString(R.string.tab_favs)
+                ).setActiveColorResource(R.color.pink)
+                        .setBadgeItem(tabStarredBadge)
 
         bottomBar
-            .addItem(tabNew)
-            .addItem(tabArchive)
-            .addItem(tabStarred)
-            .setFirstSelectedPosition(0)
-            .initialise()
+                .addItem(tabNew)
+                .addItem(tabArchive)
+                .addItem(tabStarred)
+                .setFirstSelectedPosition(0)
+                .initialise()
 
         bottomBar.setMode(BottomNavigationBar.MODE_SHIFTING)
         bottomBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC)
@@ -613,29 +589,29 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
             override fun onTabUnselected(position: Int) = Unit
 
             override fun onTabReselected(position: Int) =
-                when (mLayoutManager) {
-                    is StaggeredGridLayoutManager ->
-                        if (mLayoutManager.findFirstCompletelyVisibleItemPositions(null)[0] == 0) {
-                            getElementsAccordingToTab()
-                        } else {
-                            mLayoutManager.scrollToPositionWithOffset(0, 0)
-                        }
-                    is GridLayoutManager ->
-                        if (mLayoutManager.findFirstCompletelyVisibleItemPosition() == 0) {
-                            getElementsAccordingToTab()
-                        } else {
-                            mLayoutManager.scrollToPositionWithOffset(0, 0)
-                        }
-                    else -> Unit
-                }
+                    when (mLayoutManager) {
+                        is StaggeredGridLayoutManager ->
+                            if (mLayoutManager.findFirstCompletelyVisibleItemPositions(null)[0] == 0) {
+                                getElementsAccordingToTab()
+                            } else {
+                                mLayoutManager.scrollToPositionWithOffset(0, 0)
+                            }
+                        is GridLayoutManager ->
+                            if (mLayoutManager.findFirstCompletelyVisibleItemPosition() == 0) {
+                                getElementsAccordingToTab()
+                            } else {
+                                mLayoutManager.scrollToPositionWithOffset(0, 0)
+                            }
+                        else -> Unit
+                    }
 
             override fun onTabSelected(position: Int) =
-                when (position) {
-                    0 -> getUnRead()
-                    1 -> getRead()
-                    2 -> getStarred()
-                    else -> Unit
-                }
+                    when (position) {
+                        0 -> getUnRead()
+                        1 -> getRead()
+                        2 -> getStarred()
+                        else -> Unit
+                    }
 
         })
     }
@@ -664,21 +640,21 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     }
 
     fun mayBeEmpty() =
-        if (items.isEmpty()) {
-            emptyText.visibility = View.VISIBLE
-            recyclerView.visibility = View.GONE
-        } else {
-            emptyText.visibility = View.GONE
-            recyclerView.visibility = View.VISIBLE
-        }
+            if (items.isEmpty()) {
+                emptyText.visibility = View.VISIBLE
+                recyclerView.visibility = View.GONE
+            } else {
+                emptyText.visibility = View.GONE
+                recyclerView.visibility = View.VISIBLE
+            }
 
     private fun getElementsAccordingToTab(appendResults: Boolean = false) =
-        when (elementsShown) {
-            UNREAD_SHOWN -> getUnRead(appendResults)
-            READ_SHOWN -> getRead(appendResults)
-            FAV_SHOWN -> getStarred(appendResults)
-            else -> getUnRead(appendResults)
-        }
+            when (elementsShown) {
+                UNREAD_SHOWN -> getUnRead(appendResults)
+                READ_SHOWN -> getRead(appendResults)
+                FAV_SHOWN -> getStarred(appendResults)
+                else -> getUnRead(appendResults)
+            }
 
     private fun doCallTo(appendResults: Boolean, toastMessage: Int, call: (String?, Long?, String?) -> Call<List<Item>>) {
         fun handleItemsResponse(response: Response<List<Item>>) {
@@ -705,21 +681,21 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
             swipeRefreshLayout.post { swipeRefreshLayout.isRefreshing = true }
 
         call(maybeTagFilter?.tag, maybeSourceFilter?.id?.toLong(), maybeSearchFilter)
-            .enqueue(object : Callback<List<Item>> {
-                override fun onResponse(call: Call<List<Item>>, response: Response<List<Item>>) {
-                    handleItemsResponse(response)
-                }
+                .enqueue(object : Callback<List<Item>> {
+                    override fun onResponse(call: Call<List<Item>>, response: Response<List<Item>>) {
+                        handleItemsResponse(response)
+                    }
 
-                override fun onFailure(call: Call<List<Item>>, t: Throwable) {
-                    swipeRefreshLayout.isRefreshing = false
-                    Toast.makeText(this@HomeActivity, toastMessage, Toast.LENGTH_SHORT).show()
-                }
-            })
+                    override fun onFailure(call: Call<List<Item>>, t: Throwable) {
+                        swipeRefreshLayout.isRefreshing = false
+                        Toast.makeText(this@HomeActivity, toastMessage, Toast.LENGTH_SHORT).show()
+                    }
+                })
     }
 
     private fun getUnRead(appendResults: Boolean = false) {
         offset =  if (appendResults) (offset + itemsNumber)
-                  else 0
+        else 0
         firstVisible = if (appendResults) firstVisible else 0
         elementsShown = UNREAD_SHOWN
         doCallTo(appendResults, R.string.cant_get_new_elements){t, id, f -> api.newItems(t, id, f, itemsNumber, offset)}
@@ -727,7 +703,7 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private fun getRead(appendResults: Boolean = false) {
         offset =  if (appendResults) (offset + itemsNumber)
-                  else 0
+        else 0
         firstVisible = if (appendResults) firstVisible else 0
         elementsShown = READ_SHOWN
         doCallTo(appendResults, R.string.cant_get_read){t, id, f -> api.readItems(t, id, f, itemsNumber, offset)}
@@ -735,7 +711,7 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private fun getStarred(appendResults: Boolean = false) {
         offset =  if (appendResults) (offset + itemsNumber)
-                  else 0
+        else 0
         firstVisible = if (appendResults) firstVisible else 0
         elementsShown = FAV_SHOWN
         doCallTo(appendResults, R.string.cant_get_favs){t, id, f -> api.starredItems(t, id, f, itemsNumber, offset)}
@@ -756,29 +732,29 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         val mAdapter: RecyclerView.Adapter<*>
         if (shouldBeCardView) {
             mAdapter =
-                ItemCardAdapter(
-                    this,
-                    items,
-                    api,
-                    customTabActivityHelper,
-                    internalBrowser,
-                    articleViewer,
-                    fullHeightCards,
-                    appColors,
-                    debugReadingItems,
-                    userIdentifier)
+                    ItemCardAdapter(
+                            this,
+                            items,
+                            api,
+                            customTabActivityHelper,
+                            internalBrowser,
+                            articleViewer,
+                            fullHeightCards,
+                            appColors,
+                            debugReadingItems,
+                            userIdentifier)
         } else {
             mAdapter =
-                ItemListAdapter(
-                    this,
-                    items,
-                    api,
-                    customTabActivityHelper,
-                    clickBehavior,
-                    internalBrowser,
-                    articleViewer,
-                    debugReadingItems,
-                    userIdentifier)
+                    ItemListAdapter(
+                            this,
+                            items,
+                            api,
+                            customTabActivityHelper,
+                            clickBehavior,
+                            internalBrowser,
+                            articleViewer,
+                            debugReadingItems,
+                            userIdentifier)
         }
         recyclerView.adapter = mAdapter
         mAdapter.notifyDataSetChanged()
@@ -797,15 +773,15 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                     if (response.body() != null) {
                         if (displayUnreadCount)
                             tabNewBadge
-                                .setText(response.body()!!.unread.toString())
-                                .maybeShow()
+                                    .setText(response.body()!!.unread.toString())
+                                    .maybeShow()
                         if (displayAllCount) {
                             tabArchiveBadge
-                                .setText(response.body()!!.total.toString())
-                                .maybeShow()
+                                    .setText(response.body()!!.total.toString())
+                                    .maybeShow()
                             tabStarredBadge
-                                .setText(response.body()!!.starred.toString())
-                                .maybeShow()
+                                    .setText(response.body()!!.starred.toString())
+                                    .maybeShow()
                         } else {
                             tabArchiveBadge.removeBadge()
                             tabStarredBadge.removeBadge()
@@ -877,8 +853,8 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                 api.update().enqueue(object : Callback<String> {
                     override fun onResponse(call: Call<String>, response: Response<String>) {
                         Toast.makeText(this@HomeActivity,
-                            R.string.refresh_success_response, Toast.LENGTH_LONG)
-                            .show()
+                                R.string.refresh_success_response, Toast.LENGTH_LONG)
+                                .show()
                     }
 
                     override fun onFailure(call: Call<String>, t: Throwable) {
@@ -923,17 +899,17 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
             R.id.action_share_the_app -> {
                 if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS) {
                     val share = AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
-                        .setMessage(getString(R.string.invitation_message))
-                        .setDeepLink(Uri.parse("https://ymbh5.app.goo.gl/qbvQ"))
-                        .setCallToActionText(getString(R.string.invitation_cta))
-                        .build()
+                            .setMessage(getString(R.string.invitation_message))
+                            .setDeepLink(Uri.parse("https://ymbh5.app.goo.gl/qbvQ"))
+                            .setCallToActionText(getString(R.string.invitation_cta))
+                            .build()
                     startActivityForResult(share, REQUEST_INVITE)
                 } else {
                     val sendIntent = Intent()
                     sendIntent.action = Intent.ACTION_SEND
                     sendIntent.putExtra(
-                        Intent.EXTRA_TEXT,
-                        getString(R.string.invitation_message) + " https://ymbh5.app.goo.gl/qbvQ"
+                            Intent.EXTRA_TEXT,
+                            getString(R.string.invitation_message) + " https://ymbh5.app.goo.gl/qbvQ"
                     )
                     sendIntent.type = "text/plain"
                     startActivityForResult(sendIntent, REQUEST_INVITE_BYMAIL)

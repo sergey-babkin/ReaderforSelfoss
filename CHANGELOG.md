@@ -2,6 +2,8 @@
 
 - Hiding FABs on scroll.
 
+- Closing #109 (code cleaning)
+
 **1.5.4.10**
 
 - Displaying a loader when "reading more" in the article viewer.

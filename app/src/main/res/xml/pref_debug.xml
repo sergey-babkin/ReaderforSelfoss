@@ -10,7 +10,7 @@
 
     <SwitchPreference
         android:defaultValue="false"
-        android:key="loging_debug"
+        android:key="login_debug"
         android:summaryOff="@string/login_debug_off"
         android:summaryOn="@string/login_debug_on"
         android:title="@string/login_debug_title" />

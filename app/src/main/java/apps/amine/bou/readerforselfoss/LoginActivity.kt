@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.support.design.widget.TextInputLayout
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
@@ -15,9 +14,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 import apps.amine.bou.readerforselfoss.api.selfoss.SelfossApi
@@ -32,6 +28,8 @@ import com.mikepenz.aboutlibraries.LibsBuilder
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlinx.android.synthetic.main.activity_login.*
+
 
 
 class LoginActivity : AppCompatActivity() {
@@ -43,14 +41,7 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var settings: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
-    private lateinit var mFirebaseAnalytics: FirebaseAnalytics
-    private lateinit var mUrlView: EditText
-    private lateinit var mLoginView: TextView
-    private lateinit var mHTTPLoginView: TextView
-    private lateinit var mProgressView: View
-    private lateinit var mPasswordView: EditText
-    private lateinit var mHTTPPasswordView: EditText
-    private lateinit var mLoginFormView: View
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var userIdentifier: String
     private var logErrors: Boolean = false
 
@@ -61,7 +52,6 @@ class LoginActivity : AppCompatActivity() {
         Scoop.getInstance().apply(this)
         setContentView(R.layout.activity_login)
 
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
         handleBaseUrlFail()
@@ -69,7 +59,7 @@ class LoginActivity : AppCompatActivity() {
 
         settings = getSharedPreferences(Config.settingsName, Context.MODE_PRIVATE)
         userIdentifier = settings.getString("unique_id", "")
-        logErrors = settings.getBoolean("loging_debug", false)
+        logErrors = settings.getBoolean("login_debug", false)
 
         editor = settings.edit()
 
@@ -77,60 +67,44 @@ class LoginActivity : AppCompatActivity() {
             goToMain()
         }
 
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
-        mUrlView = findViewById(R.id.url)
-        mLoginView = findViewById(R.id.login)
-        mHTTPLoginView = findViewById(R.id.httpLogin)
-        mPasswordView = findViewById(R.id.password)
-        mHTTPPasswordView = findViewById(R.id.httpPassword)
-        mLoginFormView = findViewById(R.id.login_form)
-        mProgressView = findViewById(R.id.login_progress)
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
         handleActions()
     }
 
     private fun handleActions() {
-        val mSwitch: Switch = findViewById(R.id.withLogin)
-        val mHTTPSwitch: Switch = findViewById(R.id.withHttpLogin)
-        val mLoginLayout: TextInputLayout = findViewById(R.id.loginLayout)
-        val mHTTPLoginLayout: TextInputLayout = findViewById(R.id.httpLoginInput)
-        val mPasswordLayout: TextInputLayout = findViewById(R.id.passwordLayout)
-        val mHTTPPasswordLayout: TextInputLayout = findViewById(R.id.httpPasswordInput)
-        val mEmailSignInButton: Button = findViewById(R.id.email_sign_in_button)
-        val selfHostedSwitch: Switch = findViewById(R.id.withSelfhostedCert)
-        val warningTextview: TextView = findViewById(R.id.warningText)
 
-        selfHostedSwitch.setOnCheckedChangeListener { _, b ->
+        withSelfhostedCert.setOnCheckedChangeListener { _, b ->
             isWithSelfSignedCert = !isWithSelfSignedCert
             val visi: Int = if (b) View.VISIBLE else View.GONE
 
-            warningTextview.visibility = visi
+            warningText.visibility = visi
         }
 
-        mPasswordView.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
-            if (id == R.id.login || id == EditorInfo.IME_NULL) {
+        passwordView.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
+            if (id == R.id.loginView || id == EditorInfo.IME_NULL) {
                 attemptLogin()
                 return@OnEditorActionListener true
             }
             false
         })
 
-        mEmailSignInButton.setOnClickListener { attemptLogin() }
+        signInButton.setOnClickListener { attemptLogin() }
 
-        mSwitch.setOnCheckedChangeListener { _, b ->
+        withLogin.setOnCheckedChangeListener { _, b ->
             isWithLogin = !isWithLogin
             val visi: Int = if (b) View.VISIBLE else View.GONE
 
-            mLoginLayout.visibility = visi
-            mPasswordLayout.visibility = visi
+            loginLayout.visibility = visi
+            passwordLayout.visibility = visi
         }
 
-        mHTTPSwitch.setOnCheckedChangeListener { _, b ->
+        withHttpLogin.setOnCheckedChangeListener { _, b ->
             isWithHTTPLogin = !isWithHTTPLogin
             val visi: Int = if (b) View.VISIBLE else View.GONE
 
-            mHTTPLoginLayout.visibility = visi
-            mHTTPPasswordLayout.visibility = visi
+            httpLoginInput.visibility = visi
+            httpPasswordInput.visibility = visi
         }
     }
 
@@ -140,9 +114,9 @@ class LoginActivity : AppCompatActivity() {
             alertDialog.setTitle(getString(R.string.warning_wrong_url))
             alertDialog.setMessage(getString(R.string.base_url_error))
             alertDialog.setButton(
-                AlertDialog.BUTTON_NEUTRAL,
-                "OK",
-                { dialog, _ -> dialog.dismiss() })
+                    AlertDialog.BUTTON_NEUTRAL,
+                    "OK",
+                    { dialog, _ -> dialog.dismiss() })
             alertDialog.show()
         }
     }
@@ -156,25 +130,25 @@ class LoginActivity : AppCompatActivity() {
     private fun attemptLogin() {
 
         // Reset errors.
-        mUrlView.error = null
-        mLoginView.error = null
-        mHTTPLoginView.error = null
-        mPasswordView.error = null
-        mHTTPPasswordView.error = null
+        urlView.error = null
+        loginView.error = null
+        httpLoginView.error = null
+        passwordView.error = null
+        httpPasswordView.error = null
 
         // Store values at the time of the login attempt.
-        val url = mUrlView.text.toString()
-        val login = mLoginView.text.toString()
-        val httpLogin = mHTTPLoginView.text.toString()
-        val password = mPasswordView.text.toString()
-        val httpPassword = mHTTPPasswordView.text.toString()
+        val url = urlView.text.toString()
+        val login = loginView.text.toString()
+        val httpLogin = httpLoginView.text.toString()
+        val password = passwordView.text.toString()
+        val httpPassword = httpPasswordView.text.toString()
 
         var cancel = false
         var focusView: View? = null
 
         if (!url.isBaseUrlValid()) {
-            mUrlView.error = getString(R.string.login_url_problem)
-            focusView = mUrlView
+            urlView.error = getString(R.string.login_url_problem)
+            focusView = urlView
             cancel = true
             inValidCount++
             if (inValidCount == 3) {
@@ -182,9 +156,9 @@ class LoginActivity : AppCompatActivity() {
                 alertDialog.setTitle(getString(R.string.warning_wrong_url))
                 alertDialog.setMessage(getString(R.string.text_wrong_url))
                 alertDialog.setButton(
-                    AlertDialog.BUTTON_NEUTRAL,
-                    "OK",
-                    { dialog, _ -> dialog.dismiss() })
+                        AlertDialog.BUTTON_NEUTRAL,
+                        "OK",
+                        { dialog, _ -> dialog.dismiss() })
                 alertDialog.show()
                 inValidCount = 0
             }
@@ -192,14 +166,14 @@ class LoginActivity : AppCompatActivity() {
 
         if (isWithLogin || isWithHTTPLogin) {
             if (TextUtils.isEmpty(password)) {
-                mPasswordView.error = getString(R.string.error_invalid_password)
-                focusView = mPasswordView
+                passwordView.error = getString(R.string.error_invalid_password)
+                focusView = passwordView
                 cancel = true
             }
 
             if (TextUtils.isEmpty(login)) {
-                mLoginView.error = getString(R.string.error_field_required)
-                focusView = mLoginView
+                loginView.error = getString(R.string.error_field_required)
+                focusView = loginView
                 cancel = true
             }
         }
@@ -226,11 +200,11 @@ class LoginActivity : AppCompatActivity() {
                     editor.remove("password")
                     editor.remove("httpPassword")
                     editor.apply()
-                    mUrlView.error = getString(R.string.wrong_infos)
-                    mLoginView.error = getString(R.string.wrong_infos)
-                    mPasswordView.error = getString(R.string.wrong_infos)
-                    mHTTPLoginView.error = getString(R.string.wrong_infos)
-                    mHTTPPasswordView.error = getString(R.string.wrong_infos)
+                    urlView.error = getString(R.string.wrong_infos)
+                    loginView.error = getString(R.string.wrong_infos)
+                    passwordView.error = getString(R.string.wrong_infos)
+                    httpLoginView.error = getString(R.string.wrong_infos)
+                    httpPasswordView.error = getString(R.string.wrong_infos)
                     if (logErrors) {
                         Crashlytics.setUserIdentifier(userIdentifier)
                         Crashlytics.log(100, "LOGIN_DEBUG_ERRROR", t.message)
@@ -242,7 +216,7 @@ class LoginActivity : AppCompatActivity() {
 
                 override fun onResponse(call: Call<SuccessResponse>, response: Response<SuccessResponse>) {
                     if (response.body() != null && response.body()!!.isSuccess) {
-                        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, Bundle())
+                        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, Bundle())
                         goToMain()
                     } else {
                         preferenceError(Exception("No response body..."))
@@ -260,34 +234,34 @@ class LoginActivity : AppCompatActivity() {
     private fun showProgress(show: Boolean) {
         val shortAnimTime = resources.getInteger(android.R.integer.config_shortAnimTime)
 
-        mLoginFormView.visibility = if (show) View.GONE else View.VISIBLE
-        mLoginFormView
-            .animate()
-            .setDuration(shortAnimTime.toLong())
-            .alpha(
-                if (show) 0F else 1F
-            ).setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    mLoginFormView.visibility = if (show) View.GONE else View.VISIBLE
-                }
-            })
+        loginForm.visibility = if (show) View.GONE else View.VISIBLE
+        loginForm
+                .animate()
+                .setDuration(shortAnimTime.toLong())
+                .alpha(
+                        if (show) 0F else 1F
+                ).setListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                loginForm.visibility = if (show) View.GONE else View.VISIBLE
+            }
+        })
 
-        mProgressView.visibility = if (show) View.VISIBLE else View.GONE
-        mProgressView
-            .animate()
-            .setDuration(shortAnimTime.toLong())
-            .alpha(
-                if (show) 1F else 0F
-            ).setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    mProgressView.visibility = if (show) View.VISIBLE else View.GONE
-                }
-            })
+        loginProgress.visibility = if (show) View.VISIBLE else View.GONE
+        loginProgress
+                .animate()
+                .setDuration(shortAnimTime.toLong())
+                .alpha(
+                        if (show) 1F else 0F
+                ).setListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                loginProgress.visibility = if (show) View.VISIBLE else View.GONE
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.login_menu, menu)
-        menu.findItem(R.id.loging_debug).isChecked = logErrors
+        menu.findItem(R.id.login_debug).isChecked = logErrors
         return true
     }
 
@@ -295,17 +269,17 @@ class LoginActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.about -> {
                 LibsBuilder()
-                    .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
-                    .withAboutIconShown(true)
-                    .withAboutVersionShown(true)
-                    .start(this)
+                        .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
+                        .withAboutIconShown(true)
+                        .withAboutVersionShown(true)
+                        .start(this)
                 return true
             }
-            R.id.loging_debug -> {
+            R.id.login_debug -> {
                 val newState = !item.isChecked
                 item.isChecked = newState
                 logErrors = newState
-                editor.putBoolean("loging_debug", newState)
+                editor.putBoolean("login_debug", newState)
                 editor.apply()
                 return true
             }

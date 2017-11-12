@@ -21,6 +21,7 @@ import com.amulyakhare.textdrawable.util.ColorGenerator
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlinx.android.synthetic.main.source_list_item.view.*
 
 
 class SourcesListAdapter(private val app: Activity,
@@ -41,13 +42,13 @@ class SourcesListAdapter(private val app: Activity,
             val color = generator.getColor(itm.title)
 
             val drawable =
-                TextDrawable
-                    .builder()
-                    .round()
-                    .build(itm.title.toTextDrawableString(), color)
-            holder.sourceImage.setImageDrawable(drawable)
+                    TextDrawable
+                            .builder()
+                            .round()
+                            .build(itm.title.toTextDrawableString(), color)
+            holder.itemImage.setImageDrawable(drawable)
         } else {
-            c.circularBitmapDrawable(itm.getIcon(c), holder.sourceImage)
+            c.circularBitmapDrawable(itm.getIcon(c), holder.itemImage)
         }
 
         holder.sourceTitle.text = itm.title
@@ -58,17 +59,14 @@ class SourcesListAdapter(private val app: Activity,
     }
 
     inner class ViewHolder(internal val mView: ConstraintLayout) : RecyclerView.ViewHolder(mView) {
-        lateinit var sourceImage: ImageView
+        lateinit var itemImage: ImageView
         lateinit var sourceTitle: TextView
 
         init {
-
             handleClickListeners()
         }
 
         private fun handleClickListeners() {
-            sourceImage = mView.findViewById(R.id.itemImage)
-            sourceTitle = mView.findViewById(R.id.sourceTitle)
 
             val deleteBtn: Button = mView.findViewById(R.id.deleteBtn)
 

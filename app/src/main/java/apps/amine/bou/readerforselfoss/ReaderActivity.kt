@@ -10,10 +10,6 @@ import android.support.v7.app.AppCompatActivity
 import android.text.Html
 import android.view.MenuItem
 import android.view.View
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
 import apps.amine.bou.readerforselfoss.api.mercury.MercuryApi
 import apps.amine.bou.readerforselfoss.api.mercury.ParsedContent
 import apps.amine.bou.readerforselfoss.utils.buildCustomTabsIntent
@@ -30,16 +26,11 @@ import org.sufficientlysecure.htmltextview.HtmlHttpImageGetter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlinx.android.synthetic.main.activity_reader.*
 
 
 class ReaderActivity : AppCompatActivity() {
     private lateinit var mCustomTabActivityHelper: CustomTabActivityHelper
-    private lateinit var image: ImageView
-    private lateinit var source: TextView
-    private lateinit var title: TextView
-    private lateinit var content: TextView
-    private lateinit var progress: FrameLayout
-    private lateinit var nestedScrollView: NestedScrollView
     //private lateinit var content: HtmlTextView
     private lateinit var url: String
     private lateinit var contentText: String
@@ -59,12 +50,6 @@ class ReaderActivity : AppCompatActivity() {
         Scoop.getInstance().apply(this)
         setContentView(R.layout.activity_reader)
 
-        image = findViewById(R.id.imageView)
-        source = findViewById(R.id.source)
-        title = findViewById(R.id.title)
-        content = findViewById(R.id.content)
-        progress = findViewById(R.id.progressBar)
-        nestedScrollView = findViewById(R.id.nestedScrollView)
         url = intent.getStringExtra("url")
         contentText = intent.getStringExtra("content")
         contentTitle = intent.getStringExtra("title")
@@ -109,19 +94,19 @@ class ReaderActivity : AppCompatActivity() {
             getContentFromMercury(customTabsIntent, prefs)
         } else {
             source.text = contentSource
-            title.text = contentTitle
+            titleView.text = contentTitle
             tryToHandleHtml(contentText, customTabsIntent, prefs)
 
             if (!contentImage.isEmptyOrNullOrNullString()) {
-                image.visibility = View.VISIBLE
+                imageView.visibility = View.VISIBLE
                 Glide
                         .with(baseContext)
                         .asBitmap()
                         .load(contentImage)
                         .apply(RequestOptions.fitCenterTransform())
-                        .into(image)
+                        .into(imageView)
             } else {
-                image.visibility = View.GONE
+                imageView.visibility = View.GONE
             }
         }
 
@@ -135,14 +120,14 @@ class ReaderActivity : AppCompatActivity() {
     }
 
     private fun getContentFromMercury(customTabsIntent: CustomTabsIntent, prefs: SharedPreferences) {
-        progress.visibility = View.VISIBLE
+        progressBar.visibility = View.VISIBLE
         val parser = MercuryApi(BuildConfig.MERCURY_KEY, prefs.getBoolean("should_log_everything", false))
 
         parser.parseUrl(url).enqueue(object : Callback<ParsedContent> {
             override fun onResponse(call: Call<ParsedContent>, response: Response<ParsedContent>) {
                 if (response.body() != null && response.body()!!.content != null && response.body()!!.content.isNotEmpty()) {
                     source.text = response.body()!!.domain
-                    title.text = response.body()!!.title
+                    titleView.text = response.body()!!.title
                     this@ReaderActivity.url = response.body()!!.url
 
                     if (response.body()!!.content != null && !response.body()!!.content.isEmpty()) {
@@ -150,20 +135,20 @@ class ReaderActivity : AppCompatActivity() {
                     }
 
                     if (response.body()!!.lead_image_url != null && !response.body()!!.lead_image_url.isEmpty()) {
-                        image.visibility = View.VISIBLE
+                        imageView.visibility = View.VISIBLE
                         Glide
                                 .with(baseContext)
                                 .asBitmap()
                                 .load(response.body()!!.lead_image_url)
                                 .apply(RequestOptions.fitCenterTransform())
-                                .into(image)
+                                .into(imageView)
                     } else {
-                        image.visibility = View.GONE
+                        imageView.visibility = View.GONE
                     }
 
                     nestedScrollView.scrollTo(0, 0)
 
-                    progress.visibility = View.GONE
+                    progressBar.visibility = View.GONE
                 } else openInBrowserAfterFailing(customTabsIntent)
             }
 
@@ -185,7 +170,7 @@ class ReaderActivity : AppCompatActivity() {
     }
 
     private fun openInBrowserAfterFailing(customTabsIntent: CustomTabsIntent) {
-        progress.visibility = View.GONE
+        progressBar.visibility = View.GONE
         this@ReaderActivity.openItemUrl(
                 url,
                 contentText,
