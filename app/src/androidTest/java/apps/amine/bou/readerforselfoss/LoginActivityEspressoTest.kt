@@ -32,18 +32,18 @@ class LoginActivityEspressoTest {
     @Rule @JvmField
     val rule = ActivityTestRule(LoginActivity::class.java, true, false)
 
-    lateinit var context: Context
-    lateinit var url: String
-    lateinit var username: String
-    lateinit var password: String
+    private lateinit var context: Context
+    private lateinit var url: String
+    private lateinit var username: String
+    private lateinit var password: String
 
     @Before
     fun setUp() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
         val editor =
-            context
-                .getSharedPreferences(Config.settingsName, Context.MODE_PRIVATE)
-                .edit()
+                context
+                        .getSharedPreferences(Config.settingsName, Context.MODE_PRIVATE)
+                        .edit()
         editor.clear()
         editor.commit()
 
@@ -77,12 +77,12 @@ class LoginActivityEspressoTest {
     fun wrongLoginUrl() {
         rule.launchActivity(Intent())
 
-        onView(withId(R.id.login_progress))
-            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+        onView(withId(R.id.loginProgress))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
 
         onView(withId(R.id.url)).perform(click()).perform(typeText("WRONGURL"))
 
-        onView(withId(R.id.email_sign_in_button)).perform(click())
+        onView(withId(R.id.signInButton)).perform(click())
 
         onView(withId(R.id.urlLayout)).check(matches(isHintOrErrorEnabled()))
     }
@@ -98,20 +98,20 @@ class LoginActivityEspressoTest {
 
         onView(withId(R.id.withLogin)).perform(click())
 
-        onView(withId(R.id.email_sign_in_button)).perform(click())
+        onView(withId(R.id.signInButton)).perform(click())
 
         onView(withId(R.id.loginLayout)).check(matches(isHintOrErrorEnabled()))
         onView(withId(R.id.passwordLayout)).check(matches(isHintOrErrorEnabled()))
 
-        onView(withId(R.id.login)).perform(click()).perform(typeText(username), closeSoftKeyboard())
+        onView(withId(R.id.loginView)).perform(click()).perform(typeText(username), closeSoftKeyboard())
 
         onView(withId(R.id.passwordLayout)).check(matches(isHintOrErrorEnabled()))
 
-        onView(withId(R.id.email_sign_in_button)).perform(click())
+        onView(withId(R.id.signInButton)).perform(click())
 
         onView(withId(R.id.passwordLayout)).check(
-            matches(
-                isHintOrErrorEnabled())
+                matches(
+                        isHintOrErrorEnabled())
         )
 
     }
@@ -125,11 +125,11 @@ class LoginActivityEspressoTest {
 
         onView(withId(R.id.withLogin)).perform(click())
 
-        onView(withId(R.id.login)).perform(click()).perform(typeText(username), closeSoftKeyboard())
+        onView(withId(R.id.loginView)).perform(click()).perform(typeText(username), closeSoftKeyboard())
 
-        onView(withId(R.id.password)).perform(click()).perform(typeText("WRONGPASS"), closeSoftKeyboard())
+        onView(withId(R.id.passwordView)).perform(click()).perform(typeText("WRONGPASS"), closeSoftKeyboard())
 
-        onView(withId(R.id.email_sign_in_button)).perform(click())
+        onView(withId(R.id.signInButton)).perform(click())
 
         onView(withId(R.id.urlLayout)).check(matches(isHintOrErrorEnabled()))
         onView(withId(R.id.loginLayout)).check(matches(isHintOrErrorEnabled()))
@@ -146,11 +146,11 @@ class LoginActivityEspressoTest {
 
         onView(withId(R.id.withLogin)).perform(click())
 
-        onView(withId(R.id.login)).perform(click()).perform(typeText(username), closeSoftKeyboard())
+        onView(withId(R.id.loginView)).perform(click()).perform(typeText(username), closeSoftKeyboard())
 
-        onView(withId(R.id.password)).perform(click()).perform(typeText(password), closeSoftKeyboard())
+        onView(withId(R.id.passwordView)).perform(click()).perform(typeText(password), closeSoftKeyboard())
 
-        onView(withId(R.id.email_sign_in_button)).perform(click())
+        onView(withId(R.id.signInButton)).perform(click())
 
         intended(hasComponent(HomeActivity::class.java.name))
 
