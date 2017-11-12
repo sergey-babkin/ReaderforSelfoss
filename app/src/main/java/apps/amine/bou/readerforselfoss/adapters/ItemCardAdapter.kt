@@ -230,7 +230,7 @@ class ItemCardAdapter(private val app: Activity,
             mView.setOnClickListener {
                 c.openItemUrl(items[adapterPosition].getLinkDecoded(),
                         items[adapterPosition].content,
-                        items[adapterPosition].getIcon(c),
+                        items[adapterPosition].getThumbnail(c),
                         items[adapterPosition].title,
                         items[adapterPosition].sourceAndDateText(),
                         customTabsIntent,

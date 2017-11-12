@@ -1,20 +1,19 @@
 package apps.amine.bou.readerforselfoss
 
+import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.preference.PreferenceManager
 import android.support.customtabs.CustomTabsIntent
 import android.support.design.widget.FloatingActionButton
+import android.support.v4.widget.NestedScrollView
 import android.support.v7.app.AppCompatActivity
 import android.text.Html
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageButton
+import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
-import apps.amine.bou.readerforselfoss.R.id.fab
 import apps.amine.bou.readerforselfoss.api.mercury.MercuryApi
 import apps.amine.bou.readerforselfoss.api.mercury.ParsedContent
 import apps.amine.bou.readerforselfoss.utils.buildCustomTabsIntent
@@ -24,14 +23,13 @@ import apps.amine.bou.readerforselfoss.utils.openItemUrl
 import apps.amine.bou.readerforselfoss.utils.shareLink
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.crashlytics.android.Crashlytics
 import com.ftinc.scoop.Scoop
 import com.github.rubensousa.floatingtoolbar.FloatingToolbar
 import org.sufficientlysecure.htmltextview.HtmlHttpImageGetter
-import org.sufficientlysecure.htmltextview.HtmlTextView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import xyz.klinker.android.drag_dismiss.activity.DragDismissActivity
 
 
 class ReaderActivity : AppCompatActivity() {
@@ -40,6 +38,8 @@ class ReaderActivity : AppCompatActivity() {
     private lateinit var source: TextView
     private lateinit var title: TextView
     private lateinit var content: TextView
+    private lateinit var progress: FrameLayout
+    private lateinit var nestedScrollView: NestedScrollView
     //private lateinit var content: HtmlTextView
     private lateinit var url: String
     private lateinit var contentText: String
@@ -56,36 +56,35 @@ class ReaderActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         Scoop.getInstance().apply(this)
-        val v = this
-
         setContentView(R.layout.activity_reader)
 
-
-        image = v.findViewById(R.id.imageView)
-        source = v.findViewById(R.id.source)
-        title = v.findViewById(R.id.title)
-        content = v.findViewById(R.id.content)
+        image = findViewById(R.id.imageView)
+        source = findViewById(R.id.source)
+        title = findViewById(R.id.title)
+        content = findViewById(R.id.content)
+        progress = findViewById(R.id.progressBar)
+        nestedScrollView = findViewById(R.id.nestedScrollView)
         url = intent.getStringExtra("url")
         contentText = intent.getStringExtra("content")
         contentTitle = intent.getStringExtra("title")
         contentImage = intent.getStringExtra("image")
         contentSource = intent.getStringExtra("source")
 
-        fab = v.findViewById(R.id.fab)
-        val mFloatingToolbar: FloatingToolbar = v.findViewById(R.id.floatingToolbar)
+        fab = findViewById(R.id.fab)
+        val mFloatingToolbar: FloatingToolbar = findViewById(R.id.floatingToolbar)
         mFloatingToolbar.attachFab(fab)
 
         val customTabsIntent = this@ReaderActivity.buildCustomTabsIntent()
         mCustomTabActivityHelper = CustomTabActivityHelper()
         mCustomTabActivityHelper.bindCustomTabsService(this)
 
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
         mFloatingToolbar.setClickListener(object : FloatingToolbar.ItemClickListener {
             override fun onItemClick(item: MenuItem) {
                 when (item.itemId) {
-                    R.id.more_action -> getContentFromMercury(customTabsIntent)
+                    R.id.more_action -> getContentFromMercury(customTabsIntent, prefs)
                     R.id.share_action -> this@ReaderActivity.shareLink(url)
                     R.id.open_action -> this@ReaderActivity.openItemUrl(
                             url,
@@ -107,26 +106,28 @@ class ReaderActivity : AppCompatActivity() {
 
 
         if (contentText.isEmptyOrNullOrNullString()) {
-            getContentFromMercury(customTabsIntent)
+            getContentFromMercury(customTabsIntent, prefs)
         } else {
             source.text = contentSource
             title.text = contentTitle
-            content.text = Html.fromHtml(contentText, HtmlHttpImageGetter(content, null, true), null)
-            //content.setHtml(contentText, HtmlHttpImageGetter(content, null, true))
+            tryToHandleHtml(contentText, customTabsIntent, prefs)
 
-            if (!contentImage.isEmptyOrNullOrNullString())
+            if (!contentImage.isEmptyOrNullOrNullString()) {
+                image.visibility = View.VISIBLE
                 Glide
                         .with(baseContext)
                         .asBitmap()
                         .load(contentImage)
                         .apply(RequestOptions.fitCenterTransform())
                         .into(image)
+            } else {
+                image.visibility = View.GONE
+            }
         }
     }
 
-    private fun getContentFromMercury(customTabsIntent: CustomTabsIntent) {
-
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+    private fun getContentFromMercury(customTabsIntent: CustomTabsIntent, prefs: SharedPreferences) {
+        progress.visibility = View.VISIBLE
         val parser = MercuryApi(BuildConfig.MERCURY_KEY, prefs.getBoolean("should_log_everything", false))
 
         parser.parseUrl(url).enqueue(object : Callback<ParsedContent> {
@@ -135,42 +136,59 @@ class ReaderActivity : AppCompatActivity() {
                     source.text = response.body()!!.domain
                     title.text = response.body()!!.title
                     this@ReaderActivity.url = response.body()!!.url
-                    if (response.body()!!.content != null && !response.body()!!.content.isEmpty()) {
-                        try {
-                            content.text = Html.fromHtml(response.body()!!.content, HtmlHttpImageGetter(content, null, true), null)
 
-                            //content.setHtml(response.body()!!.content, HtmlHttpImageGetter(content, null, true))
-                        } catch (e: IndexOutOfBoundsException) {
-                            openInBrowserAfterFailing()
-                        }
+                    if (response.body()!!.content != null && !response.body()!!.content.isEmpty()) {
+                        tryToHandleHtml(response.body()!!.content, customTabsIntent, prefs)
                     }
-                    if (response.body()!!.lead_image_url != null && !response.body()!!.lead_image_url.isEmpty())
+
+                    if (response.body()!!.lead_image_url != null && !response.body()!!.lead_image_url.isEmpty()) {
+                        image.visibility = View.VISIBLE
                         Glide
                                 .with(baseContext)
                                 .asBitmap()
                                 .load(response.body()!!.lead_image_url)
                                 .apply(RequestOptions.fitCenterTransform())
                                 .into(image)
+                    } else {
+                        image.visibility = View.GONE
+                    }
 
-                } else openInBrowserAfterFailing()
+                    nestedScrollView.scrollTo(0, 0)
+
+                    progress.visibility = View.GONE
+                } else openInBrowserAfterFailing(customTabsIntent)
             }
 
-            override fun onFailure(call: Call<ParsedContent>, t: Throwable) = openInBrowserAfterFailing()
-
-            private fun openInBrowserAfterFailing() {
-                this@ReaderActivity.openItemUrl(
-                        url,
-                        contentText,
-                        contentImage,
-                        contentTitle,
-                        contentSource,
-                        customTabsIntent,
-                        true,
-                        false,
-                        this@ReaderActivity
-                )
-                finish()
-            }
+            override fun onFailure(call: Call<ParsedContent>, t: Throwable) = openInBrowserAfterFailing(customTabsIntent)
         })
+    }
+
+    private fun tryToHandleHtml(c: String, customTabsIntent: CustomTabsIntent, prefs: SharedPreferences) {
+        try {
+            content.text = Html.fromHtml(c, HtmlHttpImageGetter(content, null, true), null)
+
+            //content.setHtml(response.body()!!.content, HtmlHttpImageGetter(content, null, true))
+        } catch (e: Exception) {
+            Crashlytics.setUserIdentifier(prefs.getString("unique_id", ""))
+            Crashlytics.log(100, "CANT_TRANSFORM_TO_HTML", e.message)
+            Crashlytics.logException(e)
+            openInBrowserAfterFailing(customTabsIntent)
+        }
+    }
+
+    private fun openInBrowserAfterFailing(customTabsIntent: CustomTabsIntent) {
+        progress.visibility = View.GONE
+        this@ReaderActivity.openItemUrl(
+                url,
+                contentText,
+                contentImage,
+                contentTitle,
+                contentSource,
+                customTabsIntent,
+                true,
+                false,
+                this@ReaderActivity
+        )
+        finish()
     }
 }
