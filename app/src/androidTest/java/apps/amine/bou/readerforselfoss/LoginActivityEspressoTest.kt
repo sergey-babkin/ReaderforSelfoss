@@ -80,7 +80,7 @@ class LoginActivityEspressoTest {
         onView(withId(R.id.loginProgress))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
 
-        onView(withId(R.id.url)).perform(click()).perform(typeText("WRONGURL"))
+        onView(withId(R.id.urlView)).perform(click()).perform(typeText("WRONGURL"))
 
         onView(withId(R.id.signInButton)).perform(click())
 
@@ -94,7 +94,7 @@ class LoginActivityEspressoTest {
 
         rule.launchActivity(Intent())
 
-        onView(withId(R.id.url)).perform(click()).perform(typeText(url), closeSoftKeyboard())
+        onView(withId(R.id.urlView)).perform(click()).perform(typeText(url), closeSoftKeyboard())
 
         onView(withId(R.id.withLogin)).perform(click())
 
@@ -121,7 +121,7 @@ class LoginActivityEspressoTest {
 
         rule.launchActivity(Intent())
 
-        onView(withId(R.id.url)).perform(click()).perform(typeText(url), closeSoftKeyboard())
+        onView(withId(R.id.urlView)).perform(click()).perform(typeText(url), closeSoftKeyboard())
 
         onView(withId(R.id.withLogin)).perform(click())
 
@@ -142,7 +142,7 @@ class LoginActivityEspressoTest {
 
         rule.launchActivity(Intent())
 
-        onView(withId(R.id.url)).perform(click()).perform(typeText(url), closeSoftKeyboard())
+        onView(withId(R.id.urlView)).perform(click()).perform(typeText(url), closeSoftKeyboard())
 
         onView(withId(R.id.withLogin)).perform(click())
 
