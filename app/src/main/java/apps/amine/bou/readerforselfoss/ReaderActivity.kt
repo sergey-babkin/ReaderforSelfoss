@@ -114,7 +114,7 @@ class ReaderActivity : AppCompatActivity() {
             if (scrollY > oldScrollY) {
                 fab.hide()
             } else {
-                fab.show()
+                if (mFloatingToolbar.isShowing) mFloatingToolbar.hide() else fab.show()
             }
         })
     }
