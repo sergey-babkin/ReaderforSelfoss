@@ -2,6 +2,8 @@
 
 - Fixed fab and toolbar issue (#113)
 
+- Fixed links clickable (#114)
+
 **1.5.4.11**
 
 - Hiding FABs on scroll.

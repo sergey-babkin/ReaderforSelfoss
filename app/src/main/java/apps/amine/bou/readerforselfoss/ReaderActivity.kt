@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton
 import android.support.v4.widget.NestedScrollView
 import android.support.v7.app.AppCompatActivity
 import android.text.Html
+import android.text.method.LinkMovementMethod
 import android.view.MenuItem
 import android.view.View
 import apps.amine.bou.readerforselfoss.api.mercury.MercuryApi
@@ -117,6 +118,8 @@ class ReaderActivity : AppCompatActivity() {
                 if (mFloatingToolbar.isShowing) mFloatingToolbar.hide() else fab.show()
             }
         })
+
+        content.movementMethod = LinkMovementMethod.getInstance()
     }
 
     private fun getContentFromMercury(customTabsIntent: CustomTabsIntent, prefs: SharedPreferences) {
