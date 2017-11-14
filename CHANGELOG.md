@@ -1,8 +1,10 @@
-**master**
+**1.5.4.12**
 
 - Fixed fab and toolbar issue (#113)
 
 - Fixed links clickable (#114)
+
+- Changed the link colors in the article viewer
 
 **1.5.4.11**
 
