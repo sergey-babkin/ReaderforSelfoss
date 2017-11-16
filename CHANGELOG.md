@@ -1,3 +1,7 @@
+**master**
+
+- Displaying the right number of items.
+
 **1.5.4.12**
 
 - Fixed fab and toolbar issue (#113)

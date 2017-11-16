@@ -117,6 +117,10 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     private var recyclerViewScrollListener: RecyclerView.OnScrollListener? = null
     private lateinit var settings: SharedPreferences
 
+    private var badgeNew: Int = -1
+    private var badgeAll: Int = -1
+    private var badgeFavs: Int = -1
+
 
 
 
@@ -190,8 +194,10 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                                 is ItemListAdapter -> adapter.removeItemAtIndex(position)
                             }
 
-                            if (items.size > 0)
-                                tabNewBadge.setText("${items.size}").maybeShow()
+                            if (items.size > 0) {
+                                badgeNew--
+                                reloadBadgeContent()
+                            }
                             else
                                 tabNewBadge.hide()
 
@@ -771,26 +777,38 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
             api.stats.enqueue(object : Callback<Stats> {
                 override fun onResponse(call: Call<Stats>, response: Response<Stats>) {
                     if (response.body() != null) {
-                        if (displayUnreadCount)
-                            tabNewBadge
-                                    .setText(response.body()!!.unread.toString())
-                                    .maybeShow()
-                        if (displayAllCount) {
-                            tabArchiveBadge
-                                    .setText(response.body()!!.total.toString())
-                                    .maybeShow()
-                            tabStarredBadge
-                                    .setText(response.body()!!.starred.toString())
-                                    .maybeShow()
-                        } else {
-                            tabArchiveBadge.removeBadge()
-                            tabStarredBadge.removeBadge()
-                        }
+
+                        badgeNew = response.body()!!.unread
+                        badgeAll = response.body()!!.total
+                        badgeFavs = response.body()!!.starred
+                        reloadBadgeContent()
                     }
                 }
 
                 override fun onFailure(call: Call<Stats>, t: Throwable) {}
             })
+        } else {
+            reloadBadgeContent(succeeded = false)
+        }
+    }
+
+    private fun reloadBadgeContent(succeeded: Boolean = true) {
+        if (succeeded) {
+            if (displayUnreadCount)
+                tabNewBadge
+                        .setText(badgeNew.toString())
+                        .maybeShow()
+            if (displayAllCount) {
+                tabArchiveBadge
+                        .setText(badgeAll.toString())
+                        .maybeShow()
+                tabStarredBadge
+                        .setText(badgeFavs.toString())
+                        .maybeShow()
+            } else {
+                tabArchiveBadge.removeBadge()
+                tabStarredBadge.removeBadge()
+            }
         } else {
             tabNewBadge.removeBadge()
             tabArchiveBadge.removeBadge()
