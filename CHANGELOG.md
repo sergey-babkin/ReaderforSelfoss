@@ -1,6 +1,8 @@
-**master**
+**1.5.4.13**
 
 - Displaying the right number of items.
+
+- Fixing infinite scroll remaining issues. Should be stable enough.
 
 **1.5.4.12**
 
