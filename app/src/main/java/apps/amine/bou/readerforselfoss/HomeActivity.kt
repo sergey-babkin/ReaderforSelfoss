@@ -71,7 +71,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import kotlinx.android.synthetic.main.activity_home.*
 
-
 class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private val MENU_PREFERENCES = 12302
@@ -209,8 +208,8 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                                 else -> 0
                             }
 
-                            if (lastVisibleItem == (items.size - 1)) {
-                                getElementsAccordingToTab(appendResults = true)
+                            if (lastVisibleItem === items.size && items.size <= maxItemNumber()) {
+                                getElementsAccordingToTab(appendResults = true, offsetOverride = lastVisibleItem)
                             }
 
                         } catch (e: IndexOutOfBoundsException) {
@@ -634,7 +633,7 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                             else -> 0
                         }
 
-                        if (lastVisibleItem == (items.size - 1)) {
+                        if (lastVisibleItem == (items.size - 1) && items.size < maxItemNumber()) {
                             getElementsAccordingToTab(appendResults = true)
                         }
                     }
@@ -645,7 +644,7 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         recyclerView.addOnScrollListener(recyclerViewScrollListener)
     }
 
-    fun mayBeEmpty() =
+    private fun mayBeEmpty() =
             if (items.isEmpty()) {
                 emptyText.visibility = View.VISIBLE
                 recyclerView.visibility = View.GONE
@@ -654,13 +653,21 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                 recyclerView.visibility = View.VISIBLE
             }
 
-    private fun getElementsAccordingToTab(appendResults: Boolean = false) =
-            when (elementsShown) {
-                UNREAD_SHOWN -> getUnRead(appendResults)
-                READ_SHOWN -> getRead(appendResults)
-                FAV_SHOWN -> getStarred(appendResults)
-                else -> getUnRead(appendResults)
-            }
+    private fun getElementsAccordingToTab(appendResults: Boolean = false, offsetOverride: Int? = null) {
+        offset =  if (appendResults && offsetOverride === null) {
+            (offset + itemsNumber)
+        } else {
+            offsetOverride ?: 0
+        }
+        firstVisible = if (appendResults) firstVisible else 0
+
+        when (elementsShown) {
+            UNREAD_SHOWN -> getUnRead(appendResults)
+            READ_SHOWN -> getRead(appendResults)
+            FAV_SHOWN -> getStarred(appendResults)
+            else -> getUnRead(appendResults)
+        }
+    }
 
     private fun doCallTo(appendResults: Boolean, toastMessage: Int, call: (String?, Long?, String?) -> Call<List<Item>>) {
         fun handleItemsResponse(response: Response<List<Item>>) {
@@ -700,25 +707,16 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     }
 
     private fun getUnRead(appendResults: Boolean = false) {
-        offset =  if (appendResults) (offset + itemsNumber)
-        else 0
-        firstVisible = if (appendResults) firstVisible else 0
         elementsShown = UNREAD_SHOWN
         doCallTo(appendResults, R.string.cant_get_new_elements){t, id, f -> api.newItems(t, id, f, itemsNumber, offset)}
     }
 
     private fun getRead(appendResults: Boolean = false) {
-        offset =  if (appendResults) (offset + itemsNumber)
-        else 0
-        firstVisible = if (appendResults) firstVisible else 0
         elementsShown = READ_SHOWN
         doCallTo(appendResults, R.string.cant_get_read){t, id, f -> api.readItems(t, id, f, itemsNumber, offset)}
     }
 
     private fun getStarred(appendResults: Boolean = false) {
-        offset =  if (appendResults) (offset + itemsNumber)
-        else 0
-        firstVisible = if (appendResults) firstVisible else 0
         elementsShown = FAV_SHOWN
         doCallTo(appendResults, R.string.cant_get_favs){t, id, f -> api.starredItems(t, id, f, itemsNumber, offset)}
     }
@@ -937,4 +935,12 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
             else -> return super.onOptionsItemSelected(item)
         }
     }
+
+    private fun maxItemNumber(): Int =
+        when (elementsShown) {
+            UNREAD_SHOWN -> badgeNew
+            READ_SHOWN -> badgeAll
+            FAV_SHOWN -> badgeFavs
+            else -> badgeNew // if !elementsShown then unread are fetched.
+        }
 }
