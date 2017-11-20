@@ -208,7 +208,7 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                                 else -> 0
                             }
 
-                            if (lastVisibleItem === items.size && items.size <= maxItemNumber()) {
+                            if (lastVisibleItem === items.size && items.size <= maxItemNumber() && maxItemNumber() >= itemsNumber) {
                                 getElementsAccordingToTab(appendResults = true, offsetOverride = lastVisibleItem)
                             }
 

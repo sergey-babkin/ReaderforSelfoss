@@ -1,3 +1,7 @@
+**1.5.4.14**
+
+- Fixing infinite scroll trying to load more items when there are no more.
+
 **1.5.4.13**
 
 - Displaying the right number of items.
