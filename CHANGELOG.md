@@ -1,3 +1,7 @@
+**1.5.4.15**
+
+- Fixed an issue with the sources list.
+
 **1.5.4.14**
 
 - Fixing infinite scroll trying to load more items when there are no more.

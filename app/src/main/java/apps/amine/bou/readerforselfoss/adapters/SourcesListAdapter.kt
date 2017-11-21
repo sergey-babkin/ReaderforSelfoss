@@ -46,21 +46,17 @@ class SourcesListAdapter(private val app: Activity,
                             .builder()
                             .round()
                             .build(itm.title.toTextDrawableString(), color)
-            holder.itemImage.setImageDrawable(drawable)
+            holder.mView.itemImage.setImageDrawable(drawable)
         } else {
-            c.circularBitmapDrawable(itm.getIcon(c), holder.itemImage)
+            c.circularBitmapDrawable(itm.getIcon(c), holder.mView.itemImage)
         }
 
-        holder.sourceTitle.text = itm.title
+        holder.mView.sourceTitle.text = itm.title
     }
 
-    override fun getItemCount(): Int {
-        return items.size
-    }
+    override fun getItemCount(): Int = items.size
 
     inner class ViewHolder(internal val mView: ConstraintLayout) : RecyclerView.ViewHolder(mView) {
-        lateinit var itemImage: ImageView
-        lateinit var sourceTitle: TextView
 
         init {
             handleClickListeners()
