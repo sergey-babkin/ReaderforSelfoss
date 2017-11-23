@@ -1,3 +1,7 @@
+**master**
+
+- Fixing list view displaying issues.
+
 **1.5.4.15**
 
 - Fixed an issue with the sources list.

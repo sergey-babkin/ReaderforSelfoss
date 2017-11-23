@@ -11,10 +11,7 @@ import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SearchView
-import android.support.v7.widget.StaggeredGridLayoutManager
+import android.support.v7.widget.*
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.Menu
 import android.view.MenuItem
@@ -759,6 +756,9 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                             articleViewer,
                             debugReadingItems,
                             userIdentifier)
+
+            recyclerView.addItemDecoration(DividerItemDecoration(this@HomeActivity,
+                    DividerItemDecoration.VERTICAL))
         }
         recyclerView.adapter = mAdapter
         mAdapter.notifyDataSetChanged()
