@@ -2,6 +2,8 @@
 
 - Fixing list view displaying issues.
 
+- Endless scroll is not in beta anymore.
+
 **1.5.4.15**
 
 - Fixed an issue with the sources list.
