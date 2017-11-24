@@ -607,13 +607,15 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                         else -> Unit
                     }
 
-            override fun onTabSelected(position: Int) =
-                    when (position) {
-                        0 -> getUnRead()
-                        1 -> getRead()
-                        2 -> getStarred()
-                        else -> Unit
-                    }
+            override fun onTabSelected(position: Int) {
+                offset = 0
+                when (position) {
+                    0 -> getUnRead()
+                    1 -> getRead()
+                    2 -> getStarred()
+                    else -> Unit
+                }
+            }
 
         })
     }

@@ -1,3 +1,7 @@
+**1.5.4.17**
+
+- Fixed the last bug with infinite scroll.
+
 **1.5.4.16**
 
 - Fixing list view displaying issues.
