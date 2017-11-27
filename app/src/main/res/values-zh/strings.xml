@@ -43,8 +43,8 @@
   <string name="cant_create_source">"无法创建新数据"</string>
   <string name="cant_get_spouts">"无法获取数据列表"</string>
   <string name="form_not_complete">"文件不完整。"</string>
-  <string name="pref_header_links">"Links"</string>
-  <string name="issue_tracker_link">"Issue Tracker"</string>
+  <string name="pref_header_links">"链接"</string>
+  <string name="issue_tracker_link">"问题跟踪器"</string>
   <string name="issue_tracker_summary">"Report a bug or ask for a new feature"</string>
   <string name="warning_wrong_url">"WARNING"</string>
   <string name="pref_switch_card_view_title">"Card View"</string>
