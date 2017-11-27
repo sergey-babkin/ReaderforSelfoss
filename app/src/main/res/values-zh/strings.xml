@@ -102,13 +102,13 @@
   <string name="card_height_off">Card height will be fixed</string>
   <string name="source_code">Source code</string>
   <string name="cant_mark_read">无法将文章标记为已读</string>
-  <string name="drawer_error_loading_tags">加载标签时出错…</string>
-  <string name="drawer_error_loading_sources">加载数据源时出错…</string>
+  <string name="drawer_error_loading_tags">加载标记时出错..。</string>
+  <string name="drawer_error_loading_sources">加载源时出错..。</string>
   <string name="drawer_item_filters">搜索条件</string>
   <string name="drawer_action_clear">清空</string>
   <string name="drawer_item_tags">标签</string>
   <string name="drawer_item_sources">来源</string>
-  <string name="drawer_action_edit">编辑</string>
+  <string name="drawer_action_edit">edit</string>
   <string name="cache_drawer_error" tools:keep="@string/cache_drawer_error">无法缓存您的抽屉数据</string>
   <string name="no_tags_loaded">未加载标签</string>
   <string name="no_sources_loaded">未加载数据源</string>
