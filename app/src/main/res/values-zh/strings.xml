@@ -94,13 +94,13 @@
   <string name="intro_hello_message">"感谢下载应用程序！"</string>
   <string name="intro_needs_selfoss_title">"在开始之前…"</string>
   <string name="intro_needs_selfoss_message">"您不能在没有 Selfoss 运行的情况下使用这个应用。"</string>
-  <string name="intro_needs_selfoss_link">"What is Selfoss ?"</string>
-  <string name="intro_all_set_title">"All set !"</string>
-  <string name="intro_all_set_message">"You are ready to use the app. Don't forget to go to the settings page to configure your app, and where you'll find some useful links."</string>
-  <string name="card_height_title">Full height cards</string>
-  <string name="card_height_on">Cards height will adjust to its content</string>
-  <string name="card_height_off">Card height will be fixed</string>
-  <string name="source_code">Source code</string>
+  <string name="intro_needs_selfoss_link">"什么是 Selfoss？"</string>
+  <string name="intro_all_set_title">"都好了！"</string>
+  <string name="intro_all_set_message">"你已准备就绪。别忘了去设置页面配置应用，可以还可以在那里找到一些有用的链接。"</string>
+  <string name="card_height_title">全高卡片</string>
+  <string name="card_height_on">卡片高度将根据内容调整</string>
+  <string name="card_height_off">卡片高度将被固定</string>
+  <string name="source_code">源代码</string>
   <string name="cant_mark_read">无法将文章标记为已读</string>
   <string name="drawer_error_loading_tags">加载标记时出错..。</string>
   <string name="drawer_error_loading_sources">加载源时出错..。</string>
@@ -108,7 +108,7 @@
   <string name="drawer_action_clear">清空</string>
   <string name="drawer_item_tags">标签</string>
   <string name="drawer_item_sources">来源</string>
-  <string name="drawer_action_edit">edit</string>
+  <string name="drawer_action_edit">编辑</string>
   <string name="cache_drawer_error" tools:keep="@string/cache_drawer_error">无法缓存您的抽屉数据</string>
   <string name="no_tags_loaded">未加载标签</string>
   <string name="no_sources_loaded">未加载数据源</string>
@@ -145,17 +145,17 @@
   <string name="read_debug_on">将项目标记为已读时将记录 Api 调用</string>
   <string name="summary_debug_identifier">除错标识符</string>
   <string name="unique_id_to_clipboard">复制到你的剪贴板的标识符</string>
-  <string name="display_header_drawer_summary">Display a header with the selfoss instance url on the lateral drawer.</string>
-  <string name="display_header_drawer_title">Account header</string>
+  <string name="display_header_drawer_summary">在侧边栏中显示带有 Selfoss 链接地址的页眉。</string>
+  <string name="display_header_drawer_title">帐户页眉</string>
   <string name="login_everything_title">记录每个 api 调用</string>
   <string name="login_everything_on">为了程序除错，这将记录每个 api 调用</string>
   <string name="login_everything_off">将不记录任何 api 调用</string>
   <string name="pref_general_infinite_loading_title">翻页时载入更多文章</string>
-  <string name="translation">Translation</string>
-  <string name="cant_open_invalid_url">The item url is invalid. I\'m looking into solving this issue so the app won\'t crash.</string>
-  <string name="drawer_report_bug">Report a bug</string>
-  <string name="items_number_should_be_number">The items number should be an integer.</string>
-  <string name="reader_action_more">Read more</string>
-  <string name="reader_action_open">Open in browser</string>
-  <string name="reader_action_share">Share</string>
+  <string name="translation">翻译</string>
+  <string name="cant_open_invalid_url">项目链接地址无效。我正在设法解决这个问题，以避免应用程序崩溃。</string>
+  <string name="drawer_report_bug">报告错误</string>
+  <string name="items_number_should_be_number">项目数应为整数。</string>
+  <string name="reader_action_more">阅读更多</string>
+  <string name="reader_action_open">在浏览器中打开</string>
+  <string name="reader_action_share">分享</string>
 </resources>
