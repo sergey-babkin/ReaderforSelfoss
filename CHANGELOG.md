@@ -1,3 +1,11 @@
+**1.5.4.18**
+
+- Typo fix.
+
+- The real last infinite scroll bug fix.
+
+- Simplified Chinese translation !
+
 **1.5.4.17**
 
 - Fixed the last bug with infinite scroll.
