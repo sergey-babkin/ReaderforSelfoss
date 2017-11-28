@@ -17,6 +17,7 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -101,6 +102,7 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     private var userIdentifier: String = ""
     private var displayAccountHeader: Boolean = false
     private var infiniteScroll: Boolean = false
+    private var lastFetchDone: Boolean = false
 
     private lateinit var tabNewBadge: TextBadgeItem
     private lateinit var tabArchiveBadge: TextBadgeItem
@@ -227,8 +229,11 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
                             if (lastVisibleItem === items.size &&
                                     items.size <= maxItemNumber() &&
-                                    maxItemNumber() >= itemsNumber
+                                    (maxItemNumber() >= itemsNumber || !lastFetchDone)
                             ) {
+                                if (maxItemNumber() < itemsNumber) {
+                                    lastFetchDone = true
+                                }
                                 getElementsAccordingToTab(
                                         appendResults = true,
                                         offsetOverride = lastVisibleItem
@@ -656,6 +661,7 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
             override fun onTabSelected(position: Int) {
                 offset = 0
+                lastFetchDone = false
                 when (position) {
                     0 -> getUnRead()
                     1 -> getRead()
