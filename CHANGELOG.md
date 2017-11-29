@@ -1,3 +1,7 @@
+**1.5.4.19**
+
+- Fixed an issue with crowdin configuration (and its translations)
+
 **1.5.4.18**
 
 - Typo fix.
