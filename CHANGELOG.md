@@ -1,3 +1,7 @@
+**1.5.4.20**
+
+- Turkish translation !
+
 **1.5.4.19**
 
 - Fixed an issue with crowdin configuration (and its translations)
