@@ -59,30 +59,17 @@ fun Context.buildCustomTabsIntent(): CustomTabsIntent {
 }
 
 fun Context.openItemUrlInternally(
+        allItems: ArrayList<Item>,
+        currentItem: Int,
         linkDecoded: String,
-        content: String,
-        image: String,
-        title: String,
-        source: String,
         customTabsIntent: CustomTabsIntent,
         articleViewer: Boolean,
         app: Activity
 ) {
     if (articleViewer) {
         val intent = Intent(this, ReaderActivity::class.java)
-
-        /*DragDismissIntentBuilder(this)
-                .setFullscreenOnTablets(true)      // defaults to false, tablets will have padding on each side
-                .setDragElasticity(DragDismissIntentBuilder.DragElasticity.NORMAL)  // Larger elasticities will make it easier to dismiss.
-                .setDrawUnderStatusBar(true)
-                .build(intent)*/
-
-
-        intent.putExtra("url", linkDecoded)
-        intent.putExtra("content", content)
-        intent.putExtra("title", title)
-        intent.putExtra("image", image)
-        intent.putExtra("source", source)
+        intent.putParcelableArrayListExtra("allItems", allItems)
+        intent.putExtra("currentItem", currentItem)
         app.startActivity(intent)
     } else {
         try {
@@ -102,11 +89,9 @@ fun Context.openItemUrlInternally(
 }
 
 fun Context.openItemUrl(
+        allItems: ArrayList<Item>,
+        currentItem: Int,
         linkDecoded: String,
-        content: String,
-        image: String,
-        title: String,
-        source: String,
         customTabsIntent: CustomTabsIntent,
         internalBrowser: Boolean,
         articleViewer: Boolean,
@@ -124,11 +109,9 @@ fun Context.openItemUrl(
             openInBrowser(linkDecoded, app)
         } else {
             this.openItemUrlInternally(
+                    allItems,
+                    currentItem,
                     linkDecoded,
-                    content,
-                    image,
-                    title,
-                    source,
                     customTabsIntent,
                     articleViewer,
                     app

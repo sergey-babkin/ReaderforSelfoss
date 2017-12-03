@@ -273,11 +273,9 @@ class ItemListAdapter(
             if (!clickBehavior) {
                 mView.setOnClickListener {
                     c.openItemUrl(
+                            items,
+                            adapterPosition,
                             items[adapterPosition].getLinkDecoded(),
-                            items[adapterPosition].content,
-                            items[adapterPosition].getThumbnail(c),
-                            items[adapterPosition].title,
-                            items[adapterPosition].sourceAndDateText(),
                             customTabsIntent,
                             internalBrowser,
                             articleViewer,
@@ -292,11 +290,9 @@ class ItemListAdapter(
                 mView.setOnClickListener { actionBarShowHide() }
                 mView.setOnLongClickListener {
                     c.openItemUrl(
+                            items,
+                            adapterPosition,
                             items[adapterPosition].getLinkDecoded(),
-                            items[adapterPosition].content,
-                            items[adapterPosition].getThumbnail(c),
-                            items[adapterPosition].title,
-                            items[adapterPosition].sourceAndDateText(),
                             customTabsIntent,
                             internalBrowser,
                             articleViewer,
