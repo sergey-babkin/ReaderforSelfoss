@@ -8,6 +8,7 @@ import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.text.Html
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView.ScaleType
 import android.widget.TextView
@@ -52,6 +53,7 @@ class ItemCardAdapter(
 ) : RecyclerView.Adapter<ItemCardAdapter.ViewHolder>() {
     private val c: Context = app.baseContext
     private val generator: ColorGenerator = ColorGenerator.MATERIAL
+    private val imageMaxHeight: Int = c.resources.getDimension(R.dimen.card_image_max_height).toInt()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(c).inflate(R.layout.card_item, parent, false) as CardView
@@ -67,10 +69,17 @@ class ItemCardAdapter(
 
         holder.mView.sourceTitleAndDate.text = itm.sourceAndDateText()
 
+        if (!fullHeightCards) {
+            holder.mView.itemImage.maxHeight = imageMaxHeight
+            holder.mView.itemImage.scaleType = ScaleType.CENTER_CROP
+        }
+
         if (itm.getThumbnail(c).isEmpty()) {
+            holder.mView.itemImage.visibility = View.GONE
             Glide.with(c).clear(holder.mView.itemImage)
             holder.mView.itemImage.setImageDrawable(null)
         } else {
+            holder.mView.itemImage.visibility = View.VISIBLE
             c.bitmapCenterCrop(itm.getThumbnail(c), holder.mView.itemImage)
         }
 
@@ -182,11 +191,6 @@ class ItemCardAdapter(
         }
 
         private fun handleClickListeners() {
-
-            if (!fullHeightCards) {
-                mView.itemImage.maxHeight = c.resources.getDimension(R.dimen.card_image_max_height).toInt()
-                mView.itemImage.scaleType = ScaleType.CENTER_CROP
-            }
 
             mView.favButton.setOnLikeListener(object : OnLikeListener {
                 override fun liked(likeButton: LikeButton) {

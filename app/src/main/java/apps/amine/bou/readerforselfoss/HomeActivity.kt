@@ -629,9 +629,10 @@ class HomeActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         }
 
         recyclerView.layoutManager = mLayoutManager
-        recyclerView.setHasFixedSize(true)
 
-        if (infiniteScroll) {
+        if (!infiniteScroll) {
+            recyclerView.setHasFixedSize(true)
+        } else {
             handleInfiniteScroll()
         }
 
