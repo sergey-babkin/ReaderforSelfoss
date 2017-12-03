@@ -1,3 +1,7 @@
+**1.5.4.21**
+
+- Spanish translation and some Indonesian !
+
 **1.5.4.20**
 
 - Turkish translation !
