@@ -1,3 +1,7 @@
+**1.5.4.22**
+
+- You can now scroll through the loaded articles !
+
 **1.5.4.21**
 
 - Spanish translation and some Indonesian !
