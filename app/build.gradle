@@ -8,19 +8,27 @@ buildscript {
     }
 }
 
+ext {
+    configuration = [
+            buildDate: new Date()
+    ]
+}
+
 def gitVersion() {
     def process = "git describe --abbrev=0 --tags".execute()
-    return process.text.substring(1).replaceAll("\\.", "")
+    return process.text.substring(1).replaceAll("\\.", "").trim()
 }
 
 def versionCodeFromGit() {
-    println "version code " + gitVersion().toInteger()
-    return gitVersion().toInteger()
+    def versionCode = gitVersion() + (ext.configuration.buildDate.format("SSssmm")).toInteger()
+    println "version code " + versionCode
+    return versionCode.toInteger()
 }
 
 def versionNameFromGit() {
-    println "version code " + gitVersion().trim()
-    return gitVersion().trim()
+    def versionName = gitVersion() + ext.configuration.buildDate.format('yyyyMMddHHmm')
+    println "version name " + versionName
+    return versionName
 }
 
 apply plugin: 'org.sonarqube'

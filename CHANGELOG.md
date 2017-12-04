@@ -1,3 +1,9 @@
+**1.5.5.x**
+
+- Completed Dutch and Indonesian translation !
+
+- Changed versions handling.
+
 **1.5.4.22**
 
 - You can now scroll through the loaded articles !
