@@ -41,6 +41,7 @@ class ReaderActivity : AppCompatActivity() {
 
         val debugReadingItems = sharedPref.getBoolean("read_debug", false)
         val userIdentifier = sharedPref.getString("unique_id", "")
+        val markOnScroll = sharedPref.getBoolean("mark_on_scroll", false)
 
         val api = SelfossApi(
                 this,
@@ -59,50 +60,50 @@ class ReaderActivity : AppCompatActivity() {
         pager.setPageTransformer(true, DepthPageTransformer())
         (indicator as CircleIndicator).setViewPager(pager)
 
-        pager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
-            var isLastItem = false
+        if (markOnScroll) {
+            pager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
+                var isLastItem = false
 
-            override fun onPageSelected(position: Int) {
-                isLastItem = (position === (allItems.size - 1))
-            }
-
-            override fun onPageScrollStateChanged(state: Int) {
-                if (state === ViewPager.SCROLL_STATE_DRAGGING || (state === ViewPager.SCROLL_STATE_IDLE && isLastItem)) {
-                    api.markItem(allItems[pager.currentItem].id).enqueue(
-                            object : Callback<SuccessResponse> {
-                                override fun onResponse(
-                                        call: Call<SuccessResponse>,
-                                        response: Response<SuccessResponse>
-                                ) {
-                                    if (!response.succeeded() && debugReadingItems) {
-                                        val message =
-                                                "message: ${response.message()} " +
-                                                        "response isSuccess: ${response.isSuccessful} " +
-                                                        "response code: ${response.code()} " +
-                                                        "response message: ${response.message()} " +
-                                                        "response errorBody: ${response.errorBody()?.string()} " +
-                                                        "body success: ${response.body()?.success} " +
-                                                        "body isSuccess: ${response.body()?.isSuccess}"
-                                        Crashlytics.setUserIdentifier(userIdentifier)
-                                        Crashlytics.log(100, "READ_DEBUG_SUCCESS", message)
-                                        Crashlytics.logException(Exception("Was success, but did it work ?"))
-                                    }
-                                }
-
-                                override fun onFailure(call: Call<SuccessResponse>, t: Throwable) {
-                                    if (debugReadingItems) {
-                                        Crashlytics.setUserIdentifier(userIdentifier)
-                                        Crashlytics.log(100, "READ_DEBUG_ERROR", t.message)
-                                        Crashlytics.logException(t)
-                                    }
-                                }
-                            }
-                    )
+                override fun onPageSelected(position: Int) {
+                    isLastItem = (position === (allItems.size - 1))
                 }
-            }
-        })
 
+                override fun onPageScrollStateChanged(state: Int) {
+                    if (state === ViewPager.SCROLL_STATE_DRAGGING || (state === ViewPager.SCROLL_STATE_IDLE && isLastItem)) {
+                        api.markItem(allItems[pager.currentItem].id).enqueue(
+                                object : Callback<SuccessResponse> {
+                                    override fun onResponse(
+                                            call: Call<SuccessResponse>,
+                                            response: Response<SuccessResponse>
+                                    ) {
+                                        if (!response.succeeded() && debugReadingItems) {
+                                            val message =
+                                                    "message: ${response.message()} " +
+                                                            "response isSuccess: ${response.isSuccessful} " +
+                                                            "response code: ${response.code()} " +
+                                                            "response message: ${response.message()} " +
+                                                            "response errorBody: ${response.errorBody()?.string()} " +
+                                                            "body success: ${response.body()?.success} " +
+                                                            "body isSuccess: ${response.body()?.isSuccess}"
+                                            Crashlytics.setUserIdentifier(userIdentifier)
+                                            Crashlytics.log(100, "READ_DEBUG_SUCCESS", message)
+                                            Crashlytics.logException(Exception("Was success, but did it work ?"))
+                                        }
+                                    }
 
+                                    override fun onFailure(call: Call<SuccessResponse>, t: Throwable) {
+                                        if (debugReadingItems) {
+                                            Crashlytics.setUserIdentifier(userIdentifier)
+                                            Crashlytics.log(100, "READ_DEBUG_ERROR", t.message)
+                                            Crashlytics.logException(t)
+                                        }
+                                    }
+                                }
+                        )
+                    }
+                }
+            })
+        }
     }
 
     override fun onPause() {

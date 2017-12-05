@@ -10,6 +10,8 @@
 
 - Toolbar in reader activity.
 
+- Marking items as read on scroll (with settings to enable/disable).
+
 **1.5.4.22**
 
 - You can now scroll through the loaded articles !
