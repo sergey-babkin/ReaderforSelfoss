@@ -8,6 +8,8 @@
 
 - Changed versions handling.
 
+- Toolbar in reader activity.
+
 **1.5.4.22**
 
 - You can now scroll through the loaded articles !

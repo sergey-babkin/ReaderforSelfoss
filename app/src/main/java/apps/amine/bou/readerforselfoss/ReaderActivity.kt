@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v7.app.AppCompatActivity
+import android.view.MenuItem
 import apps.amine.bou.readerforselfoss.api.selfoss.Item
 import apps.amine.bou.readerforselfoss.fragments.ArticleFragment
 import apps.amine.bou.readerforselfoss.transformers.DepthPageTransformer
@@ -19,6 +20,10 @@ class ReaderActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Scoop.getInstance().apply(this)
         setContentView(R.layout.activity_reader)
+
+        setSupportActionBar(toolBar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
 
         allItems = intent.getParcelableArrayListExtra<Item>("allItems")
         val currentItem = intent.getIntExtra("currentItem", 0)
@@ -39,5 +44,15 @@ class ReaderActivity : AppCompatActivity() {
         override fun getItem(position: Int): ArticleFragment {
             return ArticleFragment.newInstance(position, allItems)
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
