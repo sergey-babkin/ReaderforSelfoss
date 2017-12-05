@@ -1,4 +1,4 @@
-**1.5.5.x**
+**1.5.5.x (didn't last long) AND 1.5.6.x**
 
 - Completed Dutch and Indonesian translation !
 
