@@ -4,6 +4,8 @@
 
 - Fixed #142.
 
+- Added an animation to the viewpager.
+
 - Changed versions handling.
 
 **1.5.4.22**

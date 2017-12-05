@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v7.app.AppCompatActivity
 import apps.amine.bou.readerforselfoss.api.selfoss.Item
 import apps.amine.bou.readerforselfoss.fragments.ArticleFragment
+import apps.amine.bou.readerforselfoss.transformers.DepthPageTransformer
 import com.ftinc.scoop.Scoop
 import kotlinx.android.synthetic.main.activity_reader.*
 import me.relex.circleindicator.CircleIndicator
@@ -26,6 +27,7 @@ class ReaderActivity : AppCompatActivity() {
         pager.adapter = adapter
         pager.currentItem = currentItem
 
+        pager.setPageTransformer(true, DepthPageTransformer())
         (indicator as CircleIndicator).setViewPager(pager)
     }
 
