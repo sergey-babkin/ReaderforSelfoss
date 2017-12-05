@@ -12,6 +12,8 @@
 
 - Marking items as read on scroll (with settings to enable/disable).
 
+- Swapped the title and subtitle in the article viewer.
+
 **1.5.4.22**
 
 - You can now scroll through the loaded articles !
