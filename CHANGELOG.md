@@ -2,6 +2,8 @@
 
 - Completed Dutch and Indonesian translation !
 
+- Fixed #142.
+
 - Changed versions handling.
 
 **1.5.4.22**

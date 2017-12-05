@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v7.app.AppCompatActivity
 import apps.amine.bou.readerforselfoss.api.selfoss.Item
 import apps.amine.bou.readerforselfoss.fragments.ArticleFragment
+import com.ftinc.scoop.Scoop
 import kotlinx.android.synthetic.main.activity_reader.*
 import me.relex.circleindicator.CircleIndicator
 
@@ -15,6 +16,7 @@ class ReaderActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Scoop.getInstance().apply(this)
         setContentView(R.layout.activity_reader)
 
         allItems = intent.getParcelableArrayListExtra<Item>("allItems")
