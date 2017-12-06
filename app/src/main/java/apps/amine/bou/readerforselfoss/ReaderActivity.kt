@@ -25,8 +25,6 @@ import retrofit2.Response
 
 class ReaderActivity : AppCompatActivity() {
 
-    private lateinit var allItems: ArrayList<Item>
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Scoop.getInstance().apply(this)
@@ -43,6 +41,18 @@ class ReaderActivity : AppCompatActivity() {
         val userIdentifier = sharedPref.getString("unique_id", "")
         val markOnScroll = sharedPref.getBoolean("mark_on_scroll", false)
 
+        if (allItems.isEmpty()) {
+            Crashlytics.setUserIdentifier(userIdentifier)
+            Crashlytics.log(
+                    100,
+                    "READER_ITEMS_EMPTY",
+                    "Items empty when trying to open the Article Reader. Was (static) companion object field set ?"
+            )
+            Crashlytics.logException(Exception("Empty items on Reader Activity."))
+
+            finish()
+        }
+
         val api = SelfossApi(
                 this,
                 this@ReaderActivity,
@@ -50,7 +60,6 @@ class ReaderActivity : AppCompatActivity() {
                 sharedPref.getBoolean("should_log_everything", false)
         )
 
-        allItems = intent.getParcelableArrayListExtra<Item>("allItems")
         val currentItem = intent.getIntExtra("currentItem", 0)
 
         var adapter = ScreenSlidePagerAdapter(supportFragmentManager)
@@ -61,54 +70,72 @@ class ReaderActivity : AppCompatActivity() {
         (indicator as CircleIndicator).setViewPager(pager)
 
         if (markOnScroll) {
-            pager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
-                var isLastItem = false
+            pager.addOnPageChangeListener(
+                    object : ViewPager.SimpleOnPageChangeListener() {
+                        var isLastItem = false
 
-                override fun onPageSelected(position: Int) {
-                    isLastItem = (position === (allItems.size - 1))
-                }
+                        override fun onPageSelected(position: Int) {
+                            isLastItem = (position === (allItems.size - 1))
+                        }
 
-                override fun onPageScrollStateChanged(state: Int) {
-                    if (state === ViewPager.SCROLL_STATE_DRAGGING || (state === ViewPager.SCROLL_STATE_IDLE && isLastItem)) {
-                        api.markItem(allItems[pager.currentItem].id).enqueue(
-                                object : Callback<SuccessResponse> {
-                                    override fun onResponse(
-                                            call: Call<SuccessResponse>,
-                                            response: Response<SuccessResponse>
-                                    ) {
-                                        if (!response.succeeded() && debugReadingItems) {
-                                            val message =
-                                                    "message: ${response.message()} " +
-                                                            "response isSuccess: ${response.isSuccessful} " +
-                                                            "response code: ${response.code()} " +
-                                                            "response message: ${response.message()} " +
-                                                            "response errorBody: ${response.errorBody()?.string()} " +
-                                                            "body success: ${response.body()?.success} " +
-                                                            "body isSuccess: ${response.body()?.isSuccess}"
-                                            Crashlytics.setUserIdentifier(userIdentifier)
-                                            Crashlytics.log(100, "READ_DEBUG_SUCCESS", message)
-                                            Crashlytics.logException(Exception("Was success, but did it work ?"))
+                        override fun onPageScrollStateChanged(state: Int) {
+                            if (state === ViewPager.SCROLL_STATE_DRAGGING || (state === ViewPager.SCROLL_STATE_IDLE && isLastItem)) {
+                                api.markItem(allItems[pager.currentItem].id).enqueue(
+                                        object : Callback<SuccessResponse> {
+                                            override fun onResponse(
+                                                    call: Call<SuccessResponse>,
+                                                    response: Response<SuccessResponse>
+                                            ) {
+                                                if (!response.succeeded() && debugReadingItems) {
+                                                    val message =
+                                                            "message: ${response.message()} " +
+                                                                    "response isSuccess: ${response.isSuccessful} " +
+                                                                    "response code: ${response.code()} " +
+                                                                    "response message: ${response.message()} " +
+                                                                    "response errorBody: ${response.errorBody()?.string()} " +
+                                                                    "body success: ${response.body()?.success} " +
+                                                                    "body isSuccess: ${response.body()?.isSuccess}"
+                                                    Crashlytics.setUserIdentifier(userIdentifier)
+                                                    Crashlytics.log(
+                                                            100,
+                                                            "READ_DEBUG_SUCCESS",
+                                                            message
+                                                    )
+                                                    Crashlytics.logException(Exception("Was success, but did it work ?"))
+                                                }
+                                            }
+
+                                            override fun onFailure(
+                                                    call: Call<SuccessResponse>,
+                                                    t: Throwable
+                                            ) {
+                                                if (debugReadingItems) {
+                                                    Crashlytics.setUserIdentifier(userIdentifier)
+                                                    Crashlytics.log(
+                                                            100,
+                                                            "READ_DEBUG_ERROR",
+                                                            t.message
+                                                    )
+                                                    Crashlytics.logException(t)
+                                                }
+                                            }
                                         }
-                                    }
-
-                                    override fun onFailure(call: Call<SuccessResponse>, t: Throwable) {
-                                        if (debugReadingItems) {
-                                            Crashlytics.setUserIdentifier(userIdentifier)
-                                            Crashlytics.log(100, "READ_DEBUG_ERROR", t.message)
-                                            Crashlytics.logException(t)
-                                        }
-                                    }
-                                }
-                        )
+                                )
+                            }
+                        }
                     }
-                }
-            })
+            )
         }
     }
 
     override fun onPause() {
         super.onPause()
         pager.clearOnPageChangeListeners()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        allItems = ArrayList()
     }
 
     private inner class ScreenSlidePagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
@@ -129,5 +156,9 @@ class ReaderActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    companion object {
+        var allItems: ArrayList<Item> = ArrayList()
     }
 }

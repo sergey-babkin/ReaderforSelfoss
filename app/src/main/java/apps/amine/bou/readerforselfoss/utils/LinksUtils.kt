@@ -67,8 +67,8 @@ fun Context.openItemUrlInternally(
         app: Activity
 ) {
     if (articleViewer) {
+        ReaderActivity.allItems = allItems
         val intent = Intent(this, ReaderActivity::class.java)
-        intent.putParcelableArrayListExtra("allItems", allItems)
         intent.putExtra("currentItem", currentItem)
         app.startActivity(intent)
     } else {
