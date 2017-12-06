@@ -2,7 +2,7 @@
 
 - Completed Dutch and Indonesian translation !
 
-- Fixed #142.
+- Fixed #142, #144.
 
 - Added an animation to the viewpager.
 
