@@ -25,6 +25,8 @@ import retrofit2.Response
 
 class ReaderActivity : AppCompatActivity() {
 
+    private var markOnScroll: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Scoop.getInstance().apply(this)
@@ -39,7 +41,7 @@ class ReaderActivity : AppCompatActivity() {
 
         val debugReadingItems = sharedPref.getBoolean("read_debug", false)
         val userIdentifier = sharedPref.getString("unique_id", "")
-        val markOnScroll = sharedPref.getBoolean("mark_on_scroll", false)
+        markOnScroll = sharedPref.getBoolean("mark_on_scroll", false)
 
         if (allItems.isEmpty()) {
             Crashlytics.setUserIdentifier(userIdentifier)
@@ -130,12 +132,14 @@ class ReaderActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        pager.clearOnPageChangeListeners()
+        if (markOnScroll) {
+            pager.clearOnPageChangeListeners()
+        }
     }
 
-    override fun onStop() {
-        super.onStop()
-        allItems = ArrayList()
+    override fun onSaveInstanceState(oldInstanceState: Bundle?) {
+        super.onSaveInstanceState(oldInstanceState)
+        oldInstanceState!!.clear()
     }
 
     private inner class ScreenSlidePagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
