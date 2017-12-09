@@ -1,6 +1,6 @@
 **1.5.5.x (didn't last long) AND 1.5.6.x**
 
-- Completed Dutch and Indonesian translation !
+- Completed Dutch, Indonesian and Portuguese translations !
 
 - Fixed #142, #144.
 
