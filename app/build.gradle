@@ -178,6 +178,7 @@ dependencies {
 
     // Pager
     compile 'me.relex:circleindicator:1.2.2@aar'
+
 }
 
 apply plugin: 'com.google.gms.google-services'
