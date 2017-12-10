@@ -71,6 +71,12 @@
         <meta-data
             android:name="apps.amine.bou.readerforselfoss.utils.glide.SelfSignedGlideModule"
             android:value="GlideModule" />
+
+        <meta-data android:name="android.webkit.WebView.MetricsOptOut"
+            android:value="true" />
+
+        <meta-data android:name="android.webkit.WebView.EnableSafeBrowsing"
+            android:value="true" />
     </application>
 
 </manifest>

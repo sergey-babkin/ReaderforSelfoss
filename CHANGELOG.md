@@ -1,18 +1,19 @@
 **1.5.5.x (didn't last long) AND 1.5.6.x**
 
-- Completed Dutch, Indonesian and Portuguese translations !
-
-- Fixed #142, #144, #147.
-
-- Added an animation to the viewpager.
-
-- Changed versions handling.
-
+- Added an option to use a webview in the article viewer (see #149)
 - Toolbar in reader activity.
 
 - Marking items as read on scroll (with settings to enable/disable).
 
 - Swapped the title and subtitle in the article viewer.
+
+- Added an animation to the viewpager.
+
+- Completed Dutch, Indonesian and Portuguese translations !
+
+- Fixed #142, #144, #147.
+
+- Changed versions handling.
 
 **1.5.4.22**
 

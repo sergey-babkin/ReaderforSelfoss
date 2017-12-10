@@ -27,6 +27,8 @@ class ReaderActivity : AppCompatActivity() {
 
     private var markOnScroll: Boolean = false
 
+    private var useWebview: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Scoop.getInstance().apply(this)
@@ -42,6 +44,8 @@ class ReaderActivity : AppCompatActivity() {
         val debugReadingItems = sharedPref.getBoolean("read_debug", false)
         val userIdentifier = sharedPref.getString("unique_id", "")
         markOnScroll = sharedPref.getBoolean("mark_on_scroll", false)
+        useWebview = sharedPref.getBoolean("prefer_webview_in_article_viewer", false)
+
 
         if (allItems.isEmpty()) {
             Crashlytics.setUserIdentifier(userIdentifier)
@@ -148,7 +152,7 @@ class ReaderActivity : AppCompatActivity() {
         }
 
         override fun getItem(position: Int): ArticleFragment {
-            return ArticleFragment.newInstance(position, allItems)
+            return ArticleFragment.newInstance(position, allItems, useWebview)
         }
     }
 
