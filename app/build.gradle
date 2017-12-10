@@ -178,6 +178,9 @@ dependencies {
 
     // Pager
     compile 'me.relex:circleindicator:1.2.2@aar'
+
+    // This seem to be needed.
+    compile 'com.klinkerapps:drag-dismiss-activity:1.5.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
