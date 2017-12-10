@@ -70,3 +70,5 @@
 -dontwarn com.anupcowkur.reservoir.**
 
 -dontwarn javax.annotation.**
+
+-keep class android.support.v7.widget.SearchView { *; }
