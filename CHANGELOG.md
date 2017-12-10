@@ -1,4 +1,4 @@
-**1.5.5.x (didn't last long) AND 1.5.7.x**
+**1.5.7.x**
 
 - Added an option to use a webview in the article viewer (see #149)
 
