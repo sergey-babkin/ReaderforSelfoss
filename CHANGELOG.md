@@ -1,6 +1,7 @@
 **1.5.5.x (didn't last long) AND 1.5.6.x**
 
 - Added an option to use a webview in the article viewer (see #149)
+
 - Toolbar in reader activity.
 
 - Marking items as read on scroll (with settings to enable/disable).

@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment
 import android.support.v4.widget.NestedScrollView
 import android.text.Html
 import android.text.method.LinkMovementMethod
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -296,7 +295,6 @@ class ArticleFragment : Fragment() {
                 allItems: ArrayList<Item>,
                 webview: Boolean
         ): ArticleFragment {
-            Log.e("TRUC", "uses webview ? $webview")
             val fragment = ArticleFragment()
             val args = Bundle()
             args.putInt(ARG_POSITION, position)
