@@ -49,7 +49,7 @@ repositories {
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.0'
+    buildToolsVersion '27.0.2'
     defaultConfig {
         applicationId "apps.amine.bou.readerforselfoss"
         minSdkVersion 16
@@ -117,19 +117,19 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 
     // Android Support
-    compile 'com.android.support:appcompat-v7:27.0.0'
-    compile 'com.android.support:design:27.0.0'
-    compile 'com.android.support:recyclerview-v7:27.0.0'
-    compile 'com.android.support:support-v4:27.0.0'
-    compile 'com.android.support:support-vector-drawable:27.0.0'
-    compile 'com.android.support:customtabs:27.0.0'
-    compile 'com.android.support:cardview-v7:27.0.0'
+    compile 'com.android.support:appcompat-v7:27.0.2'
+    compile 'com.android.support:design:27.0.2'
+    compile 'com.android.support:recyclerview-v7:27.0.2'
+    compile 'com.android.support:support-v4:27.0.2'
+    compile 'com.android.support:support-vector-drawable:27.0.2'
+    compile 'com.android.support:customtabs:27.0.2'
+    compile 'com.android.support:cardview-v7:27.0.2'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
     // Firebase + crashlytics
-    compile 'com.google.firebase:firebase-core:11.4.2'
-    compile 'com.google.firebase:firebase-config:11.4.2'
-    compile 'com.google.firebase:firebase-invites:11.4.2'
+    compile 'com.google.firebase:firebase-core:11.6.2'
+    compile 'com.google.firebase:firebase-config:11.6.2'
+    compile 'com.google.firebase:firebase-invites:11.6.2'
     compile('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
         transitive = true;
     }
@@ -163,9 +163,6 @@ dependencies {
 
     // Asking politely users to rate the app
     compile 'com.github.stkent:amplify:2.1.0'
-
-    // For the article reader
-    compile 'com.klinkerapps:drag-dismiss-activity:1.5.0'
 
     // Drawer
     implementation 'co.zsmb:materialdrawer-kt:1.2.1'
